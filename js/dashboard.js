@@ -92,17 +92,40 @@ class LabDashboard {
     });
   }
 
+  parseTimestamp(ts) {
+    if (!ts) return 0;
+    try {
+      if (typeof ts === 'number') return ts;
+      const d = new Date(ts);
+      if (!isNaN(d.getTime())) return d.getTime();
+
+      const clean = String(ts).replace(/\./g, ':');
+      const parts = clean.split(/[ ,]+/);
+      if (parts.length >= 2) {
+        const dateParts = parts[0].split('/');
+        const timeParts = parts[1].split(':');
+        if (dateParts.length === 3) {
+          const day = parseInt(dateParts[0], 10);
+          const month = parseInt(dateParts[1], 10) - 1;
+          const year = parseInt(dateParts[2], 10);
+          const hour = parseInt(timeParts[0], 10) || 0;
+          const min = parseInt(timeParts[1], 10) || 0;
+          const sec = parseInt(timeParts[2], 10) || 0;
+          const parsed = new Date(year, month, day, hour, min, sec);
+          if (!isNaN(parsed.getTime())) return parsed.getTime();
+        }
+      }
+      return 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
   startAutoSync() {
     if (this.pollInterval) clearInterval(this.pollInterval);
     this.pollInterval = setInterval(() => {
-      const isTeacherActive = window.labAuth && window.labAuth.isTeacher();
-      const dashboardPage = document.getElementById('page-dashboard-guru');
-      const isDashboardVisible = dashboardPage && dashboardPage.classList.contains('active-section');
-
-      if (isTeacherActive || isDashboardVisible) {
-        this.fetchServerData(false);
-      }
-    }, 3000);
+      this.fetchServerData(false);
+    }, 4000);
   }
 
   deduplicateList(list) {
@@ -111,7 +134,7 @@ class LabDashboard {
     const result = [];
     list.forEach(item => {
       if (!item || !item.studentName) return;
-      const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}_${(item.timestamp || '').trim()}`;
+      const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}`;
       if (!seen.has(key)) {
         seen.add(key);
         result.push(item);
@@ -163,22 +186,30 @@ class LabDashboard {
   mergeEvaluations(serverEvals) {
     if (!Array.isArray(serverEvals) || serverEvals.length === 0) return;
     const map = new Map();
-    // Local evaluations first
+    // 1. Existing local evaluations
     this.evaluations.forEach(item => {
       if (item && item.studentName) {
-        const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}_${(item.timestamp || '').trim()}`;
+        const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}`;
         map.set(key, item);
       }
     });
-    // Server data updates / merges
+    // 2. Incoming cloud/server evaluations
     serverEvals.forEach(item => {
       if (item && item.studentName) {
-        const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}_${(item.timestamp || '').trim()}`;
+        const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}`;
         map.set(key, item);
       }
     });
-    this.evaluations = Array.from(map.values()).sort((a, b) => (b.id || 0) - (a.id || 0));
+    // 3. Sort by latest timestamp (newest first on top)
+    this.evaluations = Array.from(map.values()).sort((a, b) => {
+      const timeA = this.parseTimestamp(a.timestamp) || (typeof a.id === 'number' ? a.id : 0);
+      const timeB = this.parseTimestamp(b.timestamp) || (typeof b.id === 'number' ? b.id : 0);
+      return timeB - timeA;
+    });
+
     this.saveData();
+    this.renderMetrics();
+    this.renderEvaluationTable();
   }
 
   mergeLKPDs(serverLkpds) {
@@ -192,8 +223,14 @@ class LabDashboard {
         map.set(item.id, item);
       }
     });
-    this.lkpdSubmissions = Array.from(map.values()).sort((a, b) => (b.id || 0) - (a.id || 0));
+    this.lkpdSubmissions = Array.from(map.values()).sort((a, b) => {
+      const timeA = this.parseTimestamp(a.timestamp) || (typeof a.id === 'number' ? a.id : 0);
+      const timeB = this.parseTimestamp(b.timestamp) || (typeof b.id === 'number' ? b.id : 0);
+      return timeB - timeA;
+    });
     this.saveData();
+    this.renderMetrics();
+    this.renderLKPDTable();
   }
 
   async fetchServerData(notify = false) {
@@ -202,27 +239,36 @@ class LabDashboard {
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
 
     try {
-      // 1. Fetch from Google Sheets API
+      // 1. Fetch from Google Sheets API with cache busting & redirect handling
       try {
-        const sheetRes = await fetch(GOOGLE_SCRIPT_URL, { cache: 'no-store' });
+        const sheetRes = await fetch(`${GOOGLE_SCRIPT_URL}?t=${Date.now()}`, {
+          method: 'GET',
+          redirect: 'follow',
+          cache: 'no-store'
+        });
         if (sheetRes.ok) {
           const sheetJson = await sheetRes.json();
           if (sheetJson.status === 'success' && Array.isArray(sheetJson.data) && sheetJson.data.length > 0) {
-            const mapped = sheetJson.data.map((item, idx) => ({
-              id: item.id || `gs_${(item.nama || 'siswa')}_${(item.kelas || '')}_${(item.timestamp || idx)}`.replace(/[^a-zA-Z0-9]/g, '_'),
-              timestamp: item.timestamp || new Date().toLocaleString('id-ID'),
-              studentName: item.nama || 'Siswa',
-              studentClass: item.kelas || 'VII-A',
-              score: Number(item.nilai) || 0,
-              correctCount: Number(item.benar) || 0,
-              totalQuestions: Number(item.totalSoal) || 15,
-              isPassed: (Number(item.nilai) || 0) >= 75
-            }));
+            const mapped = sheetJson.data.map((item, idx) => {
+              const score = Number(item.nilai) || 0;
+              const correct = Number(item.benar) || 0;
+              const total = Number(item.totalSoal) || 15;
+              return {
+                id: `gs_${(item.nama || 'siswa')}_${(item.kelas || '')}_${idx}_${(item.timestamp || '').replace(/[^a-zA-Z0-9]/g, '')}`,
+                timestamp: item.timestamp || new Date().toLocaleString('id-ID'),
+                studentName: item.nama || 'Siswa',
+                studentClass: item.kelas || 'VII-A',
+                score: score,
+                correctCount: correct,
+                totalQuestions: total,
+                isPassed: score >= 75
+              };
+            });
             this.mergeEvaluations(mapped);
           }
         }
       } catch (sheetErr) {
-        // Fallback for CORS or offline
+        console.warn("Cloud Sync warning:", sheetErr);
       }
 
       // 2. Local backend fallback
@@ -244,7 +290,9 @@ class LabDashboard {
         }
       } catch (localErr) {}
 
-      this.renderDashboard();
+      this.renderMetrics();
+      this.renderEvaluationTable();
+      this.renderLKPDTable();
       if (notify && window.labAuth) {
         window.labAuth.showToast("✅ Data Dashboard berhasil disinkronkan!");
       }
@@ -301,8 +349,24 @@ class LabDashboard {
       } catch (e) {}
     }
 
-    // Send to Google Sheets Cloud Database
+    // Send to Google Sheets Cloud Database (Dual submission GET & POST)
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
+    try {
+      const params = new URLSearchParams({
+        nama: record.studentName,
+        kelas: record.studentClass,
+        nilai: record.score,
+        benar: record.correctCount,
+        totalSoal: record.totalQuestions,
+        action: 'save'
+      });
+      fetch(`${GOOGLE_SCRIPT_URL}?${params.toString()}`, {
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-store'
+      }).catch(() => {});
+    } catch (e) {}
+
     try {
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
@@ -315,7 +379,7 @@ class LabDashboard {
           benar: record.correctCount,
           totalSoal: record.totalQuestions
         })
-      }).catch(err => console.warn("Google Sheets Error:", err));
+      }).catch(() => {});
     } catch (e) {}
 
     // POST to local API if available
@@ -455,7 +519,7 @@ class LabDashboard {
           </span>
         </td>
         <td style="text-align: center;">
-          <button class="dash-action-btn delete" onclick="window.labDashboard.deleteEvaluation(${e.id})" title="Hapus Data">
+          <button class="dash-action-btn delete" onclick="window.labDashboard.deleteEvaluation('${e.id}')" title="Hapus Data">
             <i class="fa-solid fa-trash-can"></i>
           </button>
         </td>
@@ -489,10 +553,10 @@ class LabDashboard {
           <span class="status-pill status-pass"><i class="fa-solid fa-circle-check"></i> Lengkap Terisi</span>
         </td>
         <td style="text-align: center;">
-          <button class="btn btn-secondary btn-sm" onclick="window.labDashboard.viewLKPDDetail(${lkpd.id})" title="Lihat LKPD">
+          <button class="btn btn-secondary btn-sm" onclick="window.labDashboard.viewLKPDDetail('${lkpd.id}')" title="Lihat LKPD">
             <i class="fa-solid fa-eye"></i> Tinjau
           </button>
-          <button class="dash-action-btn delete" onclick="window.labDashboard.deleteLKPD(${lkpd.id})" title="Hapus LKPD">
+          <button class="dash-action-btn delete" onclick="window.labDashboard.deleteLKPD('${lkpd.id}')" title="Hapus LKPD">
             <i class="fa-solid fa-trash-can"></i>
           </button>
         </td>
@@ -518,7 +582,7 @@ class LabDashboard {
 
   async deleteEvaluation(id) {
     if (confirm("Apakah Anda yakin ingin menghapus catatan nilai evaluasi ini?")) {
-      this.evaluations = this.evaluations.filter(e => e.id !== id);
+      this.evaluations = this.evaluations.filter(e => String(e.id) !== String(id));
       this.saveData();
       this.renderDashboard();
 
@@ -536,7 +600,7 @@ class LabDashboard {
 
   async deleteLKPD(id) {
     if (confirm("Apakah Anda yakin ingin menghapus data LKPD ini?")) {
-      this.lkpdSubmissions = this.lkpdSubmissions.filter(l => l.id !== id);
+      this.lkpdSubmissions = this.lkpdSubmissions.filter(l => String(l.id) !== String(id));
       this.saveData();
       this.renderDashboard();
 

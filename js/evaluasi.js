@@ -212,6 +212,24 @@ class LabEvaluation {
       window.confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
     }
 
+    // Send directly to Google Sheets Cloud Database (GET query parameter works seamlessly without CORS blocks)
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
+    try {
+      const params = new URLSearchParams({
+        nama: this.studentName,
+        kelas: this.studentClass,
+        nilai: this.score,
+        benar: correctCount,
+        totalSoal: questions.length,
+        action: 'save'
+      });
+      fetch(`${GOOGLE_SCRIPT_URL}?${params.toString()}`, {
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-store'
+      }).catch(() => {});
+    } catch (e) {}
+
     // Automatically record to Teacher Dashboard
     if (window.labDashboard) {
       window.labDashboard.recordEvaluation({

@@ -47,6 +47,7 @@ function initNavigation() {
       }
       if (window.labDashboard) {
         window.labDashboard.renderDashboard();
+        window.labDashboard.fetchServerData(false);
       }
     } else if (pageId === 'ar-3d') {
       if (!window.labViewer3D) {
