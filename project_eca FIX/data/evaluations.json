@@ -1,0 +1,62 @@
+[
+  {
+    "id": 101,
+    "timestamp": "20/09/2026 14:10",
+    "studentName": "Ahmad Fauzi",
+    "studentClass": "VII-A",
+    "score": 93,
+    "correctCount": 14,
+    "totalQuestions": 15,
+    "isPassed": true
+  },
+  {
+    "id": 102,
+    "timestamp": "20/09/2026 14:15",
+    "studentName": "Siti Rahmawati",
+    "studentClass": "VII-A",
+    "score": 87,
+    "correctCount": 13,
+    "totalQuestions": 15,
+    "isPassed": true
+  },
+  {
+    "id": 103,
+    "timestamp": "20/09/2026 14:22",
+    "studentName": "Budi Pratama",
+    "studentClass": "VII-B",
+    "score": 60,
+    "correctCount": 9,
+    "totalQuestions": 15,
+    "isPassed": false
+  },
+  {
+    "id": 104,
+    "timestamp": "20/09/2026 14:28",
+    "studentName": "Dewi Lestari",
+    "studentClass": "VII-A",
+    "score": 100,
+    "correctCount": 15,
+    "totalQuestions": 15,
+    "isPassed": true
+  },
+  {
+    "id": 105,
+    "timestamp": "20/09/2026 14:35",
+    "studentName": "Rian Hidayat",
+    "studentClass": "VII-C",
+    "score": 80,
+    "correctCount": 12,
+    "totalQuestions": 15,
+    "isPassed": true
+  },
+  {
+    "id": 106,
+    "timestamp": "20/09/2026 14:40",
+    "studentName": "Annisa Putri",
+    "studentClass": "VII-B",
+    "score": 73,
+    "correctCount": 11,
+    "totalQuestions": 15,
+    "isPassed": false
+  }
+]

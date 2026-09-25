@@ -1,0 +1,36 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <!-- GHS Red Diamond Border -->
+  <polygon points="100,12 188,100 100,188 12,100" fill="#ffffff" stroke="#e11d48" stroke-width="14" stroke-linejoin="miter"/>
+
+  <!-- Skull and Crossbones Silhouette -->
+  <g fill="#000000" transform="translate(100, 102)">
+    <!-- Crossbones -->
+    <g stroke="#000000" stroke-width="8" stroke-linecap="round">
+      <line x1="-38" y1="-32" x2="38" y2="32"/>
+      <line x1="38" y1="-32" x2="-38" y2="32"/>
+    </g>
+    <!-- Bone End Knobs -->
+    <circle cx="-38" cy="-32" r="5"/><circle cx="-32" cy="-38" r="5"/>
+    <circle cx="38" cy="32" r="5"/><circle cx="32" cy="38" r="5"/>
+    <circle cx="38" cy="-32" r="5"/><circle cx="32" cy="-38" r="5"/>
+    <circle cx="-38" cy="32" r="5"/><circle cx="-32" cy="38" r="5"/>
+
+    <!-- Cranium / Head -->
+    <path d="M -26,-12 C -26,-36 26,-36 26,-12 C 26,2 18,12 14,18 L -14,18 C -18,12 -26,2 -26,-12 Z"/>
+    
+    <!-- Jaw / Teeth section -->
+    <rect x="-12" y="18" width="24" height="10" rx="2"/>
+
+    <!-- Eye Sockets (White Cutouts) -->
+    <ellipse cx="-11" cy="-10" rx="7" ry="8.5" fill="#ffffff" transform="rotate(10 -11 -10)"/>
+    <ellipse cx="11" cy="-10" rx="7" ry="8.5" fill="#ffffff" transform="rotate(-10 11 -10)"/>
+
+    <!-- Nasal Cavity (Inverted Heart) -->
+    <polygon points="0,-1 -4.5,8 4.5,8" fill="#ffffff"/>
+
+    <!-- Teeth Slots -->
+    <line x1="-6" y1="18" x2="-6" y2="28" stroke="#ffffff" stroke-width="2"/>
+    <line x1="0" y1="18" x2="0" y2="28" stroke="#ffffff" stroke-width="2"/>
+    <line x1="6" y1="18" x2="6" y2="28" stroke="#ffffff" stroke-width="2"/>
+  </g>
+</svg>

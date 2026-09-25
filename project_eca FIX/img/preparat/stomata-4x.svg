@@ -1,0 +1,61 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="leafBg4" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="70%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#bbf7d0"/>
+    </radialGradient>
+  </defs>
+  <rect width="500" height="500" fill="url(#leafBg4)"/>
+
+  <!-- Pavement / Puzzle Epidermal Cells -->
+  <g stroke="#16a34a" stroke-width="1.5" fill="none" opacity="0.6">
+    <path d="M 30,20 Q 80,60 120,30 T 200,50 T 280,30 T 380,60 T 480,30"/>
+    <path d="M 10,90 Q 70,120 130,90 T 220,130 T 320,90 T 420,130 T 500,90"/>
+    <path d="M 20,170 Q 90,210 160,170 T 260,210 T 360,170 T 460,210"/>
+    <path d="M 0,250 Q 80,290 150,250 T 250,290 T 350,250 T 450,290 T 510,250"/>
+    <path d="M 30,330 Q 100,370 170,330 T 270,370 T 370,330 T 470,370"/>
+    <path d="M 10,410 Q 80,450 150,410 T 240,460 T 340,410 T 440,460 T 500,410"/>
+    
+    <!-- Vertical Puzzle Interlocks -->
+    <path d="M 90,0 Q 120,80 90,160 T 90,320 T 90,500"/>
+    <path d="M 200,0 Q 230,80 200,160 T 200,320 T 200,500"/>
+    <path d="M 320,0 Q 350,80 320,160 T 320,320 T 320,500"/>
+    <path d="M 430,0 Q 460,80 430,160 T 430,320 T 430,500"/>
+  </g>
+
+  <!-- Multiple Stomata dots distributed across field (4x overview) -->
+  <!-- Stomata helper macro -->
+  <g fill="#15803d" stroke="#166534" stroke-width="1">
+    <!-- Stoma 1 -->
+    <g transform="translate(140, 80)">
+      <ellipse cx="-4" cy="0" rx="3.5" ry="8" transform="rotate(-15)"/>
+      <ellipse cx="4" cy="0" rx="3.5" ry="8" transform="rotate(15)"/>
+      <ellipse cx="0" cy="0" rx="1.5" ry="5" fill="#052e16"/>
+    </g>
+    <!-- Stoma 2 -->
+    <g transform="translate(360, 95)">
+      <ellipse cx="-4" cy="0" rx="3.5" ry="8" transform="rotate(20)"/>
+      <ellipse cx="4" cy="0" rx="3.5" ry="8" transform="rotate(-20)"/>
+      <ellipse cx="0" cy="0" rx="1.5" ry="5" fill="#052e16"/>
+    </g>
+    <!-- Stoma 3 (Center) -->
+    <g transform="translate(250, 230)">
+      <ellipse cx="-5" cy="0" rx="4.5" ry="10" transform="rotate(-10)"/>
+      <ellipse cx="5" cy="0" rx="4.5" ry="10" transform="rotate(10)"/>
+      <ellipse cx="0" cy="0" rx="2" ry="6" fill="#052e16"/>
+    </g>
+    <!-- Stoma 4 -->
+    <g transform="translate(110, 350)">
+      <ellipse cx="-4" cy="0" rx="3.5" ry="8" transform="rotate(25)"/>
+      <ellipse cx="4" cy="0" rx="3.5" ry="8" transform="rotate(-25)"/>
+      <ellipse cx="0" cy="0" rx="1.5" ry="5" fill="#052e16"/>
+    </g>
+    <!-- Stoma 5 -->
+    <g transform="translate(390, 360)">
+      <ellipse cx="-4" cy="0" rx="3.5" ry="8" transform="rotate(-15)"/>
+      <ellipse cx="4" cy="0" rx="3.5" ry="8" transform="rotate(15)"/>
+      <ellipse cx="0" cy="0" rx="1.5" ry="5" fill="#052e16"/>
+    </g>
+  </g>
+</svg>

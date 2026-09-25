@@ -1,0 +1,65 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b192e"/><stop offset="100%" stop-color="#030b17"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cbd5e1"/><stop offset="50%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" rx="16" fill="url(#bg)"/>
+  <ellipse cx="200" cy="250" rx="160" ry="14" fill="#000" opacity="0.4"/>
+
+  <!-- Main Caliper Beam -->
+  <rect x="40" y="125" width="320" height="36" rx="2" fill="url(#steel)" stroke="#64748b" stroke-width="1.5"/>
+
+  <!-- Fixed Upper Jaw (Inside measurement) -->
+  <path d="M 40,125 L 40,70 Q 40,60 55,75 L 75,125 Z" fill="url(#steel)" stroke="#64748b" stroke-width="1.5"/>
+
+  <!-- Fixed Lower Jaw (Outside measurement) -->
+  <path d="M 40,161 L 40,230 Q 40,245 60,225 L 85,161 Z" fill="url(#steel)" stroke="#64748b" stroke-width="1.5"/>
+
+  <!-- Sliding Vernier Jaws Block -->
+  <g transform="translate(110, 0)">
+    <!-- Sliding Upper Jaw -->
+    <path d="M 65,125 L 65,70 Q 65,60 50,75 L 30,125 Z" fill="url(#steel)" stroke="#0284c7" stroke-width="1.5"/>
+    <!-- Sliding Lower Jaw -->
+    <path d="M 65,161 L 65,230 Q 65,245 45,225 L 20,161 Z" fill="url(#steel)" stroke="#0284c7" stroke-width="1.5"/>
+    <!-- Vernier Body Frame -->
+    <rect x="15" y="115" width="60" height="56" rx="4" fill="url(#steel)" stroke="#0284c7" stroke-width="2"/>
+    <!-- Thumb Grip Ridges -->
+    <rect x="62" y="150" width="8" height="16" rx="2" fill="#64748b"/>
+    <!-- Lock Screw -->
+    <circle cx="45" cy="110" r="7" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>
+    <!-- Vernier Scale Window -->
+    <rect x="20" y="130" width="48" height="22" fill="#ffffff" rx="2"/>
+    <!-- Vernier Nonius scale ticks -->
+    <g stroke="#0f172a" stroke-width="1">
+      <line x1="24" y1="130" x2="24" y2="138"/><line x1="28" y1="130" x2="28" y2="136"/>
+      <line x1="32" y1="130" x2="32" y2="136"/><line x1="36" y1="130" x2="36" y2="136"/>
+      <line x1="40" y1="130" x2="40" y2="136"/><line x1="44" y1="130" x2="44" y2="138"/>
+      <line x1="48" y1="130" x2="48" y2="136"/><line x1="52" y1="130" x2="52" y2="136"/>
+      <line x1="56" y1="130" x2="56" y2="136"/><line x1="60" y1="130" x2="60" y2="138"/>
+    </g>
+    <text x="22" y="148" font-family="sans-serif" font-size="8" font-weight="bold" fill="#0284c7">0.05mm</text>
+  </g>
+
+  <!-- Main Scale Markings (cm/mm) -->
+  <g stroke="#0f172a" stroke-width="1.2">
+    <line x1="90" y1="125" x2="90" y2="137"/><text x="86" y="148" font-size="9" font-family="sans-serif" font-weight="bold" fill="#0f172a">0</text>
+    <line x1="110" y1="125" x2="110" y2="133"/><line x1="130" y1="125" x2="130" y2="133"/>
+    <line x1="150" y1="125" x2="150" y2="137"/><text x="146" y="148" font-size="9" font-family="sans-serif" font-weight="bold" fill="#0f172a">1</text>
+    <line x1="170" y1="125" x2="170" y2="133"/><line x1="190" y1="125" x2="190" y2="133"/>
+    <line x1="210" y1="125" x2="210" y2="137"/><text x="206" y="148" font-size="9" font-family="sans-serif" font-weight="bold" fill="#0f172a">2</text>
+    <line x1="230" y1="125" x2="230" y2="133"/><line x1="250" y1="125" x2="250" y2="133"/>
+    <line x1="270" y1="125" x2="270" y2="137"/><text x="266" y="148" font-size="9" font-family="sans-serif" font-weight="bold" fill="#0f172a">3</text>
+    <line x1="290" y1="125" x2="290" y2="133"/><line x1="310" y1="125" x2="310" y2="133"/>
+    <line x1="330" y1="125" x2="330" y2="137"/><text x="326" y="148" font-size="9" font-family="sans-serif" font-weight="bold" fill="#0f172a">4</text>
+  </g>
+
+  <!-- Depth Probe Rod extending to right -->
+  <rect x="355" y="140" width="30" height="4" fill="url(#steel)" stroke="#64748b"/>
+
+  <rect x="15" y="15" width="140" height="26" rx="6" fill="#0284c7" opacity="0.25"/>
+  <text x="25" y="32" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#38bdf8">JANGKA SORONG</text>
+</svg>

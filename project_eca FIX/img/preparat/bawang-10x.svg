@@ -1,0 +1,62 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="lightBg10" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#faf5ff"/>
+      <stop offset="60%" stop-color="#f3e8ff"/>
+      <stop offset="100%" stop-color="#e9d5ff"/>
+    </radialGradient>
+    <linearGradient id="cytoplasm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5d0fe" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#e879f9" stop-opacity="0.3"/>
+    </linearGradient>
+    <radialGradient id="nucleusGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="60%" stop-color="#6b21a8"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </radialGradient>
+  </defs>
+  <rect width="500" height="500" fill="url(#lightBg10)"/>
+
+  <!-- 4 Large Onion Epidermal Cells at 10x -->
+  <g stroke="#9333ea" stroke-width="4" fill="url(#cytoplasm)">
+    <!-- Top Cell 1 -->
+    <rect x="-30" y="20" width="280" height="135" rx="12"/>
+    <!-- Top Cell 2 -->
+    <rect x="250" y="20" width="300" height="135" rx="12"/>
+
+    <!-- Middle Cell 1 (Featured) -->
+    <rect x="-50" y="155" width="310" height="180" rx="14"/>
+    <!-- Middle Cell 2 (Featured Center) -->
+    <rect x="260" y="155" width="290" height="180" rx="14"/>
+
+    <!-- Bottom Cell 1 -->
+    <rect x="-20" y="335" width="270" height="155" rx="12"/>
+    <!-- Bottom Cell 2 -->
+    <rect x="250" y="335" width="300" height="155" rx="12"/>
+  </g>
+
+  <!-- Cell Details (Nuclei & Cytoplasm Granules) -->
+  <!-- Middle Left Cell Nucleus -->
+  <g transform="translate(140, 240)">
+    <circle cx="0" cy="0" r="18" fill="url(#nucleusGrad)"/>
+    <circle cx="-4" cy="-4" r="4.5" fill="#fdf4ff" opacity="0.8"/>
+  </g>
+
+  <!-- Middle Right Cell Nucleus -->
+  <g transform="translate(380, 230)">
+    <circle cx="0" cy="0" r="19" fill="url(#nucleusGrad)"/>
+    <circle cx="-4" cy="-4" r="4.5" fill="#fdf4ff" opacity="0.8"/>
+  </g>
+
+  <!-- Top Cell Nuclei -->
+  <circle cx="110" cy="85" r="15" fill="url(#nucleusGrad)"/>
+  <circle cx="390" cy="80" r="16" fill="url(#nucleusGrad)"/>
+
+  <!-- Bottom Cell Nuclei -->
+  <circle cx="120" cy="410" r="16" fill="url(#nucleusGrad)"/>
+  <circle cx="400" cy="415" r="16" fill="url(#nucleusGrad)"/>
+
+  <!-- Large Central Vacuole Shading -->
+  <rect x="280" y="175" width="200" height="140" rx="25" fill="#ffffff" opacity="0.35" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <rect x="-20" y="175" width="220" height="140" rx="25" fill="#ffffff" opacity="0.35" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="6,4"/>
+</svg>

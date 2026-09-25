@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Media Pembelajaran Interaktif Laboratorium IPA Kelas VII SMP Fase D Kurikulum Merdeka - Pengenalan Alat Laboratorium, Keselamatan Kerja K3, 3D & Augmented Reality, Praktikum Virtual, Games, dan Evaluasi." />
+  <meta name="keywords"
+    content="Laboratorium IPA, Alat Lab IPA Kelas 7, Augmented Reality IPA, Praktikum Virtual, Mikroskop, Kurikulum Merdeka" />
+  <meta name="author" content="Tim Pengembang Media IPA SMP" />
+  <title>Media Pembelajaran Laboratorium IPA Kelas VII SMP | Sains Interaktif</title>
+
+  <!-- Google Fonts: Outfit & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Three.js & OrbitControls CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- ================= OVERRIDE DUAL THEME & ANIMASI (1 TEMA WARNA SELARAS & TEKS TERANG JELAS) ================= -->
+  <style>
+    /* Variabel Default (Tema Gelap - Estetik Sains Modern) */
+    :root {
+      --bg-primary: #070d1e;
+      --bg-secondary: #0c1630;
+      --bg-card: rgba(12, 22, 48, 0.88);
+      --bg-card-hover: rgba(18, 33, 70, 0.95);
+      --bg-main: #070d1e;
+      --bg-dark: #040813;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dark: #f8fafc;
+      --border-color: rgba(0, 229, 255, 0.18);
+      --glass-bg: rgba(12, 22, 48, 0.88);
+      --glass-border: rgba(0, 229, 255, 0.2);
+      --heading-color: #ffffff;
+      --nav-bg: rgba(7, 13, 30, 0.96);
+      --accent-cyan: #00f0ff;
+      --accent-cyan-dark: #0284c7;
+      --card-hover: rgba(0, 240, 255, 0.08);
+      --particle-opacity: 0.8;
+      --hero-bg: linear-gradient(135deg, rgba(14, 25, 52, 0.95), rgba(7, 13, 30, 0.98));
+      --hero-border: rgba(0, 229, 255, 0.25);
+      --hero-shadow: 0 15px 40px rgba(0, 229, 255, 0.12);
+      --hero-text: #ffffff;
+      --hero-lead-text: #cbd5e1;
+      --hazard-color: #fbbf24;
+      --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Variabel Tema Terang (Cerah, Bersih, Teks Jelas & Terbaca Sempurna) */
+    [data-theme="light"] {
+      --bg-primary: #f0f7ff;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --bg-main: #f0f7ff;
+      --bg-dark: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --text-dark: #0f172a;
+      --border-color: #bae6fd;
+      --glass-bg: #ffffff;
+      --glass-border: #bae6fd;
+      --heading-color: #0f172a;
+      --nav-bg: rgba(255, 255, 255, 0.98);
+      --accent-cyan: #0284c7;
+      --accent-cyan-dark: #0369a1;
+      --card-hover: rgba(2, 132, 199, 0.04);
+      --particle-opacity: 0.25;
+      --hero-bg: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+      --hero-border: rgba(2, 132, 199, 0.25);
+      --hero-shadow: 0 12px 35px rgba(2, 132, 199, 0.12);
+      --hero-text: #0f172a;
+      --hero-lead-text: #334155;
+      --hazard-color: #b45309;
+      --shadow-card: 0 10px 30px rgba(2, 132, 199, 0.08);
+    }
+
+    body {
+      background-color: var(--bg-main) !important;
+      color: var(--text-main) !important;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .main-header,
+    footer {
+      background: var(--nav-bg) !important;
+      border-color: var(--border-color) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.3s ease;
+    }
+
+    /* Seluruh Box dan Card Mengikuti Variabel Tema yang Konsisten */
+    .glass-box,
+    .login-box,
+    .cptp-card,
+    .feature-card,
+    .video-player-box,
+    .playlist-box,
+    .ar-sidebar-panel .glass-box,
+    .eval-start-box,
+    .eval-result-card,
+    .modal-container,
+    .tool-card,
+    .catalog-controls,
+    .k3-card,
+    .ar-view-container,
+    .lab-workspace-grid,
+    .control-group-box,
+    .well-cell,
+    .lkpd-container,
+    .match-game-layout,
+    .symbol-quiz-container,
+    .eval-q-card,
+    .eval-sidebar-box {
+      background: var(--bg-card) !important;
+      border: 1px solid var(--border-color) !important;
+      box-shadow: var(--shadow-card) !important;
+      color: var(--text-main) !important;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .feature-card:hover,
+    .video-playlist-item:hover,
+    .cptp-card:hover,
+    .tool-card:hover,
+    .k3-card:hover {
+      background: var(--bg-card-hover) !important;
+    }
+
+    /* Teks Judul dan Paragraf Dinamis yang Kontras dan Terang */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .brand-text h1,
+    .login-header h2,
+    .tool-card-title,
+    .k3-card-title,
+    .eval-q-text,
+    .modal-tool-title {
+      color: var(--heading-color) !important;
+      transition: color 0.3s ease;
+    }
+
+    p,
+    .nav-link,
+    label,
+    .info-split-grid div,
+    .cptp-list li,
+    .guide-step-item div,
+    .tool-card-desc,
+    .k3-card-meaning,
+    .k3-card-examples,
+    .k3-card-action,
+    .modal-tool-desc,
+    .modal-steps-list,
+    .video-info p,
+    .hotspot-info p {
+      color: var(--text-main) !important;
+      transition: color 0.3s ease;
+    }
+
+    .cptp-list li strong {
+      color: var(--heading-color) !important;
+    }
+
+    .tool-hazard-tag {
+      color: var(--hazard-color) !important;
+      font-weight: 600 !important;
+    }
+
+    /* ================= 1 TEMA WARNA HERO BANNER ================= */
+    .hero-banner {
+      background: var(--hero-bg) !important;
+      border: 1px solid var(--hero-border) !important;
+      box-shadow: var(--hero-shadow) !important;
+    }
+
+    .hero-title {
+      color: var(--hero-text) !important;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-cyan-dark)) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+
+    .hero-lead {
+      color: var(--hero-lead-text) !important;
+    }
+
+    /* Section Header */
+    [data-theme="light"] .section-header-block h2 {
+      background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+
+    /* Badges & Accents - Selaras 1 Tema */
+    .badge-accent {
+      background: rgba(0, 240, 255, 0.12) !important;
+      color: var(--accent-cyan) !important;
+      border: 1px solid rgba(0, 240, 255, 0.3) !important;
+    }
+
+    [data-theme="light"] .badge-accent {
+      background: rgba(2, 132, 199, 0.1) !important;
+      color: #0284c7 !important;
+      border: 1px solid rgba(2, 132, 199, 0.25) !important;
+    }
+
+    /* CTA Buttons - Selaras 1 Tema */
+    .btn-primary {
+      background: linear-gradient(135deg, #00f0ff, #0284c7) !important;
+      color: #031427 !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 18px rgba(0, 240, 255, 0.35) !important;
+    }
+
+    .btn-secondary {
+      background: rgba(0, 240, 255, 0.08) !important;
+      color: var(--accent-cyan) !important;
+      border: 1.5px solid rgba(0, 240, 255, 0.35) !important;
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7) !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 18px rgba(14, 165, 233, 0.35) !important;
+    }
+
+    /* Override Tombol di Tema Terang (Light Mode) */
+    [data-theme="light"] .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3) !important;
+    }
+
+    [data-theme="light"] .btn-secondary {
+      background: #ffffff !important;
+      color: #0284c7 !important;
+      border: 1.5px solid #0284c7 !important;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08) !important;
+    }
+
+    [data-theme="light"] .btn-secondary:hover {
+      background: #e0f2fe !important;
+      color: #0369a1 !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .btn-accent {
+      background: linear-gradient(135deg, #0369a1, #075985) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 15px rgba(3, 105, 161, 0.25) !important;
+    }
+
+    /* Komponen Menu Lain Menyesuaikan 1 Tema */
+    [data-theme="light"] .nav-link {
+      color: #334155 !important;
+      font-weight: 600 !important;
+    }
+
+    [data-theme="light"] .nav-link:hover {
+      color: #0284c7 !important;
+      background: #e0f2fe !important;
+    }
+
+    [data-theme="light"] .nav-link.active {
+      color: #0284c7 !important;
+      background: #e0f2fe !important;
+      border-color: #7dd3fc !important;
+    }
+
+    [data-theme="light"] .brand-icon {
+      background: linear-gradient(135deg, #0284c7, #0ea5e9) !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="light"] .brand-text h1 {
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .brand-text span {
+      color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .feature-icon-box {
+      background: rgba(2, 132, 199, 0.1) !important;
+      border-color: rgba(2, 132, 199, 0.25) !important;
+      color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .feature-link {
+      color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .guide-step-num {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="light"] .cptp-badge {
+      background: rgba(2, 132, 199, 0.1) !important;
+      color: #0284c7 !important;
+      border: 1px solid rgba(2, 132, 199, 0.25) !important;
+    }
+
+    [data-theme="light"] .pancasila-tag {
+      background: #f0f9ff !important;
+      border-color: #bae6fd !important;
+      color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .search-input,
+    [data-theme="light"] .form-input,
+    [data-theme="light"] .form-textarea {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 1px solid #94a3b8 !important;
+    }
+
+    [data-theme="light"] .filter-btn {
+      background: #ffffff !important;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+
+    [data-theme="light"] .filter-btn.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .tool-card-category {
+      background: rgba(255, 255, 255, 0.95) !important;
+      color: #0284c7 !important;
+      border: 1px solid #bae6fd !important;
+    }
+
+    [data-theme="light"] .tool-card-img-wrap {
+      background: #f1f5f9 !important;
+    }
+
+    [data-theme="light"] .btn-detail-link {
+      color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .video-playlist-item {
+      background: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    [data-theme="light"] .video-playlist-item.active {
+      background: #e0f2fe !important;
+      border-left-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .tool-chip {
+      background: #f1f5f9 !important;
+      color: #334155 !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    [data-theme="light"] .tool-chip.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .hotspot-card:hover,
+    [data-theme="light"] .hotspot-card.active {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .hotspot-badge {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="light"] .lab-tab-btn,
+    [data-theme="light"] .game-tab-btn {
+      background: #ffffff !important;
+      color: #334155 !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    [data-theme="light"] .lab-tab-btn.active,
+    [data-theme="light"] .game-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .mag-btn.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .sol-item.active,
+    [data-theme="light"] .ind-item.active {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .drag-tool-card {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .drop-target-box {
+      background: #f8fafc !important;
+      border-color: #7dd3fc !important;
+    }
+
+    [data-theme="light"] .card-front {
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .card-back {
+      background: #ffffff !important;
+      border: 2px solid #0284c7 !important;
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .eval-q-card {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    [data-theme="light"] .eval-q-text {
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .eval-option-item {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+
+    [data-theme="light"] .eval-option-item.selected {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .eval-option-item.selected .opt-letter {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="light"] .eval-num-btn {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #64748b !important;
+    }
+
+    [data-theme="light"] .eval-num-btn.answered {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    [data-theme="light"] .eval-num-btn.current {
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+      font-weight: 800 !important;
+    }
+
+    [data-theme="light"] .big-score-circle {
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 25px rgba(2, 132, 199, 0.35) !important;
+    }
+
+    /* Modal Spec Box Light Mode */
+    [data-theme="light"] .modal-spec-box {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #1e293b !important;
+    }
+
+    /* Animasi Karakter Guru Elsa - Hidup & Mengambang Lembut */
+    .character-container {
+      position: absolute;
+      bottom: -10px;
+      right: 4%;
+      width: 330px;
+      max-width: 40%;
+      z-index: 6;
+      pointer-events: none;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      animation: floatKarakter 4s ease-in-out infinite;
+    }
+
+    .character-container img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 25px rgba(2, 132, 199, 0.28));
+      transition: filter 0.3s ease;
+    }
+
+    [data-theme="dark"] .character-container img {
+      filter: drop-shadow(0 15px 30px rgba(0, 240, 255, 0.35));
+    }
+
+    @keyframes floatKarakter {
+      0% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+
+      50% {
+        transform: translateY(-16px) rotate(0.8deg) scale(1.015);
+      }
+
+      100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+    }
+
+    @media (max-width: 992px) {
+      .character-container {
+        width: 250px;
+        right: 1%;
+        bottom: -5px;
+        opacity: 0.92;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .character-container {
+        position: relative;
+        width: 230px;
+        margin: 2rem auto 0 auto;
+        right: auto;
+        bottom: auto;
+      }
+    }
+
+    /* Particle canvas opacity terhubung dengan tema */
+    #hero-particle-canvas {
+      opacity: var(--particle-opacity) !important;
+      transition: opacity 0.4s ease;
+    }
+
+    /* Style Pilihan Tema */
+    .theme-switcher {
+      display: flex;
+      gap: 5px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 4px;
+      border-radius: 20px;
+    }
+
+    .btn-theme {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .btn-theme.active {
+      background: var(--accent-cyan);
+      color: #fff;
+    }
+  </style>
+
+  <!-- Script Tema Cepat (Mencegah Flash of Unstyled Content) -->
+  <script>
+    const savedTheme = localStorage.getItem('app-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+</head>
+
+<body>
+
+  <!-- ================= LOGIN MODAL ================= -->
+  <div id="login-modal" class="login-overlay">
+    <div class="login-box glass-box">
+      <div class="login-header">
+        <i class="fa-solid fa-atom login-icon"></i>
+        <h2>Selamat Datang</h2>
+        <p>Silakan masukkan nama dan kelas Anda untuk memulai pembelajaran.</p>
+      </div>
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="student-name">Nama Lengkap:</label>
+        <input type="text" id="student-name" class="form-input" placeholder="Masukkan nama..." required>
+      </div>
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label for="student-class">Kelas:</label>
+        <input type="text" id="student-class" class="form-input" placeholder="Contoh: VII-A" required>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="window.submitLogin()">
+        <i class="fa-solid fa-right-to-bracket"></i> Masuk Laboratorium
+      </button>
+    </div>
+  </div>
+
+  <!-- Background Audio Digantikan oleh YouTube API di bagian bawah -->
+  <audio id="bg-audio" loop style="display:none;"></audio>
+  <div id="youtube-audio-container" style="display:none;"></div>
+
+  <!-- ================= HEADER & NAVIGATION BAR ================= -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="#" class="nav-brand" data-page="beranda">
+        <div class="brand-icon">
+          <i class="fa-solid fa-atom"></i>
+        </div>
+        <div class="brand-text">
+          <h1>LAB SAINS VII</h1>
+          <span>Media Laboratorium IPA SMP</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links for Sections -->
+      <ul class="nav-menu" id="navbar-menu">
+        <li><a href="#beranda" class="nav-link active" data-page="beranda"><i class="fa-solid fa-house"></i> Beranda</a>
+        </li>
+        <li><a href="#cptp" class="nav-link" data-page="cptp"><i class="fa-solid fa-bullseye"></i> CP/TP</a></li>
+        <li><a href="#materi" class="nav-link" data-page="materi"><i class="fa-solid fa-flask"></i> Materi Alat</a></li>
+        <li><a href="#video" class="nav-link" data-page="video"><i class="fa-solid fa-video"></i> Video & K3</a></li>
+        <li><a href="#ar-3d" class="nav-link" data-page="ar-3d"><i class="fa-solid fa-cube"></i> AR & 3D</a></li>
+        <li><a href="#praktikum" class="nav-link" data-page="praktikum"><i class="fa-solid fa-vial-circle-check"></i>
+            Praktikum</a></li>
+        <li><a href="#games" class="nav-link" data-page="games"><i class="fa-solid fa-gamepad"></i> Games</a></li>
+        <li><a href="#evaluasi" class="nav-link" data-page="evaluasi"><i class="fa-solid fa-file-pen"></i> Evaluasi</a>
+        </li>
+        <li id="nav-link-dashboard-guru" style="display: none;">
+          <a href="#dashboard-guru" class="nav-link nav-link-teacher" data-page="dashboard-guru">
+            <i class="fa-solid fa-chart-line"></i> Dashboard Guru
+          </a>
+        </li>
+      </ul>
+
+      <!-- Action Controls -->
+      <div class="nav-actions">
+        <button class="btn btn-primary btn-sm" id="btn-nav-login" onclick="window.labAuth.openLoginModal()">
+          <i class="fa-solid fa-right-to-bracket"></i> Masuk / Login
+        </button>
+
+        <div id="user-info-badge" class="badge-accent" style="display: none; margin-right: 8px;">
+          <i class="fa-solid fa-user-graduate"></i> <span id="display-student-name">Siswa</span> (<span
+            id="display-student-class">VII</span>)
+        </div>
+
+        <!-- Pilihan Tema -->
+        <div class="theme-switcher">
+          <button class="btn-theme" id="btn-theme-light" onclick="window.setTheme('light')">Terang</button>
+          <button class="btn-theme" id="btn-theme-dark" onclick="window.setTheme('dark')">Gelap</button>
+        </div>
+
+        <button class="btn-icon" id="btn-toggle-sound" title="Mulai / Hentikan Musik" onclick="window.toggleAudio()">
+          <i class="fa-solid fa-volume-xmark" id="audio-icon"></i>
+        </button>
+        <button class="btn-icon hamburger-btn" id="hamburger-toggle" title="Menu Navigasi">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN APP VIEWPORTS (8 SECTIONS) ================= -->
+  <main>
+
+    <!-- ================= 1. HALAMAN BERANDA ================= -->
+    <section id="page-beranda" class="page-section active-section">
+      <div class="container">
+        <!-- Hero Banner with Cyber Particle Canvas -->
+        <div class="hero-banner" style="position: relative; overflow: hidden;">
+
+          <!-- ================= KARAKTER ANIMASI ================= -->
+          <div class="character-container">
+            <img src="karakter.png" alt="Karakter Animasi Guru" />
+          </div>
+          <!-- =================================================== -->
+
+          <canvas id="hero-particle-canvas"></canvas>
+          <div class="hero-content">
+            <span class="badge-accent"><i class="fa-solid fa-microscope"></i> Kurikulum Merdeka - Fase D Kelas
+              VII</span>
+            <h1 class="hero-title">Jelajahi Dunia <span>Laboratorium IPA</span> Secara Interaktif</h1>
+            <p class="hero-lead">
+              Pelajari fungsi alat-alat laboratorium sains, terapkan standar keselamatan kerja (K3), amati model 3D &
+              Augmented Reality, serta uji pemahamanmu melalui praktikum virtual dan games seru!
+            </p>
+            <div class="hero-cta-group">
+              <button class="btn btn-primary" onclick="window.navigateToPage('materi')">
+                <i class="fa-solid fa-book-open"></i> Mulai Belajar Alat
+              </button>
+              <button class="btn btn-secondary" onclick="window.navigateToPage('ar-3d')">
+                <i class="fa-solid fa-cube"></i> Buka Model 3D / AR
+              </button>
+              <button class="btn btn-accent" onclick="window.navigateToPage('praktikum')">
+                <i class="fa-solid fa-flask-vial"></i> Praktikum Virtual
+              </button>
+              <button class="btn btn-outline" style="border-color: var(--accent-cyan); color: var(--accent-cyan);"
+                onclick="window.labAuth.openLoginModal()">
+                <i class="fa-solid fa-right-to-bracket"></i> Login Siswa / Guru
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Header -->
+        <div class="section-header-block">
+          <span class="badge-accent">Fitur Unggulan</span>
+          <h2>Eksplorasi Modul Pembelajaran</h2>
+          <p>Pilih menu yang ingin kamu pelajari hari ini untuk pengalaman belajar sains yang menyenangkan.</p>
+        </div>
+
+        <!-- 6 Feature Cards Grid -->
+        <div class="features-grid">
+          <div class="feature-card" onclick="window.navigateToPage('cptp')">
+            <div class="feature-icon-box"><i class="fa-solid fa-bullseye"></i></div>
+            <h3>Capaian & Tujuan (CP/TP)</h3>
+            <p>Target kompetensi IPA Fase D dan Profil Pelajar Pancasila yang harus dicapai.</p>
+            <span class="feature-link">Buka CP/TP <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="feature-card" onclick="window.navigateToPage('materi')">
+            <div class="feature-icon-box"><i class="fa-solid fa-flask"></i></div>
+            <h3>Katalog Alat Laboratorium</h3>
+            <p>Ensiklopedia alat ukur, wadah reaksi, pemanas, dan alat pengamatan dengan panduan Do's & Don'ts.</p>
+            <span class="feature-link">Lihat Katalog <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="feature-card" onclick="window.navigateToPage('video')">
+            <div class="feature-icon-box"><i class="fa-solid fa-video"></i></div>
+            <h3>Video & K3 Laboratorium</h3>
+            <p>Video SOP keselamatan kerja di lab, APD, dan infografis simbol bahaya bahan kimia (B3).</p>
+            <span class="feature-link">Tonton Video <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="feature-card" onclick="window.navigateToPage('ar-3d')">
+            <div class="feature-icon-box"><i class="fa-solid fa-cube"></i></div>
+            <h3>Augmented Reality & 3D</h3>
+            <p>Rotasi 360°, inspect hotspot anatomi mikroskop & bunsen, serta simulasi kamera AR di mejamu.</p>
+            <span class="feature-link">Buka Mode AR <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="feature-card" onclick="window.navigateToPage('praktikum')">
+            <div class="feature-icon-box"><i class="fa-solid fa-vial-circle-check"></i></div>
+            <h3>Praktikum Virtual & LKPD</h3>
+            <p>Simulasi fokus mikroskop sel bawang dan uji reaksi asam-basa lakmus dengan LKPD cetak digital.</p>
+            <span class="feature-link">Mulai Praktikum <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="feature-card" onclick="window.navigateToPage('games')">
+            <div class="feature-icon-box"><i class="fa-solid fa-gamepad"></i></div>
+            <h3>Games Edukatif Sains</h3>
+            <p>Tiga mini-games seru: Drag & Drop Alat, Kuis Kilat Simbol Bahaya, dan Memory Card Matching.</p>
+            <span class="feature-link">Mainkan Game <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </div>
+
+        <!-- Petunjuk Penggunaan & Profil Pengembang -->
+        <div class="info-split-grid">
+          <div class="glass-box">
+            <h3><i class="fa-solid fa-circle-question text-cyan"></i> Petunjuk Penggunaan Media</h3>
+            <div class="guide-steps-list">
+              <div class="guide-step-item">
+                <div class="guide-step-num">1</div>
+                <div>
+                  <h4>Pahami Sasaran Pembelajaran</h4>
+                  <p>Buka menu <strong>CP/TP</strong> untuk mengetahui indikator kompetensi sains kelas VII.</p>
+                </div>
+              </div>
+              <div class="guide-step-item">
+                <div class="guide-step-num">2</div>
+                <div>
+                  <h4>Pelajari Materi & Video K3</h4>
+                  <p>Eksplorasi fungsi alat lab di menu <strong>Materi</strong> dan simak video keselamatan kerja di
+                    <strong>Video & K3</strong>.
+                  </p>
+                </div>
+              </div>
+              <div class="guide-step-item">
+                <div class="guide-step-num">3</div>
+                <div>
+                  <h4>Eksperimen di AR 3D & Praktikum Virtual</h4>
+                  <p>Putar model 3D alat dan lakukan eksperimen virtual mikroskop serta larutan asam-basa.</p>
+                </div>
+              </div>
+              <div class="guide-step-item">
+                <div class="guide-step-num">4</div>
+                <div>
+                  <h4>Uji Kemampuan & Unduh Sertifikat</h4>
+                  <p>Asah ketangkasan di menu <strong>Games</strong> dan kerjakan <strong>Soal Evaluasi</strong> untuk
+                    mendapatkan sertifikat.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-box">
+            <h3><i class="fa-solid fa-address-card text-cyan"></i> Informasi Pembelajaran</h3>
+            <div style="font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.8rem;">
+              <div><strong>Mata Pelajaran:</strong> Ilmu Pengetahuan Alam (IPA)</div>
+              <div><strong>Fase / Kelas:</strong> Fase D / Kelas VII SMP</div>
+              <div><strong>Materi Pokok:</strong> Hakikat Ilmu Sains, Alat Laboratorium, dan Keselamatan Kerja (K3)
+              </div>
+              <div><strong>Model Pembelajaran:</strong> Discovery & Virtual Scientific Inquiry</div>
+              <hr style="border: none; border-top: 1px solid var(--border-color); margin: 0.5rem 0;" />
+              <div><strong>Pengembang:</strong> Elsa Ayuningthias Wahyudi,S.Pd. </div>
+              <div><strong>Versi Media:</strong> 2.0 (AR & Virtual Lab Edition)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2. HALAMAN CP / TP ================= -->
+    <section id="page-cptp" class="page-section">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-accent">Kurikulum Merdeka</span>
+          <h2>Capaian & Tujuan Pembelajaran</h2>
+          <p>Panduan capaian pembelajaran dan alur tujuan pembelajaran IPA Fase D Kelas VII SMP.</p>
+        </div>
+
+        <div class="cptp-cards-grid">
+          <div class="cptp-card">
+            <span class="cptp-badge"><i class="fa-solid fa-graduation-cap"></i> Capaian Pembelajaran (CP)</span>
+            <h3>Pemahaman IPA & Keterampilan Proses</h3>
+            <ul class="cptp-list">
+              <li>Peserta didik mampu melakukan pengukuran terhadap aspek fisis yang mereka temui dan memanfaatkan ragam
+                alat ukur yang tepat.</li>
+              <li>Peserta didik memahami prosedur keselamatan kerja di laboratorium IPA (K3), mampu mengidentifikasi
+                simbol bahaya bahan kimia, dan mempraktikkan pencegahan kecelakaan kerja.</li>
+              <li>Peserta didik mampu menggunakan alat bantu pengamatan seperti mikroskop cahaya untuk mengamati
+                struktur mikroskopis makhluk hidup.</li>
+              <li>Peserta didik mampu merancang, melakukan, dan menginterpretasikan hasil percobaan sains secara mandiri
+                dan kritis.</li>
+            </ul>
+          </div>
+
+          <div class="cptp-card">
+            <span class="cptp-badge"><i class="fa-solid fa-list-check"></i> Tujuan Pembelajaran (TP)</span>
+            <h3>Indikator Ketercapaian Siswa</h3>
+            <ul class="cptp-list">
+              <li><strong>TP 1:</strong> Mengidentifikasi nama, jenis, dan fungsi alat-alat laboratorium IPA (alat ukur,
+                wadah reaksi, pemanas, dan mikroskop) dengan benar.</li>
+              <li><strong>TP 2:</strong> Menerapkan prosedur keselamatan kerja (K3) serta mengenali arti piktogram
+                simbol bahaya bahan kimia di laboratorium.</li>
+              <li><strong>TP 3:</strong> Mengoperasikan mikroskop cahaya virtual secara bertahap untuk menghasilkan
+                bayangan preparat yang fokus dan tajam.</li>
+              <li><strong>TP 4:</strong> Melakukan pengujian sifat larutan asam-basa menggunakan indikator alami dan
+                kertas lakmus serta mencatat hasilnya pada lembar kerja.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="glass-box">
+          <h3><i class="fa-solid fa-star text-cyan"></i> Dimensi Profil Pelajar Pancasila</h3>
+          <p style="margin-bottom: 1rem;">Pengembangan karakter peserta didik yang terintegrasi dalam
+            pembelajaran media ini:</p>
+          <div class="pancasila-tags-grid">
+            <div class="pancasila-tag"><i class="fa-solid fa-brain"></i> Bernalar Kritis</div>
+            <div class="pancasila-tag"><i class="fa-solid fa-user-gear"></i> Mandiri</div>
+            <div class="pancasila-tag"><i class="fa-solid fa-people-group"></i> Gotong Royong</div>
+            <div class="pancasila-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> Kreatif</div>
+            <div class="pancasila-tag"><i class="fa-solid fa-shield-heart"></i> Berakhlak Mulia</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3. HALAMAN MATERI ALAT LAB ================= -->
+    <section id="page-materi" class="page-section">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-accent">Ensiklopedia Sains</span>
+          <h2>Katalog Alat Laboratorium IPA</h2>
+          <p>Pelajari fungsi, spesifikasi, dan prosedur pemakaian alat-alat laboratorium IPA secara mendalam.</p>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="catalog-controls">
+          <div class="search-box-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-alat-input" class="search-input"
+              placeholder="Cari nama alat atau fungsinya (misal: mikroskop, gelas ukur)..." />
+          </div>
+
+          <div class="category-filter-bar">
+            <button class="filter-btn active" data-category="all">Semua Alat</button>
+            <button class="filter-btn" data-category="ukur">Alat Ukur</button>
+            <button class="filter-btn" data-category="penampung">Alat Penampung & Pencampur</button>
+            <button class="filter-btn" data-category="pengamatan">Alat Pengamatan</button>
+            <button class="filter-btn" data-category="pemanas-pendukung">Alat Pemanas & Pendukung</button>
+          </div>
+        </div>
+
+        <!-- Equipment Cards Dynamic Grid -->
+        <div class="tools-grid" id="alat-catalog-grid"></div>
+      </div>
+    </section>
+
+    <!-- Modal Detail Alat Laboratorium -->
+    <div class="modal-overlay" id="tool-detail-modal">
+      <div class="modal-container">
+        <button class="modal-close-btn" onclick="closeToolModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-body" id="modal-tool-content"></div>
+      </div>
+    </div>
+
+    <!-- ================= 4. HALAMAN VIDEO & K3 ================= -->
+    <section id="page-video" class="page-section">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-accent">Audio Visual & SOP</span>
+          <h2>Video Pembelajaran & K3 Laboratorium</h2>
+          <p>Simak video demonstrasi penggunaan alat yang benar dan pahami simbol keselamatan kerja.</p>
+        </div>
+
+        <!-- Video Player & Playlist Grid -->
+        <div class="video-section-grid">
+          <div class="video-player-box">
+            <div class="video-iframe-wrap">
+              <iframe id="main-video-iframe" src="https://www.youtube.com/embed/2g4QTiXrw98"
+                title="Video Pembelajaran Laboratorium IPA" allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            </div>
+            <div class="video-info">
+              <h3 id="current-video-title">Pengenalan dan Cara Penggunaan Alat-Alat Laboratorium IPA</h3>
+              <p id="current-video-desc">Video komprehensif cara memegang mikroskop, membaca meniskus gelas ukur dengan
+                tepat, memanaskan tabung reaksi dengan aman, dan merakit rangkaian pemanas pembakar spiritus dan kaki
+                tiga.</p>
+            </div>
+          </div>
+
+          <div class="playlist-box">
+            <h3><i class="fa-solid fa-play-circle text-cyan"></i> Daftar Video Materi</h3>
+            <div class="playlist-items">
+              <div class="video-playlist-item active" data-video-id="vid-1">
+                <div class="playlist-thumb">
+                  <img src="https://img.youtube.com/vi/2g4QTiXrw98/hqdefault.jpg" alt="Video 1" />
+                  <span class="playlist-duration">05:33</span>
+                </div>
+                <div class="playlist-meta">
+                  <h4>Pengenalan Alat Lab IPA</h4>
+                  <span><i class="fa-solid fa-book-open"></i> Materi Utama</span>
+                </div>
+              </div>
+
+              <div class="video-playlist-item" data-video-id="vid-2">
+                <div class="playlist-thumb">
+                  <img src="https://img.youtube.com/vi/BbE__JY1BfE/hqdefault.jpg" alt="Video 2" />
+                  <span class="playlist-duration">06:15</span>
+                </div>
+                <div class="playlist-meta">
+                  <h4>Prosedur Keselamatan Kerja & Simbol Bahaya Bahan Kimia</h4>
+                  <span><i class="fa-solid fa-shield-halved"></i> K3 & Simbol B3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Infografis Simbol Bahaya K3 Section -->
+        <div class="section-header-block" style="margin-top: 4rem;">
+          <span class="badge-accent">Piktogram GHS B3</span>
+          <h2>Simbol Bahaya Bahan Kimia Laboratorium</h2>
+          <p>Kenali arti setiap simbol belah ketupat bahaya agar kamu selalu waspada saat berpraktikum.</p>
+        </div>
+
+        <div class="k3-symbols-grid" id="k3-symbols-grid"></div>
+      </div>
+    </section>
+
+    <!-- ================= 5. HALAMAN AUGMENTED REALITY (AR) & 3D ================= -->
+    <section id="page-ar-3d" class="page-section">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-accent">Interaktif 3D & WebAR</span>
+          <h2>Augmented Reality & Model 3D Alat Lab</h2>
+          <p>Putar dan amati detail struktur alat lab dalam bentuk 3D interaktif atau aktifkan kamera AR.</p>
+        </div>
+
+        <div class="ar-view-container">
+          <!-- 3D / AR Viewport -->
+          <div class="ar-viewport-wrapper" id="ar-camera-wrapper">
+            <video id="ar-webcam-feed" autoplay playsinline muted
+              style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:0;"></video>
+            <div id="threejs-canvas-container" style="position: relative; z-index: 2;"></div>
+
+            <!-- AR Overlay HUD -->
+            <div class="ar-camera-overlay">
+              <div class="ar-status-top">
+                <div id="ar-status-badge" class="ar-badge badge-success">
+                  <i class="fa-solid fa-cube"></i> Mode 3D Viewer Siap
+                </div>
+                <div class="ar-badge">
+                  <i class="fa-solid fa-arrows-up-down-left-right"></i> Drag untuk putar 360° | Scroll untuk Zoom
+                </div>
+              </div>
+
+              <div class="ar-controls-bar">
+                <button class="btn btn-secondary" onclick="window.labAR.startCamera('ar-webcam-feed')">
+                  <i class="fa-solid fa-camera"></i> Nyalakan Kamera AR
+                </button>
+                <button class="btn btn-secondary" onclick="window.labViewer3D.toggleAutoRotate()">
+                  <i class="fa-solid fa-rotate"></i> Putar Otomatis
+                </button>
+                <button class="btn btn-accent" id="btn-3d-action" onclick="window.labViewer3D.toggleAction()">
+                  <i class="fa-solid fa-play"></i> Jalankan Animasi
+                </button>
+                <button class="btn btn-secondary" onclick="window.labAR.captureSnapshot()">
+                  <i class="fa-solid fa-camera-retro"></i> Tangkap Gambar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- AR Sidebar & Hotspots Panel -->
+          <div class="ar-sidebar-panel">
+            <div class="glass-box" style="padding: 1.2rem;">
+              <h4 style="font-size: 0.95rem; margin-bottom: 0.8rem; color: var(--accent-cyan);">
+                <i class="fa-solid fa-shapes"></i> Pilih Model Alat 3D:
+              </h4>
+              <div class="tool-switcher-chips"
+                style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 200px; overflow-y: auto; padding-right: 4px;">
+                <button class="tool-chip active" onclick="window.labAR.setTool('mikroskop')">🔬 Mikroskop</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('bunsen-spiritus')">🔥 Bunsen & Kaki 3</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('gelas-kimia')">🧪 Gelas & Pipet</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('gelas-ukur')">📏 Gelas Ukur</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('labu-erlenmeyer')">⚗️ Labu Erlenmeyer</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('neraca-ohaus')">⚖️ Neraca Ohaus</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('termometer-lab')">🌡️ Termometer</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('jangka-sorong')">📐 Jangka Sorong</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('tabung-reaksi')">🧪 Rak Tabung</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('cawan-petri')">🧫 Cawan Petri</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('lup')">🔍 Kaca Pembesar</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('kaki-tiga')">🪑 Kaki Tiga & Kasa</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('batang-pengaduk')">🥢 Batang Pengaduk</button>
+                <button class="tool-chip" onclick="window.labAR.setTool('corong-kaca')">🔻 Corong Kaca</button>
+              </div>
+            </div>
+
+            <!-- Active Tool Card Info -->
+            <div id="ar-tool-info-card" class="glass-box" style="padding: 1.2rem;">
+              <div class="ar-card-header">
+                <div class="badge-accent"><i class="fa-solid fa-cube"></i> Model AR</div>
+                <h3 style="font-size: 1.2rem; margin: 0.5rem 0;">Mikroskop Cahaya</h3>
+              </div>
+              <p style="font-size: 0.85rem; margin-bottom: 0.8rem;">
+                <strong>Fungsi:</strong> Mengamati benda-benda mikroskopis (sel, jaringan, mikroorganisme) dengan
+                perbesaran optik.
+              </p>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">
+                <span><i class="fa-solid fa-shield-halved"></i> Rentan Pecah</span> | <span><i
+                    class="fa-solid fa-layer-group"></i> Logam & Kaca Optik</span>
+              </div>
+            </div>
+
+            <!-- Interactive Hotspot List -->
+            <div class="hotspots-card-container" id="hotspot-list-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6. HALAMAN PRAKTIKUM VIRTUAL ================= -->
+    <section id="page-praktikum" class="page-section">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-accent">Virtual Inquiry</span>
+          <h2>Praktikum Virtual & Lembar Kerja (LKPD)</h2>
+          <p>Lakukan simulasi pengamatan mikroskop dan pengujian kimia sederhana langsung di komputermu.</p>
+        </div>
+
+        <!-- Virtual Lab Tabs -->
+        <div class="virtual-lab-tabs">
+          <button class="lab-tab-btn active" id="tab-btn-lab1" onclick="switchLabTab('mikroskop')">
+            <i class="fa-solid fa-microscope"></i> Praktikum 1: Mikroskop Sel Tumbuhan
+          </button>
+          <button class="lab-tab-btn" id="tab-btn-lab2" onclick="switchLabTab('kimia')">
+            <i class="fa-solid fa-flask-vial"></i> Praktikum 2: Uji Asam Basa & Indikator
+          </button>
+        </div>
+
+        <!-- Workspace Praktikum 1: Mikroskop -->
+        <div class="lab-workspace-grid" id="lab-panel-mikroskop">
+          <div class="microscope-viewport-box">
+            <div class="microscope-lens-frame">
+              <div id="specimen-image-layer"></div>
+              <div class="microscope-crosshair"></div>
+              <div id="organelle-labels"
+                style="position: absolute; top:0; left:0; width:100%; height:100%; transition: opacity 0.3s ease; opacity: 0;">
+                <span
+                  style="position: absolute; top: 30%; left: 45%; background: rgba(0,0,0,0.7); color:#00f0ff; font-size:10px; padding:2px 6px; border-radius:4px;">Nukleus</span>
+                <span
+                  style="position: absolute; top: 60%; left: 25%; background: rgba(0,0,0,0.7); color:#38ef7d; font-size:10px; padding:2px 6px; border-radius:4px;">Dinding
+                  Sel</span>
+                <span
+                  style="position: absolute; top: 50%; left: 65%; background: rgba(0,0,0,0.7); color:#f1c40f; font-size:10px; padding:2px 6px; border-radius:4px;">Sitoplasma</span>
+              </div>
+            </div>
+            <div id="focus-status-indicator" class="focus-status-badge blur">
+              <i class="fa-solid fa-circle-xmark"></i> BURAM (Atur Makrometer & Mikrometer)
+            </div>
+          </div>
+
+          <div class="lab-controls-panel">
+            <div class="control-group-box glass-box" style="padding: 1rem;">
+              <h4><i class="fa-solid fa-vial"></i> 1. Pilih Spesimen Preparat:</h4>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary specimen-btn active" data-specimen="bawang"
+                  onclick="window.virtualLab.setSpecimen('bawang')">🧅 Sel Bawang Merah</button>
+                <button class="btn btn-secondary specimen-btn" data-specimen="stomata"
+                  onclick="window.virtualLab.setSpecimen('stomata')">🌿 Stomata Daun</button>
+                <button class="btn btn-secondary specimen-btn" data-specimen="pipi"
+                  onclick="window.virtualLab.setSpecimen('pipi')">🧬 Sel Mukosa Pipi</button>
+              </div>
+            </div>
+
+            <div class="control-group-box glass-box" style="padding: 1rem;">
+              <h4><i class="fa-solid fa-magnifying-glass-plus"></i> 2. Perbesaran Lensa Objektif:</h4>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary mag-btn" data-mag="4"
+                  onclick="window.virtualLab.setMagnification(4)">4x (Lemah)</button>
+                <button class="btn btn-secondary mag-btn active" data-mag="10"
+                  onclick="window.virtualLab.setMagnification(10)">10x (Sedang)</button>
+                <button class="btn btn-secondary mag-btn" data-mag="40"
+                  onclick="window.virtualLab.setMagnification(40)">40x (Kuat)</button>
+              </div>
+            </div>
+
+            <div class="control-group-box glass-box" style="padding: 1rem;">
+              <h4><i class="fa-solid fa-sliders"></i> 3. Pengaturan Fokus & Pencahayaan:</h4>
+              <div class="slider-row">
+                <label>Makrometer (Kasar):</label>
+                <input type="range" class="lab-slider" min="0" max="100" value="50"
+                  oninput="window.virtualLab.updateCoarse(this.value)" />
+              </div>
+              <div class="slider-row">
+                <label>Mikrometer (Halus):</label>
+                <input type="range" class="lab-slider" min="0" max="100" value="50"
+                  oninput="window.virtualLab.updateFine(this.value)" />
+              </div>
+              <div class="slider-row">
+                <label>Diafragma Lampu:</label>
+                <input type="range" class="lab-slider" min="10" max="100" value="80"
+                  oninput="window.virtualLab.updateLight(this.value)" />
+                <span id="light-val-display" style="font-size: 0.85rem; width: 40px;">80%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workspace Praktikum 2: Uji Asam Basa -->
+        <div class="lab-workspace-grid" id="lab-panel-kimia" style="display: none;">
+          <div>
+            <h4 style="margin-bottom: 1rem; color: var(--accent-cyan);">
+              <i class="fa-solid fa-table-cells-large"></i> Plat Tetes Pengujian (Klik Lingkaran untuk Meneteskan):
+            </h4>
+            <div class="well-plate-grid" id="well-plate-grid"></div>
+            <button class="btn btn-secondary" style="margin-top: 1.2rem;" onclick="window.virtualLab.resetPlate()">
+              <i class="fa-solid fa-rotate"></i> Bersihkan Plat Tetes
+            </button>
+          </div>
+
+          <div class="lab-controls-panel">
+            <div class="control-group-box glass-box" style="padding: 1rem;">
+              <h4><i class="fa-solid fa-flask"></i> 1. Pilih Sampel Larutan:</h4>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <button class="btn btn-secondary sol-item active" data-sol="jeruk"
+                  onclick="window.virtualLab.selectSolution('jeruk')">🍋 Air Perasan Jeruk (Asam)</button>
+                <button class="btn btn-secondary sol-item" data-sol="cuka"
+                  onclick="window.virtualLab.selectSolution('cuka')">🧪 Asam Cuka Dapur (Asam)</button>
+                <button class="btn btn-secondary sol-item" data-sol="garam"
+                  onclick="window.virtualLab.selectSolution('garam')">🧂 Larutan Garam Dapur (Netral)</button>
+                <button class="btn btn-secondary sol-item" data-sol="sabun"
+                  onclick="window.virtualLab.selectSolution('sabun')">🧼 Air Sabun Mandi (Basa)</button>
+                <button class="btn btn-secondary sol-item" data-sol="kapur"
+                  onclick="window.virtualLab.selectSolution('kapur')">🍶 Air Kapur Sirih (Basa)</button>
+              </div>
+            </div>
+
+            <div class="control-group-box glass-box" style="padding: 1rem;">
+              <h4><i class="fa-solid fa-palette"></i> 2. Pilih Indikator:</h4>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <button class="btn btn-secondary ind-item active" data-ind="lakmus-merah"
+                  onclick="window.virtualLab.selectIndicator('lakmus-merah')">🔴 Kertas Lakmus Merah</button>
+                <button class="btn btn-secondary ind-item" data-ind="lakmus-biru"
+                  onclick="window.virtualLab.selectIndicator('lakmus-biru')">🔵 Kertas Lakmus Biru</button>
+                <button class="btn btn-secondary ind-item" data-ind="kunyit"
+                  onclick="window.virtualLab.selectIndicator('kunyit')">🟡 Ekstrak Kunyit Alami</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digital LKPD Form & Export -->
+        <div class="lkpd-container glass-box" style="padding: 2rem; border-radius: 12px; margin-top: 2rem;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <span class="badge-accent"><i class="fa-solid fa-file-waveform"></i> Lembar Kerja Digital</span>
+              <h3 style="font-family: var(--font-heading); font-size: 1.4rem; margin-top: 0.3rem;">LKPD Hasil Praktikum Siswa</h3>
+            </div>
+            <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="window.virtualLab.submitLKPD()">
+                <i class="fa-solid fa-paper-plane"></i> Kirim LKPD ke Guru
+              </button>
+              <button class="btn btn-secondary" onclick="window.virtualLab.printLKPD()">
+                <i class="fa-solid fa-print"></i> Cetak Dokumen LKPD
+              </button>
+            </div>
+          </div>
+
+          <div class="lkpd-form-grid">
+            <div class="form-group">
+              <label><i class="fa-solid fa-user"></i> Nama Peserta Didik:</label>
+              <input type="text" id="lkpd-nama-siswa" class="form-input" placeholder="Masukkan nama lengkapmu..." required />
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-school"></i> Pilih Kelas / Rombel:</label>
+              <select id="lkpd-kelas-siswa" class="form-input">
+                <option value="VII-A">Kelas VII-A</option>
+                <option value="VII-B">Kelas VII-B</option>
+                <option value="VII-C">Kelas VII-C</option>
+                <option value="VII-D">Kelas VII-D</option>
+                <option value="VII-E">Kelas VII-E</option>
+                <option value="VII-F">Kelas VII-F</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>1. Jelaskan prinsip kerja mengatur perbesaran dan fokus pada mikroskop cahaya berdasarkan
+              praktikum:</label>
+            <textarea id="lkpd-jawaban-1" class="form-textarea"
+              placeholder="Tuliskan analisis pengamatan mikroskop..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>2. Kesimpulan pengujian larutan asam-basa menggunakan indikator lakmus/kunyit:</label>
+            <textarea id="lkpd-jawaban-2" class="form-textarea"
+              placeholder="Tuliskan kesimpulan sifat asam-basa larutan..."></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. HALAMAN GAMES EDUKASI ================= -->
+    <section id="page-games" class="page-section">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-accent">Gamifikasi Sains</span>
+          <h2>Mini Games Laboratorium IPA</h2>
+          <p>Uji ketangkasan dan ingatanmu mengenai alat laboratorium dan simbol keselamatan kerja.</p>
+        </div>
+
+        <!-- Game Selector Nav Tabs -->
+        <div class="game-tabs-nav">
+          <button class="game-tab-btn active" data-game="match" onclick="window.labGames.switchGame('match')">
+            <i class="fa-solid fa-arrows-split-up-and-left"></i> Game 1: Cocokkan Alat & Fungsi
+          </button>
+          <button class="game-tab-btn" data-game="symbols" onclick="window.labGames.switchGame('symbols')">
+            <i class="fa-solid fa-bolt"></i> Game 2: Kuis Kilat Simbol K3
+          </button>
+          <button class="game-tab-btn" data-game="memory" onclick="window.labGames.switchGame('memory')">
+            <i class="fa-solid fa-clone"></i> Game 3: Memory Lab Cards
+          </button>
+        </div>
+
+        <!-- Panel Game 1: Drag and Drop -->
+        <div class="game-panel active" id="game-panel-match">
+          <div class="match-game-layout">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h4 style="color: var(--accent-cyan);"><i class="fa-solid fa-hand"></i> Tarik Kartu Alat:</h4>
+                <div id="match-game-score" class="badge-accent">Skor: 0 / 6</div>
+              </div>
+              <div id="match-tools-col"></div>
+            </div>
+
+            <div>
+              <div style="margin-bottom: 1rem;">
+                <h4 style="color: var(--accent-cyan);"><i class="fa-solid fa-bullseye"></i> Kotak Target Fungsi:</h4>
+              </div>
+              <div id="match-targets-col"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Game 2: Simbol K3 Speed Quiz -->
+        <div class="game-panel" id="game-panel-symbols">
+          <div class="symbol-quiz-container" id="symbol-quiz-container"></div>
+        </div>
+
+        <!-- Panel Game 3: Memory Cards -->
+        <div class="game-panel" id="game-panel-memory">
+          <div style="text-align: center; margin-bottom: 1.5rem;">
+            <span class="badge-accent"><i class="fa-solid fa-shoe-prints"></i> Jumlah Langkah: <strong
+                id="memory-moves-count">0</strong></span>
+          </div>
+          <div class="memory-cards-grid" id="memory-cards-grid"></div>
+        </div>
+
+
+      </div>
+    </section>
+
+    <!-- ================= 8. HALAMAN SOAL EVALUASI ================= -->
+    <section id="page-evaluasi" class="page-section">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="badge-accent">Uji Kompetensi</span>
+          <h2>Soal Evaluasi & Sertifikat Digital</h2>
+          <p>Uji pemahamanmu dengan 15 soal pilihan ganda berbobot dan peroleh sertifikat kelulusan.</p>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="eval-start-screen" class="eval-start-box">
+          <div style="font-size: 3.5rem; color: var(--accent-cyan); margin-bottom: 1rem;">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 0.8rem;">Evaluasi Akhir
+            Laboratorium IPA</h3>
+          <p style="margin-bottom: 2rem;">
+            Terdiri dari 15 butir soal pilihan ganda dengan durasi pengerjaan 20 menit. Nilai minimal ketuntasan (KKTP)
+            adalah 75.
+          </p>
+
+          <div style="text-align: left; max-width: 400px; margin: 0 auto 2rem auto;">
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label><i class="fa-solid fa-user"></i> Nama Lengkap Siswa:</label>
+              <input type="text" id="eval-student-name" class="form-input" placeholder="Masukkan nama lengkapmu..." required />
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-school"></i> Pilih Kelas:</label>
+              <select id="eval-student-class" class="form-input">
+                <option value="VII-A">Kelas VII-A</option>
+                <option value="VII-B">Kelas VII-B</option>
+                <option value="VII-C">Kelas VII-C</option>
+                <option value="VII-D">Kelas VII-D</option>
+                <option value="VII-E">Kelas VII-E</option>
+                <option value="VII-F">Kelas VII-F</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-block" style="max-width: 400px; margin: 0 auto;"
+            onclick="window.labEvaluation.startQuiz()">
+            <i class="fa-solid fa-play"></i> Mulai Kerjakan Soal
+          </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="eval-quiz-screen" style="display: none;">
+          <div class="eval-layout-grid">
+            <div>
+              <div id="eval-question-container"></div>
+              <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                <button class="btn btn-secondary" id="eval-btn-prev" onclick="window.labEvaluation.prevQuestion()">
+                  <i class="fa-solid fa-arrow-left"></i> Soal Sebelumnya
+                </button>
+                <button class="btn btn-secondary" id="eval-btn-next" onclick="window.labEvaluation.nextQuestion()">
+                  Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-accent" id="eval-btn-submit" style="display: none;"
+                  onclick="window.labEvaluation.submitQuiz()">
+                  <i class="fa-solid fa-paper-plane"></i> Kirim Jawaban
+                </button>
+              </div>
+            </div>
+
+            <div class="eval-sidebar-box glass-box" style="padding: 1.5rem; border-radius: 12px;">
+              <div class="timer-pill-box"
+                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; text-align: center; margin-bottom: 1.5rem;">
+                <i class="fa-regular fa-clock"></i> <span id="quiz-timer-display">20:00</span>
+              </div>
+              <h4 style="font-size: 0.95rem; margin-bottom: 0.8rem; color: var(--accent-cyan);">
+                <i class="fa-solid fa-list-ol"></i> Navigasi Soal:
+              </h4>
+              <div class="eval-num-nav-grid" id="eval-number-nav-grid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result & Certificate Screen -->
+        <div id="eval-result-screen" style="display: none;">
+          <div class="eval-result-card">
+            <h3 style="font-family: var(--font-heading); font-size: 2rem;">Hasil Evaluasi Belajar</h3>
+            <p id="eval-result-student-meta" style="color: var(--text-muted); margin-top: 0.3rem;">Nama: Siswa | Kelas:
+              VII</p>
+
+            <div class="big-score-circle">
+              <span id="eval-score-number">100</span>
+              <small>NILAI AKHIR</small>
+            </div>
+
+            <div id="eval-result-badge" class="eval-status-pill passed">
+              <i class="fa-solid fa-circle-check"></i> LULUS / TUNTAS KOMPETENSI
+            </div>
+            <p id="eval-correct-stats" style="margin-bottom: 2rem;">15 Benar dari 15 Soal</p>
+
+            <!-- Certificate Canvas & Download -->
+            <div>
+              <canvas id="certificate-canvas"></canvas>
+              <div style="margin-top: 1rem;">
+                <button class="btn btn-primary" onclick="window.labEvaluation.downloadCertificate()">
+                  <i class="fa-solid fa-download"></i> Unduh Sertifikat (PNG)
+                </button>
+                <button class="btn btn-secondary" style="margin-left: 10px;"
+                  onclick="window.navigateToPage('evaluasi'); document.getElementById('eval-start-screen').style.display='block'; document.getElementById('eval-result-screen').style.display='none';">
+                  <i class="fa-solid fa-rotate"></i> Ulangi Evaluasi
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question Review with Explanations -->
+          <div class="glass-box" style="padding: 2rem; margin-top: 2rem;">
+            <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-magnifying-glass-chart text-cyan"></i> Pembahasan
+              Butir Soal Evaluasi</h3>
+            <div id="eval-review-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 9. HALAMAN DASHBOARD GURU ================= -->
+    <section id="page-dashboard-guru" class="page-section">
+      <div class="container">
+        <div class="dashboard-header-block">
+          <div class="dash-title-group">
+            <span class="badge-teacher"><i class="fa-solid fa-chalkboard-user"></i> Panel Khusus Pengajar</span>
+            <h2>📊 Dashboard Guru: Rekapitulasi Pembelajaran IPA</h2>
+            <p>Pantau hasil evaluasi kuis, analisis ketuntasan kelas, dan lembar kerja praktikum (LKPD) siswa secara
+              real-time.</p>
+          </div>
+          <div class="dash-quick-actions">
+            <button class="btn btn-secondary btn-sm" onclick="window.labDashboard.refreshData()"
+              title="Segarkan Data Real-Time">
+              <i class="fa-solid fa-arrows-rotate"></i> Segarkan Data
+            </button>
+            <button class="btn btn-primary" onclick="window.labDashboard.exportCSV()">
+              <i class="fa-solid fa-file-excel"></i> Unduh Excel (CSV)
+            </button>
+            <button class="btn btn-secondary" onclick="window.labDashboard.printReport()">
+              <i class="fa-solid fa-print"></i> Cetak Rekap Nilai
+            </button>
+            <button class="btn btn-accent btn-sm" onclick="window.labDashboard.injectDemoData(true)"
+              title="Isi Data Siswa Simulasi">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Data Demo
+            </button>
+            <button class="btn btn-danger-soft btn-sm" onclick="window.labDashboard.clearAllData()"
+              title="Kosongkan Seluruh Data">
+              <i class="fa-solid fa-trash-can"></i> Reset Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Analytics Cards -->
+        <div class="dashboard-metrics-grid">
+          <div class="metric-card glass-box">
+            <div class="metric-icon-box cyan"><i class="fa-solid fa-users"></i></div>
+            <div class="metric-info">
+              <div class="metric-num" id="dash-total-students">0</div>
+              <div class="metric-label">Total Siswa Mengerjakan</div>
+            </div>
+          </div>
+          <div class="metric-card glass-box">
+            <div class="metric-icon-box blue"><i class="fa-solid fa-chart-simple"></i></div>
+            <div class="metric-info">
+              <div class="metric-num" id="dash-avg-score">0</div>
+              <div class="metric-label">Nilai Rata-Rata Kelas</div>
+            </div>
+          </div>
+          <div class="metric-card glass-box">
+            <div class="metric-icon-box green"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="metric-info">
+              <div class="metric-num" id="dash-passed-count">0</div>
+              <div class="metric-label">Siswa Tuntas (&ge; 75)</div>
+            </div>
+          </div>
+          <div class="metric-card glass-box">
+            <div class="metric-icon-box red"><i class="fa-solid fa-circle-exclamation"></i></div>
+            <div class="metric-info">
+              <div class="metric-num" id="dash-remedial-count">0</div>
+              <div class="metric-label">Perlu Remedial (&lt; 75)</div>
+            </div>
+          </div>
+          <div class="metric-card glass-box">
+            <div class="metric-icon-box purple"><i class="fa-solid fa-flask-vial"></i></div>
+            <div class="metric-info">
+              <div class="metric-num" id="dash-total-lkpd">0</div>
+              <div class="metric-label">Total LKPD Masuk</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Table Card: Rekap Evaluasi -->
+        <div class="dash-content-container glass-box">
+          <div class="dash-section-header">
+            <h3><i class="fa-solid fa-table-list text-cyan"></i> Rekapitulasi Hasil Evaluasi Kuis Siswa</h3>
+            <div class="dash-filter-bar">
+              <div class="search-box-wrap small">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Cari nama / kelas siswa..."
+                  oninput="window.labDashboard.search(this.value)" />
+              </div>
+              <div class="dash-class-chips">
+                <button class="dash-class-btn active" data-class="all"
+                  onclick="window.labDashboard.filterClass('all')">Semua Kelas</button>
+                <button class="dash-class-btn" data-class="VII-A"
+                  onclick="window.labDashboard.filterClass('VII-A')">VII-A</button>
+                <button class="dash-class-btn" data-class="VII-B"
+                  onclick="window.labDashboard.filterClass('VII-B')">VII-B</button>
+                <button class="dash-class-btn" data-class="VII-C"
+                  onclick="window.labDashboard.filterClass('VII-C')">VII-C</button>
+                <button class="dash-class-btn" data-class="VII-D"
+                  onclick="window.labDashboard.filterClass('VII-D')">VII-D</button>
+                <button class="dash-class-btn" data-class="VII-E"
+                  onclick="window.labDashboard.filterClass('VII-E')">VII-E</button>
+                <button class="dash-class-btn" data-class="VII-F"
+                  onclick="window.labDashboard.filterClass('VII-F')">VII-F</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-table-wrapper">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th width="50" style="text-align: center;">No</th>
+                  <th>Waktu Pengerjaan</th>
+                  <th>Nama Lengkap Siswa</th>
+                  <th>Kelas</th>
+                  <th>Skor Nilai</th>
+                  <th>Status Kelulusan</th>
+                  <th style="text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="dash-eval-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Rekap LKPD Section -->
+        <div class="dash-content-container glass-box" style="margin-top: 2rem;">
+          <div class="dash-section-header">
+            <h3><i class="fa-solid fa-file-signature text-cyan"></i> Pengumpulan Lembar Kerja Praktikum (LKPD) Siswa
+            </h3>
+          </div>
+          <div class="dash-table-wrapper">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th width="50" style="text-align: center;">No</th>
+                  <th>Waktu Pengiriman</th>
+                  <th>Nama Siswa</th>
+                  <th>Kelas</th>
+                  <th>Status LKPD</th>
+                  <th style="text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="dash-lkpd-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL LOGIN TERPADU (SISWA & GURU) ================= -->
+  <div class="modal-overlay" id="auth-login-modal">
+    <div class="modal-container auth-modal-box">
+      <button class="modal-close-btn" onclick="window.labAuth.closeLoginModal()"><i
+          class="fa-solid fa-xmark"></i></button>
+
+      <div class="auth-tabs-header">
+        <button class="auth-tab-btn active" id="tab-btn-login-student"
+          onclick="window.labAuth.switchLoginTab('student')">
+          <i class="fa-solid fa-user-graduate"></i> Login Siswa
+        </button>
+        <button class="auth-tab-btn" id="tab-btn-login-teacher" onclick="window.labAuth.switchLoginTab('teacher')">
+          <i class="fa-solid fa-chalkboard-user"></i> Login Guru / Pengajar
+        </button>
+      </div>
+
+      <!-- Form Login Siswa -->
+      <div id="form-login-student" class="auth-form-panel">
+        <div class="auth-panel-heading">
+          <h3>Selamat Datang, Siswa Sains! 🔬</h3>
+          <p>Masukkan Nama Lengkap dan Kelasmu untuk memulai praktikum dan evaluasi.</p>
+        </div>
+        <form
+          onsubmit="event.preventDefault(); window.labAuth.loginStudent(document.getElementById('input-student-name').value, document.getElementById('input-student-class').value);">
+          <div class="form-group" style="margin-bottom: 1.2rem;">
+            <label><i class="fa-solid fa-user"></i> Nama Lengkap Siswa:</label>
+            <input type="text" id="input-student-name" class="form-input" placeholder="Contoh: Ahmad Fauzi" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label><i class="fa-solid fa-school"></i> Pilih / Tulis Kelas:</label>
+            <select id="input-student-class" class="form-input">
+              <option value="VII-A">Kelas VII-A</option>
+              <option value="VII-B">Kelas VII-B</option>
+              <option value="VII-C">Kelas VII-C</option>
+              <option value="VII-D">Kelas VII-D</option>
+              <option value="VII-E">Kelas VII-E</option>
+              <option value="VII-F">Kelas VII-F</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-right-to-bracket"></i> Masuk Sebagai Siswa
+          </button>
+        </form>
+      </div>
+
+      <!-- Form Login Guru -->
+      <div id="form-login-teacher" class="auth-form-panel" style="display: none;">
+        <div class="auth-panel-heading">
+          <h3>Portal Masuk Guru / Pengajar 👨‍🏫</h3>
+          <p>Autentikasi pengajar untuk mengakses menu Dashboard & Rekapitulasi Nilai Siswa.</p>
+        </div>
+        <form
+          onsubmit="event.preventDefault(); window.labAuth.loginTeacher(document.getElementById('input-teacher-user').value, document.getElementById('input-teacher-pass').value);">
+          <div class="form-group" style="margin-bottom: 1.2rem;">
+            <label><i class="fa-solid fa-user-shield"></i> Username Guru:</label>
+            <input type="text" id="input-teacher-user" class="form-input"
+              placeholder="Masukkan username guru (default: guru)" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 1.2rem;">
+            <label><i class="fa-solid fa-lock"></i> Kata Sandi (Password):</label>
+            <input type="password" id="input-teacher-pass" class="form-input"
+              placeholder="Masukkan password (default: guru123)" required />
+          </div>
+          <div class="teacher-auth-hint">
+            <i class="fa-solid fa-circle-info text-cyan"></i> Kredensial Guru: <strong>Username:</strong>
+            <code>guru</code> | <strong>Password:</strong> <code>guru123</code>
+          </div>
+          <button type="submit" class="btn btn-accent btn-block" style="margin-top: 1rem;">
+            <i class="fa-solid fa-key"></i> Masuk Sebagai Guru
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer style="padding: 2.5rem 0; margin-top: 4rem; text-align: center;">
+    <div class="container">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1rem;">
+        <div class="brand-icon" style="width: 36px; height: 36px; font-size: 1.1rem; color: var(--accent-cyan);"><i
+            class="fa-solid fa-atom"></i>
+        </div>
+        <strong style="font-family: var(--font-heading); font-size: 1.1rem;">Media Pembelajaran Laboratorium IPA Kelas
+          VII SMP</strong>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 600px; margin: 0 auto 1.5rem auto;">
+        Dikembangkan sebagai media pembelajaran interaktif berbasis web untuk menunjang pembelajaran IPA (Sains) SMP
+        Fase D Kurikulum Merdeka.
+      </p>
+      <div style="font-size: 0.8rem; color: var(--text-muted);">
+        &copy; 2026 Media Pembelajaran Sains SMP. Dilengkapi Modul 3D, AR, Virtual Lab, & Gamifikasi.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Helper Script for Lab Tab Switching -->
+  <script>
+    function switchLabTab(tabKey) {
+      if (window.labAudio) window.labAudio.playClick();
+      const p1 = document.getElementById('lab-panel-mikroskop');
+      const p2 = document.getElementById('lab-panel-kimia');
+      const b1 = document.getElementById('tab-btn-lab1');
+      const b2 = document.getElementById('tab-btn-lab2');
+
+      if (tabKey === 'mikroskop') {
+        if (p1) p1.style.display = 'grid';
+        if (p2) p2.style.display = 'none';
+        if (b1) b1.classList.add('active');
+        if (b2) b2.classList.remove('active');
+      } else {
+        if (p1) p1.style.display = 'none';
+        if (p2) p2.style.display = 'grid';
+        if (b1) b1.classList.remove('active');
+        if (b2) b2.classList.add('active');
+        if (window.virtualLab) window.virtualLab.renderChemLab();
+      }
+    }
+  </script>
+
+  <!-- App Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/three-models.js"></script>
+  <script src="js/ar-module.js"></script>
+  <script src="js/praktikum.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/evaluasi.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- ================= LOGIKA DUAL THEME (TERANG / GELAP) ================= -->
+  <script>
+    function updateThemeIcon(theme) {
+      const btnLight = document.getElementById('btn-theme-light');
+      const btnDark = document.getElementById('btn-theme-dark');
+      if (btnLight && btnDark) {
+        if (theme === 'light') {
+          btnLight.classList.add('active');
+          btnDark.classList.remove('active');
+        } else {
+          btnDark.classList.add('active');
+          btnLight.classList.remove('active');
+        }
+      }
+    }
+
+    window.setTheme = function (newTheme) {
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('app-theme', newTheme);
+      updateThemeIcon(newTheme);
+
+      // Efek suara klik (jika ada)
+      if (window.labAudio && window.labAudio.playClick) {
+        window.labAudio.playClick();
+      }
+    };
+
+    // Inisialisasi ikon saat pertama load
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      updateThemeIcon(currentTheme);
+    });
+  </script>
+
+  <!-- ================= YOUTUBE BACKGROUND AUDIO OVERRIDE ================= -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    var ytPlayer;
+    var isYtPlaying = false;
+
+    // Inisialisasi YouTube Player
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('youtube-audio-container', {
+        height: '0',
+        width: '0',
+        videoId: 'ywBmcm5sMo4', // Video ID dari URL Anda
+        playerVars: {
+          'autoplay': 1,
+          'loop': 1,
+          'playlist': 'ywBmcm5sMo4',
+          'controls': 0
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Tunggu file app.js dan lainnya selesai diload, lalu timpa fungsionalitas tombol musik
+      setTimeout(() => {
+
+        // Override fungsi login asli untuk sekaligus memutar musik YouTube
+        const origLogin = window.submitLogin;
+        window.submitLogin = function () {
+          try {
+            if (origLogin) origLogin();
+          } catch(e) {
+            console.error("Error pada origLogin:", e);
+          }
+          
+          // Fallback: Paksa sembunyikan modal agar selalu bisa masuk
+          const modal = document.getElementById('login-modal');
+          if (modal) modal.style.display = 'none';
+
+          if (ytPlayer && ytPlayer.playVideo) {
+            ytPlayer.playVideo();
+            isYtPlaying = true;
+          }
+          const icon = document.getElementById('audio-icon');
+          if (icon) {
+            icon.classList.remove('fa-volume-xmark');
+            icon.classList.add('fa-volume-high');
+          }
+        };
+
+        // Override fungsi tombol nyalakan/matikan musik (toggleAudio)
+        window.toggleAudio = function () {
+          const icon = document.getElementById('audio-icon');
+          if (ytPlayer && ytPlayer.getPlayerState) {
+            if (isYtPlaying) {
+              ytPlayer.pauseVideo();
+              isYtPlaying = false;
+              if (icon) {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+              }
+            } else {
+              ytPlayer.playVideo();
+              isYtPlaying = true;
+              if (icon) {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+              }
+            }
+          }
+        };
+
+      }, 1000);
+    });
+  </script>
+</body>
+
+</html>

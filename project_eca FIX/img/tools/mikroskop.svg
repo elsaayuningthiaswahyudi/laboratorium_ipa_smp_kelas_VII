@@ -1,0 +1,55 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b192e"/><stop offset="100%" stop-color="#030b17"/>
+    </linearGradient>
+    <linearGradient id="whiteM" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="darkM" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" rx="16" fill="url(#bg)"/>
+  <ellipse cx="200" cy="270" rx="110" ry="16" fill="#000" opacity="0.6"/>
+
+  <!-- Horseshoe Base -->
+  <path d="M 120,255 L 140,235 L 260,235 L 280,255 L 265,270 L 135,270 Z" fill="url(#darkM)" stroke="#38bdf8" stroke-width="1.8"/>
+
+  <!-- Pillar & Curved Arm -->
+  <rect x="145" y="170" width="24" height="70" rx="4" fill="url(#darkM)"/>
+  <path d="M 155,185 C 130,130 150,75 205,75 L 225,75" fill="none" stroke="url(#whiteM)" stroke-width="26" stroke-linecap="round"/>
+
+  <!-- Mirror / Substage Light -->
+  <ellipse cx="215" cy="210" rx="18" ry="8" fill="#e2e8f0" stroke="#38bdf8" stroke-width="1.5"/>
+  <line x1="215" y1="218" x2="215" y2="235" stroke="#64748b" stroke-width="3"/>
+
+  <!-- Stage (Meja Preparat) -->
+  <rect x="170" y="160" width="90" height="10" rx="2" fill="url(#darkM)" stroke="#38bdf8" stroke-width="1.5"/>
+  <!-- Glass Slide on Stage -->
+  <rect x="195" y="156" width="40" height="4" fill="#38bdf8" opacity="0.8"/>
+
+  <!-- Focus Adjustment Knobs -->
+  <circle cx="150" cy="150" r="16" fill="url(#darkM)" stroke="#94a3b8" stroke-width="2"/>
+  <circle cx="150" cy="150" r="9" fill="#38bdf8"/>
+
+  <!-- Revolver / Nosepiece -->
+  <ellipse cx="225" cy="115" rx="24" ry="10" fill="url(#darkM)" stroke="#e2e8f0" stroke-width="1.5"/>
+  <!-- 3 Objective Lenses -->
+  <rect x="210" y="125" width="10" height="24" fill="#cbd5e1"/>
+  <rect x="210" y="142" width="10" height="4" fill="#ef4444"/> <!-- Red ring 4x -->
+
+  <rect x="228" y="125" width="12" height="28" fill="#cbd5e1"/>
+  <rect x="228" y="145" width="12" height="4" fill="#3b82f6"/> <!-- Blue ring 40x -->
+
+  <!-- Body Tube -->
+  <g transform="rotate(18 245 40)">
+    <rect x="235" y="45" width="20" height="55" rx="3" fill="url(#whiteM)" stroke="#94a3b8" stroke-width="1.2"/>
+    <!-- Eyepiece (Okuler) -->
+    <rect x="232" y="20" width="26" height="25" rx="2" fill="url(#darkM)"/>
+    <ellipse cx="245" cy="20" rx="13" ry="4" fill="#38bdf8"/>
+  </g>
+
+  <rect x="15" y="15" width="115" height="26" rx="6" fill="#0284c7" opacity="0.25"/>
+  <text x="25" y="32" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#38bdf8">MIKROSKOP</text>
+</svg>

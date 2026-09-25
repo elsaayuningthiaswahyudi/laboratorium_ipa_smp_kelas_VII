@@ -1,0 +1,20 @@
+[
+  {
+    "id": 203,
+    "timestamp": "24/09/2026 15:37",
+    "studentName": "Raihan Saputra",
+    "studentClass": "VII-B",
+    "jawaban1": "Fokus diatur dengan mikrometer dan makrometer.",
+    "jawaban2": "Jeruk asam, sabun basa.",
+    "wells": []
+  },
+  {
+    "id": 201,
+    "timestamp": "20/09/2026 14:12",
+    "studentName": "Ahmad Fauzi",
+    "studentClass": "VII-A",
+    "jawaban1": "Makrometer digunakan untuk menaikkan/menurunkan meja preparat secara cepat.",
+    "jawaban2": "Air jeruk asam, air sabun basa.",
+    "wells": []
+  }
+]

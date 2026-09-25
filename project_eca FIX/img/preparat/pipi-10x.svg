@@ -1,0 +1,57 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="cheekBg10" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#93c5fd"/>
+    </radialGradient>
+    <linearGradient id="cheekCellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bfdbfe" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#93c5fd" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.75"/>
+    </linearGradient>
+    <radialGradient id="cheekNuc" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="70%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#172554"/>
+    </radialGradient>
+  </defs>
+  <rect width="500" height="500" fill="url(#cheekBg10)"/>
+
+  <!-- 3 Distinct Polygonal Flat Epithelial Cells at 10x -->
+  <!-- Cell 1 (Main Center) -->
+  <path d="M 160,140 
+           C 240,110 320,130 380,180 
+           C 430,230 420,320 370,380 
+           C 310,430 210,420 150,370 
+           C 90,320 100,200 160,140 Z" 
+        fill="url(#cheekCellGrad)" stroke="#2563eb" stroke-width="3.5"/>
+
+  <!-- Cell 2 (Overlapping Upper Right) -->
+  <path d="M 340,60 
+           C 410,50 470,90 480,160 
+           C 490,210 440,250 390,240 
+           C 350,230 320,180 320,130 Z" 
+        fill="url(#cheekCellGrad)" stroke="#2563eb" stroke-width="2.5" opacity="0.85"/>
+
+  <!-- Cell 3 (Overlapping Lower Left) -->
+  <path d="M 60,280 
+           C 120,260 160,300 170,360 
+           C 180,420 130,480 70,470 
+           C 20,450 10,380 30,320 Z" 
+        fill="url(#cheekCellGrad)" stroke="#2563eb" stroke-width="2.5" opacity="0.85"/>
+
+  <!-- Folded Cell Membrane Wrinkles -->
+  <path d="M 180,160 Q 230,200 270,180" fill="none" stroke="#1d4ed8" stroke-width="1.8" opacity="0.5"/>
+  <path d="M 330,340 Q 280,360 220,380" fill="none" stroke="#1d4ed8" stroke-width="1.8" opacity="0.5"/>
+
+  <!-- Nucleus of Center Cell -->
+  <g transform="translate(260, 270)">
+    <circle cx="0" cy="0" r="22" fill="url(#cheekNuc)" stroke="#1e3a8a" stroke-width="2"/>
+    <circle cx="-5" cy="-5" r="5" fill="#eff6ff" opacity="0.75"/>
+  </g>
+
+  <!-- Nuclei of Overlapping Cells -->
+  <circle cx="410" cy="140" r="16" fill="url(#cheekNuc)"/>
+  <circle cx="95" cy="380" r="16" fill="url(#cheekNuc)"/>
+</svg>

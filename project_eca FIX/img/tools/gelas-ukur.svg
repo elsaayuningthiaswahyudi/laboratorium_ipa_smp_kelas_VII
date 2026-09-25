@@ -1,0 +1,96 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b192e"/>
+      <stop offset="100%" stop-color="#030b17"/>
+    </linearGradient>
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="25%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="75%" stop-color="#00f0ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="liquidGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0088cc" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#00d2ff" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#006699" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="baseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="300" rx="16" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle Grid lines -->
+  <g opacity="0.08" stroke="#00f0ff" stroke-width="1">
+    <line x1="0" y1="240" x2="400" y2="240"/>
+    <line x1="0" y1="180" x2="400" y2="180"/>
+    <line x1="0" y1="120" x2="400" y2="120"/>
+    <line x1="0" y1="60" x2="400" y2="60"/>
+  </g>
+
+  <!-- Pedestal Shadow -->
+  <ellipse cx="200" cy="265" rx="75" ry="14" fill="#000000" opacity="0.55"/>
+  
+  <!-- Hexagonal / Flanged Base -->
+  <polygon points="145,260 170,252 230,252 255,260 230,268 170,268" fill="url(#baseGrad)" stroke="#38bdf8" stroke-width="1.5"/>
+  <polygon points="152,258 173,254 227,254 248,258 227,262 173,262" fill="#0284c7" opacity="0.3"/>
+
+  <!-- Liquid Column inside cylinder -->
+  <rect x="175" y="110" width="50" height="145" fill="url(#liquidGrad)"/>
+  <!-- Meniscus Curve -->
+  <path d="M 175,110 Q 200,122 225,110 L 225,114 Q 200,126 175,114 Z" fill="#38bdf8" opacity="0.9" filter="url(#glow)"/>
+
+  <!-- Cylinder Glass Body -->
+  <rect x="173" y="45" width="54" height="212" rx="3" fill="url(#glassGrad)" stroke="#38bdf8" stroke-width="2"/>
+
+  <!-- Pouring Spout -->
+  <path d="M 173,45 L 160,40 L 173,50 Z" fill="url(#glassGrad)" stroke="#38bdf8" stroke-width="1.5"/>
+  <!-- Cylinder Top Rim -->
+  <ellipse cx="200" cy="45" rx="27" ry="5" fill="none" stroke="#e0f2fe" stroke-width="2"/>
+
+  <!-- Measurement Tick Marks & Numbers -->
+  <!-- 100 mL -->
+  <line x1="175" y1="60" x2="195" y2="60" stroke="#ffffff" stroke-width="2"/>
+  <text x="202" y="64" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">100</text>
+  <line x1="175" y1="72" x2="187" y2="72" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+  <line x1="175" y1="84" x2="187" y2="84" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+  
+  <!-- 80 mL -->
+  <line x1="175" y1="96" x2="195" y2="96" stroke="#ffffff" stroke-width="2"/>
+  <text x="202" y="100" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">80</text>
+  <line x1="175" y1="108" x2="187" y2="108" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+  <line x1="175" y1="120" x2="187" y2="120" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+
+  <!-- 60 mL -->
+  <line x1="175" y1="132" x2="195" y2="132" stroke="#ffffff" stroke-width="2"/>
+  <text x="202" y="136" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">60</text>
+  <line x1="175" y1="144" x2="187" y2="144" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+  <line x1="175" y1="156" x2="187" y2="156" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+
+  <!-- 40 mL -->
+  <line x1="175" y1="168" x2="195" y2="168" stroke="#ffffff" stroke-width="2"/>
+  <text x="202" y="172" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">40</text>
+  <line x1="175" y1="180" x2="187" y2="180" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+  <line x1="175" y1="192" x2="187" y2="192" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+
+  <!-- 20 mL -->
+  <line x1="175" y1="204" x2="195" y2="204" stroke="#ffffff" stroke-width="2"/>
+  <text x="202" y="208" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">20</text>
+  <line x1="175" y1="216" x2="187" y2="216" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+  <line x1="175" y1="228" x2="187" y2="228" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+
+  <!-- Unit label -->
+  <text x="180" y="246" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#00f0ff">mL</text>
+
+  <!-- Specular Highlights -->
+  <line x1="178" y1="50" x2="178" y2="250" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="182" y1="55" x2="182" y2="245" stroke="#ffffff" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
+</svg>

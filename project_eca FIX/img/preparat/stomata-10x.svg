@@ -1,0 +1,48 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="leafBg10" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#86efac"/>
+    </radialGradient>
+    <linearGradient id="guardCell" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#86efac"/>
+      <stop offset="50%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="500" fill="url(#leafBg10)"/>
+
+  <!-- Epidermal Subsidiary Cells Mosaic -->
+  <g stroke="#16a34a" stroke-width="3" fill="#f0fdf4" opacity="0.75">
+    <path d="M 60,60 C 120,40 180,90 220,60 C 260,30 340,60 380,40 L 480,80 L 460,200 L 320,180 L 250,130 L 140,160 L 50,140 Z"/>
+    <path d="M 40,200 C 100,180 140,220 180,190 L 220,320 L 120,360 L 40,300 Z"/>
+    <path d="M 320,180 C 380,160 440,220 480,190 L 460,340 L 360,360 L 310,290 Z"/>
+    <path d="M 120,360 C 180,340 240,390 300,360 L 340,460 L 200,480 L 100,450 Z"/>
+  </g>
+
+  <!-- Central Stomata Apparatus (Featured) -->
+  <g transform="translate(250, 250)">
+    <!-- Left Guard Cell (Bean Shaped) -->
+    <path d="M -10,-65 C -45,-45 -55,0 -45,45 C -35,70 -10,65 -6,55 C -22,35 -24,-25 -6,-55 C -8,-62 -9,-64 -10,-65 Z" fill="url(#guardCell)" stroke="#166534" stroke-width="3.5"/>
+    
+    <!-- Right Guard Cell (Bean Shaped) -->
+    <path d="M 10,-65 C 45,-45 55,0 45,45 C 35,70 10,65 6,55 C 22,35 24,-25 6,-55 C 8,-62 9,-64 10,-65 Z" fill="url(#guardCell)" stroke="#166534" stroke-width="3.5"/>
+
+    <!-- Open Stomatal Pore (Porus Stoma) -->
+    <ellipse cx="0" cy="0" rx="9" ry="42" fill="#052e16"/>
+
+    <!-- Chloroplasts in Guard Cells -->
+    <g fill="#166534">
+      <circle cx="-28" cy="-35" r="5"/><circle cx="-36" cy="-10" r="5.5"/>
+      <circle cx="-34" cy="15" r="5"/><circle cx="-24" cy="40" r="4.5"/>
+      
+      <circle cx="28" cy="-35" r="5"/><circle cx="36" cy="-10" r="5.5"/>
+      <circle cx="34" cy="15" r="5"/><circle cx="24" cy="40" r="4.5"/>
+    </g>
+
+    <!-- Guard Cell Nuclei -->
+    <circle cx="-30" cy="2" r="7" fill="#14532d" stroke="#86efac" stroke-width="1.5"/>
+    <circle cx="30" cy="2" r="7" fill="#14532d" stroke="#86efac" stroke-width="1.5"/>
+  </g>
+</svg>

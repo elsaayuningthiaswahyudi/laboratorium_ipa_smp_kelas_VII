@@ -1,0 +1,59 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="highCheekBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#eff6ff"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </radialGradient>
+    <radialGradient id="bigCheekNuc" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="35%" stop-color="#2563eb"/>
+      <stop offset="75%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+  </defs>
+  <rect width="500" height="500" fill="url(#highCheekBg)"/>
+
+  <!-- Single Massive Human Squamous Epithelial Cheek Cell (40x Close-Up) -->
+  <!-- Flexible, Irregular Cell Membrane (Membran Sel Tipis Berlekuk) -->
+  <path d="M 120,60 
+           C 240,30 380,50 440,120 
+           C 490,190 470,320 440,400 
+           C 390,460 260,480 140,450 
+           C 40,420 30,330 50,220 
+           C 60,140 80,80 120,60 Z" 
+        fill="#93c5fd" fill-opacity="0.45" stroke="#1d4ed8" stroke-width="6"/>
+
+  <!-- Folded Membrane Overlaps (Lipatan Membran Sel) -->
+  <path d="M 440,120 C 400,160 360,190 400,240" fill="none" stroke="#2563eb" stroke-width="3" opacity="0.6"/>
+  <path d="M 60,180 C 110,210 130,280 80,320" fill="none" stroke="#2563eb" stroke-width="3" opacity="0.6"/>
+  <path d="M 280,440 C 250,400 280,370 340,420" fill="none" stroke="#2563eb" stroke-width="3" opacity="0.6"/>
+
+  <!-- Granular Cytoplasm Particles (Butiran Sitoplasma) -->
+  <g fill="#1e40af" opacity="0.45">
+    <circle cx="160" cy="120" r="3"/><circle cx="210" cy="110" r="3.5"/><circle cx="280" cy="95" r="2.5"/>
+    <circle cx="350" cy="130" r="4"/><circle cx="410" cy="180" r="3"/><circle cx="390" cy="260" r="3.5"/>
+    <circle cx="380" cy="330" r="3"/><circle cx="310" cy="380" r="4"/><circle cx="220" cy="410" r="3"/>
+    <circle cx="140" cy="380" r="3.5"/><circle cx="90" cy="300" r="4"/><circle cx="105" cy="220" r="3"/>
+    <circle cx="170" cy="190" r="3"/><circle cx="320" cy="200" r="3.5"/><circle cx="330" cy="280" r="3"/>
+  </g>
+
+  <!-- Large Detailed Prominent Nucleus (Inti Sel & Membran Inti) -->
+  <g transform="translate(245, 250)">
+    <!-- Nuclear Envelope -->
+    <circle cx="0" cy="0" r="54" fill="url(#bigCheekNuc)" stroke="#0f172a" stroke-width="4"/>
+    <!-- Nucleolus (Anak Inti) -->
+    <circle cx="-12" cy="-10" r="14" fill="#020617"/>
+    <!-- Fine Chromatin Flecks -->
+    <circle cx="18" cy="14" r="5" fill="#1e293b"/>
+    <circle cx="15" cy="-20" r="5.5" fill="#1e293b"/>
+    <circle cx="-20" cy="20" r="4.5" fill="#1e293b"/>
+  </g>
+
+  <!-- Normal Oral Microflora Bacteria on surface (Batang & Kokus) -->
+  <g fill="#1e3a8a" opacity="0.6">
+    <rect x="290" y="150" width="8" height="3" rx="1.5" transform="rotate(25 290 150)"/>
+    <rect x="180" y="320" width="9" height="3" rx="1.5" transform="rotate(-40 180 320)"/>
+    <circle cx="380" cy="220" r="2.5"/><circle cx="384" cy="224" r="2.5"/>
+  </g>
+</svg>

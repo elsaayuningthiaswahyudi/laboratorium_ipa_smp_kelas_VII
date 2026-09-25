@@ -1,0 +1,55 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b192e"/><stop offset="100%" stop-color="#030b17"/>
+    </linearGradient>
+    <linearGradient id="glassB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="25%" stop-color="#38bdf8" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="tealLiquid" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#059669" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#10b981" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#047857" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" rx="16" fill="url(#bg)"/>
+  <ellipse cx="180" cy="265" rx="90" ry="14" fill="#000" opacity="0.5"/>
+
+  <!-- Liquid Body -->
+  <path d="M 105,140 L 108,245 Q 180,260 252,245 L 255,140 Q 180,150 105,140 Z" fill="url(#tealLiquid)"/>
+  <!-- Liquid Meniscus Surface -->
+  <ellipse cx="180" cy="140" rx="75" ry="10" fill="#34d399" opacity="0.8"/>
+
+  <!-- Beaker Glass Body -->
+  <!-- Spout -->
+  <path d="M 100,55 L 85,45 L 102,65" fill="none" stroke="#38bdf8" stroke-width="2"/>
+  <path d="M 100,55 L 106,245 Q 180,265 254,245 L 260,55" fill="url(#glassB)" stroke="#38bdf8" stroke-width="2.2"/>
+  <ellipse cx="180" cy="55" rx="80" ry="12" fill="none" stroke="#e0f2fe" stroke-width="2.2"/>
+
+  <!-- Beaker Graduation Marks -->
+  <g stroke="#ffffff" stroke-width="1.8">
+    <line x1="210" y1="90" x2="252" y2="90"/><text x="180" y="94" fill="#ffffff" font-size="11" font-weight="bold" font-family="sans-serif">250ml</text>
+    <line x1="220" y1="120" x2="250" y2="120"/>
+    <line x1="210" y1="150" x2="248" y2="150"/><text x="180" y="154" fill="#ffffff" font-size="11" font-weight="bold" font-family="sans-serif">150ml</text>
+    <line x1="220" y1="180" x2="246" y2="180"/>
+    <line x1="210" y1="210" x2="244" y2="210"/><text x="185" y="214" fill="#ffffff" font-size="11" font-weight="bold" font-family="sans-serif">50ml</text>
+  </g>
+
+  <!-- Dropper Pipette Hovering -->
+  <g transform="translate(290, 40) rotate(25)">
+    <!-- Rubber Bulb -->
+    <ellipse cx="0" cy="15" rx="14" ry="22" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"/>
+    <!-- Glass Stem -->
+    <rect x="-4" y="37" width="8" height="120" rx="2" fill="url(#glassB)" stroke="#38bdf8" stroke-width="1.2"/>
+    <polygon points="-4,157 4,157 0,185" fill="url(#glassB)" stroke="#38bdf8" stroke-width="1.2"/>
+    <!-- Fluid inside pipette -->
+    <rect x="-2" y="80" width="4" height="77" fill="#10b981"/>
+    <!-- Droplet falling -->
+    <circle cx="0" cy="205" r="4" fill="#10b981" opacity="0.9"/>
+  </g>
+
+  <rect x="15" y="15" width="130" height="26" rx="6" fill="#0284c7" opacity="0.25"/>
+  <text x="25" y="32" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#38bdf8">GELAS KIMIA</text>
+</svg>

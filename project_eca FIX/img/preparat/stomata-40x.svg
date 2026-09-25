@@ -1,0 +1,80 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="highLeafBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#bbf7d0"/>
+    </radialGradient>
+    <linearGradient id="guardCellHigh" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bbf7d0"/>
+      <stop offset="40%" stop-color="#4ade80"/>
+      <stop offset="80%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+    <radialGradient id="chloroGrad" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#86efac"/>
+      <stop offset="70%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#052e16"/>
+    </radialGradient>
+  </defs>
+  <rect width="500" height="500" fill="url(#highLeafBg)"/>
+
+  <!-- Neighboring Subsidiary Cells (Sel Tetangga) -->
+  <path d="M 80,40 C -20,120 -20,380 80,460 L 150,440 C 90,360 80,140 150,60 Z" fill="#dcfce7" stroke="#15803d" stroke-width="5"/>
+  <path d="M 420,40 C 520,120 520,380 420,460 L 350,440 C 410,360 420,140 350,60 Z" fill="#dcfce7" stroke="#15803d" stroke-width="5"/>
+  <circle cx="50" cy="250" r="18" fill="#15803d" opacity="0.4"/>
+  <circle cx="450" cy="250" r="18" fill="#15803d" opacity="0.4"/>
+
+  <!-- Huge High-Mag Guard Cells (Sel Penjaga) -->
+  <!-- Left Guard Cell -->
+  <path d="M 230,60 
+           C 140,80 110,160 110,250 
+           C 110,340 140,420 230,440 
+           C 245,435 248,420 240,405 
+           C 195,350 185,250 205,160 
+           C 215,115 235,80 240,65 Z" 
+        fill="url(#guardCellHigh)" stroke="#14532d" stroke-width="6"/>
+
+  <!-- Right Guard Cell -->
+  <path d="M 270,60 
+           C 360,80 390,160 390,250 
+           C 390,340 360,420 270,440 
+           C 255,435 252,420 260,405 
+           C 305,350 315,250 295,160 
+           C 285,115 265,80 260,65 Z" 
+        fill="url(#guardCellHigh)" stroke="#14532d" stroke-width="6"/>
+
+  <!-- Inner Thickened Cell Wall lining the Stomatal Pore (Dinding Sel Dalam Tebal) -->
+  <path d="M 240,65 C 205,140 195,250 240,405" fill="none" stroke="#052e16" stroke-width="9"/>
+  <path d="M 260,65 C 295,140 305,250 260,405" fill="none" stroke="#052e16" stroke-width="9"/>
+
+  <!-- Open Stomatal Aperture / Pore (Porus) -->
+  <ellipse cx="250" cy="245" rx="20" ry="120" fill="#022c22"/>
+
+  <!-- Distinct Chloroplast Organelles (Kloroplas Berbutir) -->
+  <!-- Left Cell Chloroplasts -->
+  <g>
+    <circle cx="160" cy="130" r="10" fill="url(#chloroGrad)"/>
+    <circle cx="140" cy="180" r="11" fill="url(#chloroGrad)"/>
+    <circle cx="135" cy="230" r="12" fill="url(#chloroGrad)"/>
+    <circle cx="142" cy="290" r="11" fill="url(#chloroGrad)"/>
+    <circle cx="155" cy="340" r="10" fill="url(#chloroGrad)"/>
+    <circle cx="185" cy="385" r="9.5" fill="url(#chloroGrad)"/>
+    <circle cx="185" cy="100" r="9.5" fill="url(#chloroGrad)"/>
+  </g>
+
+  <!-- Right Cell Chloroplasts -->
+  <g>
+    <circle cx="340" cy="130" r="10" fill="url(#chloroGrad)"/>
+    <circle cx="360" cy="180" r="11" fill="url(#chloroGrad)"/>
+    <circle cx="365" cy="230" r="12" fill="url(#chloroGrad)"/>
+    <circle cx="358" cy="290" r="11" fill="url(#chloroGrad)"/>
+    <circle cx="345" cy="340" r="10" fill="url(#chloroGrad)"/>
+    <circle cx="315" cy="385" r="9.5" fill="url(#chloroGrad)"/>
+    <circle cx="315" cy="100" r="9.5" fill="url(#chloroGrad)"/>
+  </g>
+
+  <!-- Nuclei of Guard Cells -->
+  <circle cx="155" cy="240" r="16" fill="#14532d" stroke="#86efac" stroke-width="2.5"/>
+  <circle cx="345" cy="240" r="16" fill="#14532d" stroke="#86efac" stroke-width="2.5"/>
+</svg>
