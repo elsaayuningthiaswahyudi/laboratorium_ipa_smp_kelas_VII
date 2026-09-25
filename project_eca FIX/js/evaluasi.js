@@ -94,6 +94,11 @@ class LabEvaluation {
           <span class="q-type-tag"><i class="fa-solid fa-brain"></i> HOTS / Pemahaman Sains</span>
         </div>
         <div class="eval-q-text">${q.soal}</div>
+        ${q.gambar ? `
+          <div class="eval-q-media">
+            <img src="${q.gambar}" alt="Simbol Soal ${q.id}" class="eval-q-img" />
+          </div>
+        ` : ''}
         <div class="eval-options-list">
           ${q.pilihan.map(opt => `
             <div class="eval-option-item ${selectedOpt === opt.id ? 'selected' : ''}" onclick="window.labEvaluation.selectOption(${q.id}, '${opt.id}')">
@@ -239,6 +244,11 @@ class LabEvaluation {
             <span class="review-verdict">${isCorrect ? '<i class="fa-solid fa-check"></i> Jawaban Benar' : '<i class="fa-solid fa-xmark"></i> Jawaban Salah'}</span>
           </div>
           <p class="review-q-text">${q.soal}</p>
+          ${q.gambar ? `
+            <div class="review-q-media">
+              <img src="${q.gambar}" alt="Simbol Soal ${q.id}" class="review-q-img" />
+            </div>
+          ` : ''}
           <div class="review-answers">
             <div><strong>Jawaban Kamu:</strong> <span class="${isCorrect ? 'text-green' : 'text-red'}">${userAns}</span></div>
             <div><strong>Kunci Jawaban:</strong> <span class="text-green font-bold">${q.kunci}</span></div>

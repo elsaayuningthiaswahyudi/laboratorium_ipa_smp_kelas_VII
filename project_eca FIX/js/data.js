@@ -366,6 +366,7 @@ const LAB_DATA = {
     {
       id: 3,
       soal: "Perhatikan gambar simbol keselamatan kerja berikut! Simbol berupa gambar tengkorak bersilang di dalam belah ketupat menandakan bahwa bahan kimia tersebut bersifat...",
+      gambar: "img/k3/toxic.svg",
       pilihan: [
         { id: "A", teks: "Mudah Terbakar" },
         { id: "B", teks: "Korosif" },
@@ -437,7 +438,8 @@ const LAB_DATA = {
     },
     {
       id: 9,
-      soal: "Sebuah botol zat kimia memiliki simbol cairan yang dituangkan dan melubangi permukaan tangan serta logam. Sifat bahan kimia tersebut adalah...",
+      soal: "Perhatikan gambar simbol keselamatan kerja berikut! Simbol berupa cairan yang dituangkan dan melubangi permukaan tangan serta logam menandakan bahwa sifat bahan kimia tersebut adalah...",
+      gambar: "img/k3/corrosive.svg",
       pilihan: [
         { id: "A", teks: "Mudah Terbakar" },
         { id: "B", teks: "Radioaktif" },

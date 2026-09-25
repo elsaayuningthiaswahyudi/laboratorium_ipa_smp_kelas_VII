@@ -1868,8 +1868,36 @@ body {
   font-size: 1.1rem;
   font-weight: 600;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
   color: var(--heading-color);
+}
+
+.eval-q-media,
+.review-q-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.2rem auto 1.5rem auto;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--accent-cyan, #00f0ff);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 220px;
+}
+
+.eval-q-img,
+.review-q-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+  transition: transform 0.3s ease;
+}
+
+.eval-q-img:hover,
+.review-q-img:hover {
+  transform: scale(1.05);
 }
 
 .eval-options-list {
