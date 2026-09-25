@@ -179,29 +179,57 @@ class LabDashboard {
   async fetchServerData(notify = false) {
     if (this.isSyncing) return;
     this.isSyncing = true;
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
+
     try {
-      const evalRes = await fetch('/api/evaluations', { cache: 'no-store' });
-      if (evalRes.ok) {
-        const data = await evalRes.json();
-        if (Array.isArray(data) && data.length > 0) {
-          this.mergeEvaluations(data);
+      // 1. Fetch from Google Sheets API
+      try {
+        const sheetRes = await fetch(GOOGLE_SCRIPT_URL, { cache: 'no-store' });
+        if (sheetRes.ok) {
+          const sheetJson = await sheetRes.json();
+          if (sheetJson.status === 'success' && Array.isArray(sheetJson.data) && sheetJson.data.length > 0) {
+            const mapped = sheetJson.data.map((item, idx) => ({
+              id: Date.now() - (sheetJson.data.length - idx) * 1000,
+              timestamp: item.timestamp || new Date().toLocaleString('id-ID'),
+              studentName: item.nama || 'Siswa',
+              studentClass: item.kelas || 'VII-A',
+              score: Number(item.nilai) || 0,
+              correctCount: Number(item.benar) || 0,
+              totalQuestions: Number(item.totalSoal) || 15,
+              isPassed: (Number(item.nilai) || 0) >= 75
+            }));
+            this.mergeEvaluations(mapped);
+          }
         }
+      } catch (sheetErr) {
+        // Fallback for CORS or offline
       }
 
-      const lkpdRes = await fetch('/api/lkpd', { cache: 'no-store' });
-      if (lkpdRes.ok) {
-        const data = await lkpdRes.json();
-        if (Array.isArray(data) && data.length > 0) {
-          this.mergeLKPDs(data);
+      // 2. Local backend fallback
+      try {
+        const evalRes = await fetch('/api/evaluations', { cache: 'no-store' });
+        if (evalRes.ok) {
+          const data = await evalRes.json();
+          if (Array.isArray(data) && data.length > 0) {
+            this.mergeEvaluations(data);
+          }
         }
-      }
+
+        const lkpdRes = await fetch('/api/lkpd', { cache: 'no-store' });
+        if (lkpdRes.ok) {
+          const data = await lkpdRes.json();
+          if (Array.isArray(data) && data.length > 0) {
+            this.mergeLKPDs(data);
+          }
+        }
+      } catch (localErr) {}
 
       this.renderDashboard();
       if (notify && window.labAuth) {
         window.labAuth.showToast("✅ Data Dashboard berhasil disinkronkan!");
       }
     } catch (e) {
-      // Offline / Live Server static without API — continue seamlessly
+      // Offline mode
     } finally {
       this.isSyncing = false;
     }
@@ -235,13 +263,13 @@ class LabDashboard {
       isPassed: (evalData.score || 0) >= 75
     };
 
-    // Prepend to array
+    // Prepend to local array
     this.evaluations = this.evaluations.filter(e => e.id !== record.id);
     this.evaluations.unshift(record);
     this.saveData();
     this.renderDashboard();
 
-    // Broadcast
+    // Broadcast across tabs
     if (this.channel) {
       try {
         this.channel.postMessage({
@@ -253,7 +281,24 @@ class LabDashboard {
       } catch (e) {}
     }
 
-    // POST to API
+    // Send to Google Sheets Cloud Database
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
+    try {
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nama: record.studentName,
+          kelas: record.studentClass,
+          nilai: record.score,
+          benar: record.correctCount,
+          totalSoal: record.totalQuestions
+        })
+      }).catch(err => console.warn("Google Sheets Error:", err));
+    } catch (e) {}
+
+    // POST to local API if available
     try {
       await fetch('/api/evaluations', {
         method: 'POST',
