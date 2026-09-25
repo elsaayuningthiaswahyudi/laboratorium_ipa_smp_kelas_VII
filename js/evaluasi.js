@@ -172,6 +172,8 @@ class LabEvaluation {
   }
 
   submitQuiz() {
+    if (this.isSubmitted) return;
+    this.isSubmitted = true;
     clearInterval(this.timerInterval);
     if (window.labAudio) window.labAudio.playFanfare();
 

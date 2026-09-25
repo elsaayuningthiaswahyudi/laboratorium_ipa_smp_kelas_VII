@@ -105,12 +105,27 @@ class LabDashboard {
     }, 3000);
   }
 
+  deduplicateList(list) {
+    if (!Array.isArray(list)) return [];
+    const seen = new Set();
+    const result = [];
+    list.forEach(item => {
+      if (!item || !item.studentName) return;
+      const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}_${(item.timestamp || '').trim()}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push(item);
+      }
+    });
+    return result;
+  }
+
   loadData() {
     try {
       const savedEval = localStorage.getItem(this.EVAL_STORAGE_KEY);
       if (savedEval !== null && savedEval !== undefined && savedEval !== "") {
         const parsed = JSON.parse(savedEval);
-        this.evaluations = Array.isArray(parsed) && parsed.length > 0 ? parsed : this.getDefaultEvaluations();
+        this.evaluations = this.deduplicateList(Array.isArray(parsed) && parsed.length > 0 ? parsed : this.getDefaultEvaluations());
       } else {
         this.evaluations = this.getDefaultEvaluations();
         this.saveData();
@@ -137,6 +152,7 @@ class LabDashboard {
 
   saveData() {
     try {
+      this.evaluations = this.deduplicateList(this.evaluations);
       localStorage.setItem(this.EVAL_STORAGE_KEY, JSON.stringify(this.evaluations));
       localStorage.setItem(this.LKPD_STORAGE_KEY, JSON.stringify(this.lkpdSubmissions));
     } catch (e) {
@@ -147,14 +163,18 @@ class LabDashboard {
   mergeEvaluations(serverEvals) {
     if (!Array.isArray(serverEvals) || serverEvals.length === 0) return;
     const map = new Map();
-    // Server data
-    serverEvals.forEach(item => {
-      if (item && item.id) map.set(item.id, item);
-    });
-    // Local evaluations (keep all local items)
+    // Local evaluations first
     this.evaluations.forEach(item => {
-      if (item && item.id && !map.has(item.id)) {
-        map.set(item.id, item);
+      if (item && item.studentName) {
+        const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}_${(item.timestamp || '').trim()}`;
+        map.set(key, item);
+      }
+    });
+    // Server data updates / merges
+    serverEvals.forEach(item => {
+      if (item && item.studentName) {
+        const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}_${(item.timestamp || '').trim()}`;
+        map.set(key, item);
       }
     });
     this.evaluations = Array.from(map.values()).sort((a, b) => (b.id || 0) - (a.id || 0));
@@ -189,7 +209,7 @@ class LabDashboard {
           const sheetJson = await sheetRes.json();
           if (sheetJson.status === 'success' && Array.isArray(sheetJson.data) && sheetJson.data.length > 0) {
             const mapped = sheetJson.data.map((item, idx) => ({
-              id: Date.now() - (sheetJson.data.length - idx) * 1000,
+              id: item.id || `gs_${(item.nama || 'siswa')}_${(item.kelas || '')}_${(item.timestamp || idx)}`.replace(/[^a-zA-Z0-9]/g, '_'),
               timestamp: item.timestamp || new Date().toLocaleString('id-ID'),
               studentName: item.nama || 'Siswa',
               studentClass: item.kelas || 'VII-A',
