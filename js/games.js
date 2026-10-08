@@ -624,6 +624,14 @@ class LabGames {
 
       // Phase 4: Forward Pond Progression & Camera Scroll (700ms - 1300ms)
       setTimeout(() => {
+        const waterLayer = document.querySelector('.water-bg-layer');
+        if (waterLayer) {
+          waterLayer.classList.remove('water-advancing');
+          void waterLayer.offsetWidth; // Force reflow
+          waterLayer.classList.add('water-advancing');
+          setTimeout(() => waterLayer.classList.remove('water-advancing'), 850);
+        }
+
         // Fade out other unchosen lilypads
         document.querySelectorAll('.lilypad-wrapper').forEach((wrap, i) => {
           if (i !== padIndex) wrap.classList.add('fade-out');

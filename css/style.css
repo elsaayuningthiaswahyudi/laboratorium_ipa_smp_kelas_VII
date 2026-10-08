@@ -3133,6 +3133,16 @@ body {
   100% { background-position: 0 0, 30px 40px; }
 }
 
+.water-bg-layer.water-advancing {
+  animation: waterAdvanceStream 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+@keyframes waterAdvanceStream {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(80px); }
+  100% { transform: translateY(0); }
+}
+
 /* Decorative Background Lilypads (Lush Pond Layout) */
 .deco-lilypad {
   position: absolute;
