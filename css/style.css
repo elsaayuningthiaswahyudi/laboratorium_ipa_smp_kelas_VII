@@ -1114,10 +1114,12 @@ body {
 
 .ar-viewport-wrapper {
   position: relative;
-  height: 520px;
+  height: 560px;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: #070d1e;
+  background: radial-gradient(circle at center, #101e3d 0%, #081022 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 240, 255, 0.05);
 }
 
 #threejs-canvas-container {
