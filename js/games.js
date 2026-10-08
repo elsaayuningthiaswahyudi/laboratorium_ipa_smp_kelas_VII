@@ -319,34 +319,119 @@ class LabGames {
     const overlay = document.getElementById('froggy-overlay');
     if (overlay) overlay.style.display = 'none';
     
-    // Bank 15 Soal Materi Laboratorium IPA & Hakikat Sains SMP Kelas VII
+    // Bank 15 Soal Kurikulum IPA Laboratorium SMP Kelas VII (100% Sesuai Materi Web Ini)
     this.froggyQuestions = [
       {
-        question: "Ilmu yang mempelajari tentang serangga disebut ....",
+        question: "Perhatikan gambar di samping! Arti simbol bahan kimia tersebut adalah ....",
+        image: "img/k3/flammable.svg",
         options: [
-          { text: "entomologi", isCorrect: true },
-          { text: "mikrobiologi", isCorrect: false },
-          { text: "zoologi", isCorrect: false }
+          { text: "Bahan Mudah Terbakar", isCorrect: true },
+          { text: "Bahaya Radiasi Atom", isCorrect: false },
+          { text: "Bahan Beracun", isCorrect: false }
         ]
       },
       {
-        question: "Alat laboratorium yang digunakan untuk mengukur massa benda dengan ketelitian tinggi adalah ....",
+        question: "Perhatikan gambar di samping! Simbol ini menandakan zat kimia bersifat ....",
+        image: "img/k3/toxic.svg",
         options: [
-          { text: "Neraca Ohaus", isCorrect: true },
-          { text: "Gelas Ukur", isCorrect: false },
-          { text: "Jangka Sorong", isCorrect: false }
+          { text: "Beracun (Toksik)", isCorrect: true },
+          { text: "Mudah Meledak", isCorrect: false },
+          { text: "Korosif Logam", isCorrect: false }
         ]
       },
       {
-        question: "Alat untuk mengukur volume zat cair secara presisi dan kuantitatif adalah ....",
+        question: "Simbol keselamatan kerja pada gambar menunjukkan bahan yang bersifat ....",
+        image: "img/k3/corrosive.svg",
         options: [
-          { text: "Gelas Ukur", isCorrect: true },
-          { text: "Labu Erlenmeyer", isCorrect: false },
-          { text: "Gelas Kimia", isCorrect: false }
+          { text: "Korosif (Merusak Jaringan)", isCorrect: true },
+          { text: "Pengoksidasi", isCorrect: false },
+          { text: "Iritasi Ringan", isCorrect: false }
         ]
       },
       {
-        question: "Alat yang digunakan untuk mengambil dan meneteskan cairan dalam volume kecil adalah ....",
+        question: "Arti simbol bahaya laboratorium pada gambar di samping adalah ....",
+        image: "img/k3/explosive.svg",
+        options: [
+          { text: "Mudah Meledak (Explosive)", isCorrect: true },
+          { text: "Radioaktif", isCorrect: false },
+          { text: "Mudah Terbakar", isCorrect: false }
+        ]
+      },
+      {
+        question: "Perhatikan gambar alat lab di samping! Fungsi utama alat tersebut adalah ....",
+        image: "img/tools/neraca-ohaus.svg",
+        options: [
+          { text: "Mengukur massa benda", isCorrect: true },
+          { text: "Mengukur volume cairan", isCorrect: false },
+          { text: "Mengukur diameter tabung", isCorrect: false }
+        ]
+      },
+      {
+        question: "Alat laboratorium pada gambar di samping berfungsi untuk ....",
+        image: "img/tools/gelas-ukur.svg",
+        options: [
+          { text: "Mengukur volume zat cair", isCorrect: true },
+          { text: "Menampung larutan panas", isCorrect: false },
+          { text: "Menghaluskan serbuk kimia", isCorrect: false }
+        ]
+      },
+      {
+        question: "Saat membaca skala volume air pada gelas ukur, posisi mata yang benar sejajar dengan ....",
+        image: null,
+        options: [
+          { text: "Dasar Meniskus Cekung", isCorrect: true },
+          { text: "Puncak Meniskus Cembung", isCorrect: false },
+          { text: "Bibir Atas Gelas", isCorrect: false }
+        ]
+      },
+      {
+        question: "Alat ukur panjang dengan ketelitian 0,05 mm pada gambar di samping disebut ....",
+        image: "img/tools/jangka-sorong.svg",
+        options: [
+          { text: "Jangka Sorong", isCorrect: true },
+          { text: "Mikrometer Sekrup", isCorrect: false },
+          { text: "Penggaris Baja", isCorrect: false }
+        ]
+      },
+      {
+        question: "Bagian mikroskop yang berfungsi untuk memutar dan mengganti lensa objektif adalah ....",
+        image: "img/tools/mikroskop.svg",
+        options: [
+          { text: "Revolver", isCorrect: true },
+          { text: "Makrometer", isCorrect: false },
+          { text: "Diafragma", isCorrect: false }
+        ]
+      },
+      {
+        question: "Jika lensa okuler 10x dan lensa objektif 40x, maka total perbesaran bayangan mikroskop adalah ....",
+        image: null,
+        options: [
+          { text: "400x", isCorrect: true },
+          { text: "50x", isCorrect: false },
+          { text: "40x", isCorrect: false }
+        ]
+      },
+      {
+        question: "Kawat kasa keramik yang dipasang di atas kaki tiga saat pemanasan berfungsi untuk ....",
+        image: "img/tools/bunsen-spiritus.svg",
+        options: [
+          { text: "Meratakan Panas Api", isCorrect: true },
+          { text: "Memadamkan Api Spiritus", isCorrect: false },
+          { text: "Menyaring Endapan Kimia", isCorrect: false }
+        ]
+      },
+      {
+        question: "Wadah kerucut leher sempit pada gambar sangat berguna untuk ....",
+        image: "img/tools/labu-erlenmeyer.svg",
+        options: [
+          { text: "Mengocok Larutan & Titrasi", isCorrect: true },
+          { text: "Mengukur Massa Serbuk", isCorrect: false },
+          { text: "Memotong Kaca Preparat", isCorrect: false }
+        ]
+      },
+      {
+        question: "Alat laboratorium yang digunakan untuk mengambil cairan setetes demi setetes adalah ....",
+        image: null,
         options: [
           { text: "Pipet Tetes", isCorrect: true },
           { text: "Corong Kaca", isCorrect: false },
@@ -354,96 +439,26 @@ class LabGames {
         ]
       },
       {
-        question: "Wadah berbentuk kerucut leher sempit untuk mencampur dan mengocok larutan tanpa tumpah adalah ....",
-        options: [
-          { text: "Labu Erlenmeyer", isCorrect: true },
-          { text: "Gelas Beaker", isCorrect: false },
-          { text: "Cawan Penguap", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat yang berfungsi untuk menjepit tabung reaksi dengan aman saat pemanasan adalah ....",
+        question: "Alat penjepit yang aman digunakan saat memanaskan tabung reaksi di atas api adalah ....",
+        image: "img/tools/tabung-reaksi.svg",
         options: [
           { text: "Penjepit Kayu", isCorrect: true },
-          { text: "Pinset Besi", isCorrect: false },
-          { text: "Klem Statif", isCorrect: false }
+          { text: "Pinset Logam", isCorrect: false },
+          { text: "Tang Kaca", isCorrect: false }
         ]
       },
       {
-        question: "Alat ukur derajat panas atau suhu larutan di laboratorium disebut ....",
-        options: [
-          { text: "Termometer", isCorrect: true },
-          { text: "Barometer", isCorrect: false },
-          { text: "Higrometer", isCorrect: false }
-        ]
-      },
-      {
-        question: "Simbol bahaya berupa gambar tengkorak dan tulang bersilang menunjukkan sifat bahan ....",
-        options: [
-          { text: "Beracun (Toksik)", isCorrect: true },
-          { text: "Mudah Terbakar", isCorrect: false },
-          { text: "Mudah Meledak", isCorrect: false }
-        ]
-      },
-      {
-        question: "Kawat kasa yang dilapisi keramik di atas kaki tiga berfungsi untuk ....",
-        options: [
-          { text: "Meratakan Panas Api", isCorrect: true },
-          { text: "Mendinginkan Tabung", isCorrect: false },
-          { text: "Menyaring Larutan", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat laboratorium untuk menghaluskan zat padat kimia menjadi serbuk halus adalah ....",
-        options: [
-          { text: "Mortal & Alu", isCorrect: true },
-          { text: "Kaca Arloji", isCorrect: false },
-          { text: "Cawan Petri", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat optik yang digunakan untuk mengamati sel dan jaringan mikroorganisme renik adalah ....",
-        options: [
-          { text: "Mikroskop Cahaya", isCorrect: true },
-          { text: "Kaca Pembesar (Lup)", isCorrect: false },
-          { text: "Teleskop Optik", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat pelindung diri (APD) utama untuk melindungi mata dari percikan bahan kimia berbahaya adalah ....",
-        options: [
-          { text: "Kacamata Goggles", isCorrect: true },
-          { text: "Masker Medis", isCorrect: false },
-          { text: "Jas Laboratorium", isCorrect: false }
-        ]
-      },
-      {
-        question: "Cabang ilmu sains yang mempelajari tentang zat, materi, dan perubahannya adalah ....",
-        options: [
-          { text: "Ilmu Kimia", isCorrect: true },
-          { text: "Ilmu Fisika", isCorrect: false },
-          { text: "Ilmu Geologi", isCorrect: false }
-        ]
-      },
-      {
-        question: "Saat mata terkena percikan bahan kimia korosif, tindakan pertama yang wajib dilakukan adalah ....",
-        options: [
-          { text: "Bilas Air Mengalir Segera", isCorrect: true },
-          { text: "Mengucek dengan Tisu", isCorrect: false },
-          { text: "Menutup Mata Rapat", isCorrect: false }
-        ]
-      },
-      {
-        question: "Langkah pertama dalam metode ilmiah sebelum merumuskan hipotesis adalah ....",
+        question: "Langkah pertama dalam metode ilmiah setelah melakukan pengamatan fenomena adalah ....",
+        image: null,
         options: [
           { text: "Merumuskan Masalah", isCorrect: true },
-          { text: "Melakukan Eksperimen", isCorrect: false },
-          { text: "Menarik Kesimpulan", isCorrect: false }
+          { text: "Menarik Kesimpulan", isCorrect: false },
+          { text: "Melakukan Eksperimen", isCorrect: false }
         ]
       }
     ].sort(() => Math.random() - 0.5);
 
-    // Randomize options for each question
+    // Randomize options
     this.froggyQuestions.forEach(q => {
       q.options = [...q.options].sort(() => Math.random() - 0.5);
     });
@@ -478,15 +493,31 @@ class LabGames {
     const lilypadsContainer = document.getElementById('lilypads-container');
     const frog = document.getElementById('frog-character');
     
+    // Reset Frog position smoothly on the base lily pad
     if (frog) {
       frog.className = 'frog-character';
+      frog.style.transition = 'none';
       frog.style.transform = 'translate(0, 0)';
     }
 
-    if (qBox) qBox.innerText = currentQ.question;
+    // Render Question & Image (if available)
+    if (qBox) {
+      if (currentQ.image) {
+        qBox.innerHTML = `
+          <div class="froggy-q-img-wrap">
+            <img src="${currentQ.image}" alt="Soal" />
+          </div>
+          <div class="froggy-q-text-body">${currentQ.question}</div>
+        `;
+      } else {
+        qBox.innerHTML = `<div class="froggy-q-text-body">${currentQ.question}</div>`;
+      }
+    }
+
     if (qNum) qNum.innerText = `${this.froggyIndex + 1} / ${this.froggyQuestions.length}`;
     if (qBadgeBottom) qBadgeBottom.innerText = `${this.froggyIndex + 1}`;
     
+    // Render the 3 Lilypads (A, B, C)
     if (lilypadsContainer) {
       const labels = ['A', 'B', 'C'];
       lilypadsContainer.innerHTML = currentQ.options.map((opt, i) => `
@@ -519,42 +550,59 @@ class LabGames {
   answerFroggy(isCorrect, padIndex = 0, isTimeout = false) {
     clearInterval(this.froggyTimer);
     const frog = document.getElementById('frog-character');
-    const chosenPad = document.getElementById(`lilypad-btn-${padIndex}`);
+    const chosenPadWrap = document.getElementById(`lilypad-wrap-${padIndex}`);
+    const chosenPadBtn = document.getElementById(`lilypad-btn-${padIndex}`);
+    const frogContainer = document.querySelector('.frog-character-container');
 
-    // Jump direction coordinates
-    const jumpOffsets = [-150, 0, 150];
-    const targetX = (padIndex >= 0 && padIndex < 3) ? jumpOffsets[padIndex] : 0;
+    // Calculate dynamic precise landing coordinates
+    let targetX = 0;
+    let targetY = -150;
+
+    if (chosenPadWrap && frogContainer) {
+      const padRect = chosenPadWrap.getBoundingClientRect();
+      const frogRect = frogContainer.getBoundingClientRect();
+      targetX = (padRect.left + padRect.width / 2) - (frogRect.left + frogRect.width / 2);
+      targetY = (padRect.top + padRect.height / 2) - (frogRect.top + frogRect.height / 2) - 10;
+    } else {
+      const fallbackOffsets = [-160, 0, 160];
+      const fallbackY = [-120, -190, -120];
+      targetX = (padIndex >= 0 && padIndex < 3) ? fallbackOffsets[padIndex] : 0;
+      targetY = (padIndex >= 0 && padIndex < 3) ? fallbackY[padIndex] : -140;
+    }
 
     if (isCorrect) {
       if (window.labAudio) window.labAudio.playCorrect();
       this.froggyScore += 100;
       
-      if (chosenPad) chosenPad.classList.add('correct-flash');
+      if (chosenPadBtn) chosenPadBtn.classList.add('correct-flash');
 
+      // Katak melompat maju dan mendarat di atas daun pilihan
       if (frog) {
-        frog.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-        frog.style.transform = `translate(${targetX}px, -140px) scale(1.1)`;
+        frog.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+        frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.1)`;
       }
       
+      // Setelah mendarat, kolam bergerak maju ke soal berikutnya
       setTimeout(() => {
         this.froggyIndex++;
         this.updateFroggyUI();
         this.renderFroggyQuestion();
-      }, 700);
+      }, 750);
       
     } else {
       if (window.labAudio) window.labAudio.playWrong();
       this.froggyLives--;
       this.updateFroggyUI();
 
-      if (chosenPad) chosenPad.classList.add('wrong-flash');
+      if (chosenPadBtn) chosenPadBtn.classList.add('wrong-flash');
       
+      // Katak melompat tetapi terpeleset dan tenggelam ke air
       if (frog) {
-        frog.style.transition = 'transform 0.4s ease-out';
-        frog.style.transform = `translate(${targetX}px, -90px) scale(0.9)`;
+        frog.style.transition = 'transform 0.5s ease-out';
+        frog.style.transform = `translate(${targetX * 0.7}px, ${targetY * 0.6}px) scale(0.9)`;
         setTimeout(() => {
           frog.classList.add('frog-sink');
-        }, 400);
+        }, 450);
       }
       
       setTimeout(() => {
