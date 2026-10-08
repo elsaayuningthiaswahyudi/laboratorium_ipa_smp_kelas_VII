@@ -319,8 +319,80 @@ class LabGames {
     const overlay = document.getElementById('froggy-overlay');
     if (overlay) overlay.style.display = 'none';
     
-    // Bank 15 Soal Kurikulum IPA Laboratorium SMP Kelas VII (100% Sesuai Materi Web Ini)
+    // Bank 12 Soal Kurikulum IPA Laboratorium SMP Kelas VII (100% Sesuai Kuis Educaplay)
     this.froggyQuestions = [
+      {
+        question: "pH meter berfungsi untuk?",
+        image: "img/tools/ph-meter.svg",
+        options: [
+          { text: "Mengukur pH larutan", isCorrect: true },
+          { text: "Mengukur massa", isCorrect: false },
+          { text: "Memanaskan larutan", isCorrect: false }
+        ]
+      },
+      {
+        question: "Gelas ukur pada gambar berfungsi untuk ....",
+        image: "img/tools/gelas-ukur.svg",
+        options: [
+          { text: "Mengukur volume zat cair", isCorrect: true },
+          { text: "Menampung larutan panas", isCorrect: false },
+          { text: "Menghaluskan serbuk kimia", isCorrect: false }
+        ]
+      },
+      {
+        question: "Tabung reaksi pada gambar digunakan untuk ....",
+        image: "img/tools/tabung-reaksi.svg",
+        options: [
+          { text: "Mereaksikan campuran bahan", isCorrect: true },
+          { text: "Mengukur volume zat cair", isCorrect: false },
+          { text: "Mengamati objek sel", isCorrect: false }
+        ]
+      },
+      {
+        question: "Alat laboratorium pada gambar di samping berfungsi untuk ....",
+        image: "img/tools/mikroskop.svg",
+        options: [
+          { text: "Mengamati objek mikroskopis", isCorrect: true },
+          { text: "Menimbang massa benda", isCorrect: false },
+          { text: "Mengukur diameter tabung", isCorrect: false }
+        ]
+      },
+      {
+        question: "Neraca Ohaus pada gambar berfungsi untuk ....",
+        image: "img/tools/neraca-ohaus.svg",
+        options: [
+          { text: "Mengukur massa benda", isCorrect: true },
+          { text: "Mengukur volume cairan", isCorrect: false },
+          { text: "Mengukur diameter tabung", isCorrect: false }
+        ]
+      },
+      {
+        question: "Jangka sorong pada gambar digunakan untuk ....",
+        image: "img/tools/jangka-sorong.svg",
+        options: [
+          { text: "Mengukur diameter & kedalaman", isCorrect: true },
+          { text: "Mengukur massa benda", isCorrect: false },
+          { text: "Mengukur suhu larutan", isCorrect: false }
+        ]
+      },
+      {
+        question: "Kaki tiga dan kawat kasa berfungsi untuk ....",
+        image: "img/tools/bunsen-spiritus.svg",
+        options: [
+          { text: "Menopang wadah saat pemanasan", isCorrect: true },
+          { text: "Memadamkan api spiritus", isCorrect: false },
+          { text: "Menyaring endapan kimia", isCorrect: false }
+        ]
+      },
+      {
+        question: "Labu Erlenmeyer pada gambar berguna untuk ....",
+        image: "img/tools/labu-erlenmeyer.svg",
+        options: [
+          { text: "Mencampur larutan & titrasi", isCorrect: true },
+          { text: "Mengukur massa serbuk", isCorrect: false },
+          { text: "Memotong kaca preparat", isCorrect: false }
+        ]
+      },
       {
         question: "Perhatikan gambar di samping! Arti simbol bahan kimia tersebut adalah ....",
         image: "img/k3/flammable.svg",
@@ -334,7 +406,7 @@ class LabGames {
         question: "Perhatikan gambar di samping! Simbol ini menandakan zat kimia bersifat ....",
         image: "img/k3/toxic.svg",
         options: [
-          { text: "Beracun (Toksik)", isCorrect: true },
+          { text: "Bahan Beracun (Toksik)", isCorrect: true },
           { text: "Mudah Meledak", isCorrect: false },
           { text: "Korosif Logam", isCorrect: false }
         ]
@@ -343,7 +415,7 @@ class LabGames {
         question: "Simbol keselamatan kerja pada gambar menunjukkan bahan yang bersifat ....",
         image: "img/k3/corrosive.svg",
         options: [
-          { text: "Korosif (Merusak Jaringan)", isCorrect: true },
+          { text: "Bahan Korosif", isCorrect: true },
           { text: "Pengoksidasi", isCorrect: false },
           { text: "Iritasi Ringan", isCorrect: false }
         ]
@@ -356,105 +428,6 @@ class LabGames {
           { text: "Radioaktif", isCorrect: false },
           { text: "Mudah Terbakar", isCorrect: false }
         ]
-      },
-      {
-        question: "Perhatikan gambar alat lab di samping! Fungsi utama alat tersebut adalah ....",
-        image: "img/tools/neraca-ohaus.svg",
-        options: [
-          { text: "Mengukur massa benda", isCorrect: true },
-          { text: "Mengukur volume cairan", isCorrect: false },
-          { text: "Mengukur diameter tabung", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat laboratorium pada gambar di samping berfungsi untuk ....",
-        image: "img/tools/gelas-ukur.svg",
-        options: [
-          { text: "Mengukur volume zat cair", isCorrect: true },
-          { text: "Menampung larutan panas", isCorrect: false },
-          { text: "Menghaluskan serbuk kimia", isCorrect: false }
-        ]
-      },
-      {
-        question: "Saat membaca skala volume air pada gelas ukur, posisi mata yang benar sejajar dengan ....",
-        image: null,
-        options: [
-          { text: "Dasar Meniskus Cekung", isCorrect: true },
-          { text: "Puncak Meniskus Cembung", isCorrect: false },
-          { text: "Bibir Atas Gelas", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat ukur panjang dengan ketelitian 0,05 mm pada gambar di samping disebut ....",
-        image: "img/tools/jangka-sorong.svg",
-        options: [
-          { text: "Jangka Sorong", isCorrect: true },
-          { text: "Mikrometer Sekrup", isCorrect: false },
-          { text: "Penggaris Baja", isCorrect: false }
-        ]
-      },
-      {
-        question: "Bagian mikroskop yang berfungsi untuk memutar dan mengganti lensa objektif adalah ....",
-        image: "img/tools/mikroskop.svg",
-        options: [
-          { text: "Revolver", isCorrect: true },
-          { text: "Makrometer", isCorrect: false },
-          { text: "Diafragma", isCorrect: false }
-        ]
-      },
-      {
-        question: "Jika lensa okuler 10x dan lensa objektif 40x, maka total perbesaran bayangan mikroskop adalah ....",
-        image: null,
-        options: [
-          { text: "400x", isCorrect: true },
-          { text: "50x", isCorrect: false },
-          { text: "40x", isCorrect: false }
-        ]
-      },
-      {
-        question: "Kawat kasa keramik yang dipasang di atas kaki tiga saat pemanasan berfungsi untuk ....",
-        image: "img/tools/bunsen-spiritus.svg",
-        options: [
-          { text: "Meratakan Panas Api", isCorrect: true },
-          { text: "Memadamkan Api Spiritus", isCorrect: false },
-          { text: "Menyaring Endapan Kimia", isCorrect: false }
-        ]
-      },
-      {
-        question: "Wadah kerucut leher sempit pada gambar sangat berguna untuk ....",
-        image: "img/tools/labu-erlenmeyer.svg",
-        options: [
-          { text: "Mengocok Larutan & Titrasi", isCorrect: true },
-          { text: "Mengukur Massa Serbuk", isCorrect: false },
-          { text: "Memotong Kaca Preparat", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat laboratorium yang digunakan untuk mengambil cairan setetes demi setetes adalah ....",
-        image: null,
-        options: [
-          { text: "Pipet Tetes", isCorrect: true },
-          { text: "Corong Kaca", isCorrect: false },
-          { text: "Batang Pengaduk", isCorrect: false }
-        ]
-      },
-      {
-        question: "Alat penjepit yang aman digunakan saat memanaskan tabung reaksi di atas api adalah ....",
-        image: "img/tools/tabung-reaksi.svg",
-        options: [
-          { text: "Penjepit Kayu", isCorrect: true },
-          { text: "Pinset Logam", isCorrect: false },
-          { text: "Tang Kaca", isCorrect: false }
-        ]
-      },
-      {
-        question: "Langkah pertama dalam metode ilmiah setelah melakukan pengamatan fenomena adalah ....",
-        image: null,
-        options: [
-          { text: "Merumuskan Masalah", isCorrect: true },
-          { text: "Menarik Kesimpulan", isCorrect: false },
-          { text: "Melakukan Eksperimen", isCorrect: false }
-        ]
       }
     ].sort(() => Math.random() - 0.5);
 
@@ -464,7 +437,7 @@ class LabGames {
     });
 
     this.froggyIndex = 0;
-    this.froggyLives = 3;
+    this.froggyLives = 4;
     this.froggyScore = 0;
     
     this.updateFroggyUI();
@@ -475,7 +448,9 @@ class LabGames {
     const livesCount = document.getElementById('froggy-lives-count');
     const scoreCount = document.getElementById('froggy-score-count');
     if (livesCount) livesCount.innerText = this.froggyLives;
-    if (scoreCount) scoreCount.innerText = this.froggyScore;
+    if (scoreCount) {
+      scoreCount.innerText = this.froggyScore > 0 ? this.froggyScore.toLocaleString('id-ID') : '0';
+    }
   }
 
   renderFroggyQuestion() {
@@ -514,7 +489,7 @@ class LabGames {
       frog.style.opacity = '1';
     }
 
-    // Render Question & Image (if available) with smooth crossfade
+    // Render Question & Image (if available) with smooth crossfade & zoom icon
     if (qBox) {
       qBox.style.opacity = '0';
       setTimeout(() => {
@@ -522,6 +497,7 @@ class LabGames {
           qBox.innerHTML = `
             <div class="froggy-q-img-wrap">
               <img src="${currentQ.image}" alt="Soal" />
+              <span class="zoom-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
             </div>
             <div class="froggy-q-text-body">${currentQ.question}</div>
           `;
@@ -536,20 +512,25 @@ class LabGames {
     if (qNum) qNum.innerText = `${this.froggyIndex + 1} / ${this.froggyQuestions.length}`;
     if (qBadgeBottom) qBadgeBottom.innerText = `${this.froggyIndex + 1}`;
     
-    // Render the 3 Lilypads (A, B, C) with staggered entrance
+    // Render the 3 Lilypads (A, B, C) with mandala star veins & staggered entrance
     if (lilypadsContainer) {
       const labels = ['A', 'B', 'C'];
       lilypadsContainer.innerHTML = currentQ.options.map((opt, i) => `
         <div class="lilypad-wrapper entering" id="lilypad-wrap-${i}" style="animation-delay: ${i * 0.1}s">
           <div class="lilypad-badge">${labels[i]}</div>
           <div class="lilypad" id="lilypad-btn-${i}" onclick="window.labGames.answerFroggy(${opt.isCorrect}, ${i})">
-            ${opt.text}
+            <svg class="lilypad-veins" viewBox="0 0 160 160">
+              <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+              <circle cx="80" cy="80" r="48" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.2"/>
+              <path d="M80 10 L80 150 M10 80 L150 80 M30 30 L130 130 M30 130 L130 30" stroke="rgba(255,255,255,0.08)" stroke-width="1.2"/>
+            </svg>
+            <span class="lilypad-text">${opt.text}</span>
           </div>
         </div>
       `).join('');
     }
 
-    this.froggyTimeLeft = 20;
+    this.froggyTimeLeft = 45;
     this.updateFroggyTimerUI();
     this.froggyTimer = setInterval(() => {
       this.froggyTimeLeft--;

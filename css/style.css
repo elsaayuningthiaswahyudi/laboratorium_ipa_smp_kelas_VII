@@ -3058,32 +3058,57 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 24px;
-  background: #68a81d; /* Educaplay Natural Foliage Green */
+  padding: 6px 20px;
+  background: #649c1f; /* Educaplay Green */
   color: #ffffff;
   z-index: 25;
   font-weight: 700;
-  height: 48px;
+  height: 52px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.froggy-lives, .froggy-score {
-  font-size: 0.88rem;
+.froggy-badge-box {
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 4px 12px;
   display: flex;
   align-items: center;
   gap: 6px;
-  letter-spacing: 0.5px;
+  font-size: 0.84rem;
   font-weight: 800;
 }
-.froggy-lives strong, .froggy-score strong {
+.froggy-badge-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.froggy-badge-box strong {
   font-size: 1.15rem;
   font-weight: 900;
+  color: #ffffff;
 }
+
+.educaplay-coin {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background: #76c828;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 900;
+  border: 1px solid #ffffff;
+}
+
 .froggy-title {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   letter-spacing: 0.5px;
   font-weight: 800;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .froggy-overlay {
@@ -3146,12 +3171,12 @@ body {
 /* Decorative Background Lilypads (Lush Pond Layout) */
 .deco-lilypad {
   position: absolute;
-  width: 165px;
-  height: 165px;
+  width: 175px;
+  height: 175px;
   border-radius: 50%;
   background: 
     radial-gradient(circle at 45% 45%, rgba(255,255,255,0.06) 0%, transparent 60%),
-    conic-gradient(from 40deg, #16330b 0deg, #16330b 310deg, transparent 310deg, transparent 360deg);
+    conic-gradient(from 40deg, #132d09 0deg, #132d09 310deg, transparent 310deg, transparent 360deg);
   box-shadow: 0 8px 18px rgba(0,0,0,0.35);
   opacity: 0.98;
   pointer-events: none;
@@ -3164,12 +3189,12 @@ body {
   border: 1px dashed rgba(255,255,255,0.1);
 }
 
-.deco-lilypad-left-top   { left: -45px; top: 100px; transform: rotate(-30deg); width: 160px; height: 160px; }
-.deco-lilypad-left-mid   { left: -35px; top: 250px; transform: rotate(15deg); width: 170px; height: 170px; }
-.deco-lilypad-right-top  { right: -45px; top: 90px; transform: rotate(45deg); width: 165px; height: 165px; }
-.deco-lilypad-right-mid  { right: -35px; top: 240px; transform: rotate(-50deg); width: 175px; height: 175px; }
-.deco-lilypad-back-left  { left: 18%; top: 70px; transform: rotate(110deg); width: 150px; height: 150px; opacity: 0.9; }
-.deco-lilypad-back-right { right: 18%; top: 75px; transform: rotate(-80deg); width: 155px; height: 155px; opacity: 0.9; }
+.deco-lilypad-left-top   { left: -50px; top: 90px; transform: rotate(-30deg); width: 170px; height: 170px; }
+.deco-lilypad-left-mid   { left: -40px; top: 260px; transform: rotate(15deg); width: 180px; height: 180px; }
+.deco-lilypad-right-top  { right: -50px; top: 80px; transform: rotate(45deg); width: 175px; height: 175px; }
+.deco-lilypad-right-mid  { right: -40px; top: 250px; transform: rotate(-50deg); width: 185px; height: 185px; }
+.deco-lilypad-back-left  { left: 16%; top: 60px; transform: rotate(110deg); width: 160px; height: 160px; opacity: 0.92; }
+.deco-lilypad-back-right { right: 16%; top: 65px; transform: rotate(-80deg); width: 165px; height: 165px; opacity: 0.92; }
 
 /* Question Top Card */
 .froggy-question-container {
@@ -3201,7 +3226,7 @@ body {
   padding: 10px 24px;
   border-radius: 14px;
   font-weight: 800;
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   line-height: 1.4;
   box-shadow: 0 8px 24px rgba(0,0,0,0.25);
   width: 100%;
@@ -3216,8 +3241,9 @@ body {
 
 .froggy-q-img-wrap {
   flex-shrink: 0;
-  width: 65px;
+  width: 70px;
   height: 65px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3230,6 +3256,20 @@ body {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+.froggy-q-img-wrap .zoom-icon {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  font-size: 0.65rem;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .froggy-q-text-body {
@@ -3307,11 +3347,11 @@ body {
 }
 
 .lilypad {
-  width: 165px;
-  height: 165px;
+  width: 175px;
+  height: 175px;
   background: 
-    radial-gradient(circle at 45% 45%, rgba(255,255,255,0.08) 0%, transparent 60%),
-    conic-gradient(from 45deg, #17340b 0deg, #17340b 310deg, transparent 310deg, transparent 360deg);
+    radial-gradient(circle at 45% 45%, rgba(255,255,255,0.06) 0%, transparent 60%),
+    conic-gradient(from 45deg, #132d09 0deg, #132d09 310deg, transparent 310deg, transparent 360deg);
   border-radius: 50%;
   position: relative;
   cursor: pointer;
@@ -3319,8 +3359,8 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 18px;
-  font-size: 0.98rem;
+  padding: 16px;
+  font-size: 1.02rem;
   font-weight: 800;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0,0,0,0.9);

@@ -1376,14 +1376,18 @@
           <div class="froggy-game-wrapper" id="froggy-game-wrapper">
             <!-- Top Green Header Bar -->
             <div class="froggy-header">
-              <div class="froggy-lives">
-                LIVES ❤️ <strong id="froggy-lives-count">3</strong>
+              <div class="froggy-badge-box">
+                <span class="froggy-badge-label">LIVES</span>
+                <i class="fa-solid fa-heart" style="color: #ffffff;"></i>
+                <strong id="froggy-lives-count">4</strong>
               </div>
               <div class="froggy-title">
-                Hakikat Ilmu Sains dan Metode Ilmiah
+                Kuis Alat Laboratorium IPA
               </div>
-              <div class="froggy-score">
-                SCORE 🪙 <strong id="froggy-score-count">0</strong>
+              <div class="froggy-badge-box">
+                <span class="froggy-badge-label">SCORE</span>
+                <span class="educaplay-coin">ⓔ</span>
+                <strong id="froggy-score-count">0</strong>
               </div>
             </div>
 
@@ -1493,14 +1497,14 @@
                 <div class="froggy-timer-box">
                   <div class="timer-circle" id="froggy-q-badge-bottom">1</div>
                   <div class="timer-bar">
-                    <span id="froggy-timer-text">00:20</span>
+                    <span id="froggy-timer-text">00:45</span>
                   </div>
+                  <button class="froggy-ctrl-btn" onclick="window.toggleAudio()" title="Pengaturan Audio">
+                    <i class="fa-solid fa-sliders"></i>
+                  </button>
                 </div>
 
                 <div class="froggy-action-btns">
-                  <button class="froggy-ctrl-btn" onclick="window.toggleAudio()" title="Musik Latar">
-                    <i class="fa-solid fa-volume-high"></i>
-                  </button>
                   <button class="froggy-ctrl-btn" onclick="window.labGames.toggleFroggyFullscreen()" title="Layar Penuh">
                     <i class="fa-solid fa-expand"></i>
                   </button>
