@@ -1,5 +1,5 @@
 // 3D Laboratory Apparatus Generator using Three.js
-// Ultra-High-Fidelity Models, Studio Illumination, Procedural Scale Textures, and Authentic Scientific Apparatus Details
+// Ultra-High-Fidelity Models, Studio Illumination, Razor-Sharp Scale Decals & Opaque Readouts
 
 class Lab3DViewer {
   constructor(containerId) {
@@ -23,7 +23,9 @@ class Lab3DViewer {
     }
   }
 
-  // Procedural Texture Generator Helpers
+  // =========================================================================
+  // PROCEDURAL HIGH-DPI SCALE TEXTURE GENERATORS (100% SHARP & READABLE)
+  // =========================================================================
   createTextureCanvas(width, height, drawFn) {
     const canvas = document.createElement('canvas');
     canvas.width = width;
@@ -37,161 +39,203 @@ class Lab3DViewer {
     return texture;
   }
 
+  // 1. Gelas Ukur: Skala Putih & Biru Kontras Tinggi
   createGraduationTextureCylinder() {
     return this.createTextureCanvas(512, 1024, (ctx, w, h) => {
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
-      ctx.lineWidth = 4;
-      ctx.font = 'bold 28px Inter, Arial, sans-serif';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
 
-      // Title
-      ctx.fillText('100 : 1 mL', w - 160, 60);
+      // Semi-translucent white frost calibration background strip
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+      ctx.fillRect(w * 0.1, 40, w * 0.8, h - 80);
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(w * 0.1, 40, w * 0.8, h - 80);
+
+      // Header Text
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 32px Inter, Arial, sans-serif';
+      ctx.fillText('100 mL', w / 2, 85);
       ctx.font = '22px Inter, Arial, sans-serif';
-      ctx.fillText('20°C', w - 160, 95);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('In 20°C ±1mL', w / 2, 120);
 
-      // Major and minor ticks
+      // Scale ticks & numbers (10 to 100 mL)
+      ctx.textAlign = 'left';
       for (let i = 10; i <= 100; i += 2) {
-        const y = h - 120 - ((i - 10) / 90) * (h - 220);
+        const y = (h - 120) - ((i - 10) / 90) * (h - 280);
         const isMajor = (i % 10 === 0);
         const isMid = (i % 5 === 0 && !isMajor);
 
-        ctx.lineWidth = isMajor ? 5 : (isMid ? 3.5 : 2);
-        const lineLen = isMajor ? 120 : (isMid ? 80 : 50);
-
+        // Tick line
         ctx.beginPath();
-        ctx.moveTo(w - 20, y);
-        ctx.lineTo(w - 20 - lineLen, y);
+        const lineLen = isMajor ? 140 : (isMid ? 90 : 55);
+        ctx.lineWidth = isMajor ? 6 : (isMid ? 4 : 2.5);
+        ctx.strokeStyle = isMajor ? '#ffffff' : (isMid ? '#e0f2fe' : '#93c5fd');
+        ctx.moveTo(w * 0.15, y);
+        ctx.lineTo(w * 0.15 + lineLen, y);
         ctx.stroke();
 
+        // Major Number with text shadow
         if (isMajor) {
-          ctx.font = 'bold 34px Inter, Arial, sans-serif';
-          ctx.fillText(i.toString(), w - 150, y);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 44px Inter, Arial, sans-serif';
+          ctx.shadowColor = '#000000';
+          ctx.shadowBlur = 6;
+          ctx.shadowOffsetX = 2;
+          ctx.shadowOffsetY = 2;
+          ctx.fillText(i.toString(), w * 0.15 + lineLen + 20, y + 14);
+          ctx.shadowColor = 'transparent';
         }
       }
     });
   }
 
+  // 2. Beaker / Gelas Kimia: Skala Putih Enamel Tebal
   createBeakerTexture() {
     return this.createTextureCanvas(512, 512, (ctx, w, h) => {
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.lineWidth = 4;
-      ctx.font = 'bold 24px Inter, Arial, sans-serif';
 
-      // Frosted white marking patch
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-      ctx.fillRect(40, 60, 140, 80);
-      ctx.strokeRect(40, 60, 140, 80);
+      // White frosted patch
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.fillRect(40, 50, 160, 90);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(40, 50, 160, 90);
 
       ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 24px Inter, Arial, sans-serif';
+      ctx.fillText('BORO 3.3', 55, 95);
       ctx.font = 'bold 20px Inter, Arial, sans-serif';
-      ctx.fillText('BORO 3.3', 50, 105);
-      ctx.font = '16px Inter, Arial, sans-serif';
-      ctx.fillText('250 mL', 50, 125);
+      ctx.fillText('APPROX 250ml', 55, 125);
 
       // Graduation marks
       const marks = [
-        { vol: '200', y: 150 },
-        { vol: '150', y: 230 },
-        { vol: '100', y: 310 },
-        { vol: '50', y: 390 }
+        { vol: '200', y: 170 },
+        { vol: '150', y: 250 },
+        { vol: '100', y: 330 },
+        { vol: '50',  y: 410 }
       ];
 
       marks.forEach(m => {
         ctx.beginPath();
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = '#ffffff';
         ctx.moveTo(w - 40, m.y);
-        ctx.lineTo(w - 140, m.y);
+        ctx.lineTo(w - 180, m.y);
         ctx.stroke();
 
-        ctx.font = 'bold 28px Inter, Arial, sans-serif';
+        ctx.font = 'bold 36px Inter, Arial, sans-serif';
         ctx.textAlign = 'right';
-        ctx.fillText(m.vol, w - 155, m.y + 8);
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 6;
+        ctx.fillText(m.vol, w - 200, m.y + 12);
+        ctx.shadowColor = 'transparent';
       });
     });
   }
 
+  // 3. Jangka Sorong: Skala Metrik 0-15 cm Bergaris Tajam
   createVernierScaleTexture() {
     return this.createTextureCanvas(1024, 256, (ctx, w, h) => {
-      ctx.fillStyle = '#e2e8f0';
+      ctx.fillStyle = '#f1f5f9';
       ctx.fillRect(0, 0, w, h);
 
-      // Black graduation markings
-      ctx.fillStyle = '#0f172a';
+      // Boundary Line
       ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(0, h - 25);
+      ctx.lineTo(w, h - 25);
+      ctx.stroke();
+
+      ctx.fillStyle = '#0f172a';
       ctx.textAlign = 'center';
 
-      // Centimeter and millimeter ticks
       for (let cm = 0; cm <= 15; cm++) {
         for (let mm = 0; mm < 10; mm++) {
           if (cm === 15 && mm > 0) break;
-          const x = 50 + (cm * 10 + mm) * 5.8;
+          const x = 40 + (cm * 10 + mm) * 6.2;
           const isCm = mm === 0;
           const isMid = mm === 5;
 
-          ctx.lineWidth = isCm ? 3 : (isMid ? 2 : 1.2);
-          const yLen = isCm ? 65 : (isMid ? 45 : 30);
+          ctx.lineWidth = isCm ? 4 : (isMid ? 2.5 : 1.5);
+          const yLen = isCm ? 80 : (isMid ? 55 : 35);
 
           ctx.beginPath();
-          ctx.moveTo(x, h - 30);
-          ctx.lineTo(x, h - 30 - yLen);
+          ctx.moveTo(x, h - 25);
+          ctx.lineTo(x, h - 25 - yLen);
           ctx.stroke();
 
           if (isCm) {
-            ctx.font = 'bold 22px Inter, Arial, sans-serif';
-            ctx.fillText(cm.toString(), x, h - 110);
+            ctx.font = 'bold 30px Inter, Arial, sans-serif';
+            ctx.fillText(cm.toString(), x, h - 125);
           }
         }
       }
 
-      ctx.font = 'bold 20px Inter, Arial, sans-serif';
+      ctx.font = 'bold 24px Inter, Arial, sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText('cm (0.05 mm)', w - 40, 50);
     });
   }
 
+  // 4. Termometer: Skala Celsius Kuning-Hitam Kontras Maksimal
   createThermometerScaleTexture() {
     return this.createTextureCanvas(256, 1024, (ctx, w, h) => {
-      // Yellow backing strip
+      // Solid bright yellow enamel background
       ctx.fillStyle = '#fef08a';
-      ctx.fillRect(w / 2 - 35, 40, 70, h - 80);
+      ctx.fillRect(0, 0, w, h);
+
+      // Red center capillary line channel
+      ctx.fillStyle = '#fee2e2';
+      ctx.fillRect(w / 2 - 8, 40, 16, h - 80);
 
       ctx.fillStyle = '#0f172a';
       ctx.strokeStyle = '#0f172a';
       ctx.textAlign = 'right';
 
       for (let t = -10; t <= 110; t += 2) {
-        const y = h - 80 - ((t + 10) / 120) * (h - 160);
+        const y = h - 90 - ((t + 10) / 120) * (h - 180);
         const isMajor = (t % 10 === 0);
         const isMid = (t % 5 === 0 && !isMajor);
 
-        ctx.lineWidth = isMajor ? 3 : (isMid ? 2 : 1);
-        const len = isMajor ? 30 : (isMid ? 20 : 12);
+        ctx.lineWidth = isMajor ? 4 : (isMid ? 2.5 : 1.5);
+        const len = isMajor ? 45 : (isMid ? 30 : 18);
 
+        // Right side ticks
         ctx.beginPath();
-        ctx.moveTo(w / 2 + 25, y);
-        ctx.lineTo(w / 2 + 25 - len, y);
+        ctx.moveTo(w / 2 + 10, y);
+        ctx.lineTo(w / 2 + 10 + len, y);
+        ctx.stroke();
+
+        // Left side ticks
+        ctx.beginPath();
+        ctx.moveTo(w / 2 - 10, y);
+        ctx.lineTo(w / 2 - 10 - len, y);
         ctx.stroke();
 
         if (isMajor) {
-          ctx.font = 'bold 22px Inter, Arial, sans-serif';
-          ctx.fillText(t.toString(), w / 2 - 10, y + 6);
+          ctx.font = 'bold 28px Inter, Arial, sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText(t.toString(), w / 2 + 10 + len + 8, y + 9);
         }
       }
 
-      ctx.font = 'bold 24px Inter, Arial, sans-serif';
+      ctx.font = 'bold 36px Inter, Arial, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('°C', w / 2, 35);
+      ctx.fillStyle = '#b91c1c';
+      ctx.fillText('°C', w / 2, 48);
     });
   }
 
+  // =========================================================================
+  // INITIALIZATION & STUDIO ENVIRONMENT
+  // =========================================================================
   init() {
-    // 1. Scene setup with studio depth
+    // 1. Scene setup with rich studio depth
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0c162d);
+    this.scene.background = new THREE.Color(0x0f1c3f);
 
     // 2. Camera setup
     const aspect = this.container.clientWidth / this.container.clientHeight;
@@ -207,7 +251,7 @@ class Lab3DViewer {
     
     if (THREE.ACESFilmicToneMapping) {
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      this.renderer.toneMappingExposure = 1.42;
+      this.renderer.toneMappingExposure = 1.48;
     }
     this.container.innerHTML = '';
     this.container.appendChild(this.renderer.domElement);
@@ -241,16 +285,16 @@ class Lab3DViewer {
 
   setupLighting() {
     // 1. Bright White Studio Ambient Light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
     this.scene.add(ambientLight);
 
     // 2. Hemisphere Light (Soft Sky White / Slate Ground bounce)
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x475569, 1.4);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x475569, 1.5);
     hemiLight.position.set(0, 20, 0);
     this.scene.add(hemiLight);
 
     // 3. Main Key Light (Top-Front-Right)
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.8);
     keyLight.position.set(6, 14, 8);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 1024;
@@ -259,21 +303,21 @@ class Lab3DViewer {
     this.scene.add(keyLight);
 
     // 4. Front-Left Soft Fill Light
-    const fillLight = new THREE.DirectionalLight(0xf0f9ff, 1.8);
+    const fillLight = new THREE.DirectionalLight(0xf0f9ff, 2.0);
     fillLight.position.set(-8, 8, 7);
     this.scene.add(fillLight);
 
     // 5. Rim / Edge Back Light
-    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.3);
+    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.5);
     rimLight.position.set(0, 10, -9);
     this.scene.add(rimLight);
 
     // 6. Direct Top Light
-    const topLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    const topLight = new THREE.DirectionalLight(0xffffff, 1.2);
     topLight.position.set(0, 15, 0);
     this.scene.add(topLight);
 
-    // 7. Dynamic Flame Point Light (for heating apparatus)
+    // 7. Dynamic Flame Point Light
     this.flameLight = new THREE.PointLight(0x00f0ff, 0, 8);
     this.flameLight.position.set(0, 1.8, 0);
     this.scene.add(this.flameLight);
@@ -285,7 +329,7 @@ class Lab3DViewer {
     gridHelper.position.y = -2;
     this.scene.add(gridHelper);
 
-    // Studio Pedestal Platform with Beveled Edge
+    // Studio Pedestal Platform with Bright Beveled Edge
     const pedGeo = new THREE.CylinderGeometry(4.8, 5.2, 0.4, 48);
     const pedMat = new THREE.MeshStandardMaterial({
       color: 0x1e293b,
@@ -356,8 +400,8 @@ class Lab3DViewer {
         break;
       case 'gelas-ukur':
         this.buildGraduatedCylinder(group);
-        targetCamPos.set(0, 3.0, 7.0);
-        targetLook.set(0, 2.5, 0);
+        targetCamPos.set(0, 3.2, 6.8);
+        targetLook.set(0, 2.6, 0);
         break;
       case 'erlenmeyer':
       case 'labu-erlenmeyer':
@@ -368,7 +412,7 @@ class Lab3DViewer {
       case 'termometer':
       case 'termometer-lab':
         this.buildThermometer(group);
-        targetCamPos.set(0, 3.0, 6.8);
+        targetCamPos.set(0, 3.0, 6.5);
         targetLook.set(0, 2.6, 0);
         break;
       case 'jangka-sorong':
@@ -410,7 +454,7 @@ class Lab3DViewer {
     this.currentModelGroup = group;
     this.scene.add(group);
 
-    // Set camera to frame model nicely
+    // Frame model prominently
     this.camera.position.copy(targetCamPos);
     if (this.controls) {
       this.controls.target.copy(targetLook);
@@ -423,13 +467,102 @@ class Lab3DViewer {
   }
 
   // =========================================================================
-  // 1. MODEL MIKROSKOP CAHAYA 3D (ULTRA-DETAILED)
+  // 1. MODEL GELAS UKUR 3D (SKALA OPAQUE 100% TERANG & MENISKUS JELAS)
+  // =========================================================================
+  buildGraduatedCylinder(group) {
+    // Glass Material with visible cyan edges & reflections
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: 0xe0f2fe,
+      transparent: true,
+      opacity: 0.45,
+      roughness: 0.1,
+      metalness: 0.2,
+      side: THREE.DoubleSide
+    });
+    
+    // Rich, Solid Blue Aqueous Solution (50 mL)
+    const liquidMat = new THREE.MeshStandardMaterial({
+      color: 0x0284c7,
+      transparent: true,
+      opacity: 0.86,
+      roughness: 0.15,
+      metalness: 0.1
+    });
+
+    const plasticBaseMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.25, metalness: 0.4 });
+
+    // 1. Heavy Royal Blue Hexagonal Base
+    const baseGeo = new THREE.CylinderGeometry(2.0, 2.2, 0.5, 6);
+    const base = new THREE.Mesh(baseGeo, plasticBaseMat);
+    base.position.set(0, 0.25, 0);
+    base.castShadow = true;
+    group.add(base);
+
+    // 2. Clear Glass Cylinder Body
+    const cylGeo = new THREE.CylinderGeometry(1.05, 1.05, 6.6, 48, 1, true);
+    const cyl = new THREE.Mesh(cylGeo, glassMat);
+    cyl.position.set(0, 3.6, 0);
+    group.add(cyl);
+
+    const cylBottom = new THREE.Mesh(new THREE.CylinderGeometry(1.03, 1.03, 0.18, 36), glassMat);
+    cylBottom.position.set(0, 0.4, 0);
+    group.add(cylBottom);
+
+    // Molded Spout & Glass Rim
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(1.06, 0.09, 16, 36), glassMat);
+    rim.rotation.x = Math.PI / 2;
+    rim.position.set(0, 6.9, 0);
+    group.add(rim);
+
+    // Safety Yellow Hexagonal Bumper Collar
+    const bumper = new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.35, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.35 }));
+    bumper.position.set(0, 6.35, 0);
+    group.add(bumper);
+
+    // 3. Dedicated High-Contrast Opaque Scale Decal Banner (100% Crisp & Visible!)
+    const scaleTex = this.createGraduationTextureCylinder();
+    const scaleBannerGeo = new THREE.PlaneGeometry(1.5, 5.8);
+    const scaleBannerMat = new THREE.MeshBasicMaterial({
+      map: scaleTex,
+      transparent: true,
+      opacity: 1.0,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const scaleBanner = new THREE.Mesh(scaleBannerGeo, scaleBannerMat);
+    scaleBanner.position.set(0, 3.55, 1.08);
+    group.add(scaleBanner);
+
+    // 4. Solid Blue Liquid Column (Up to 50 mL mark)
+    const liqGeo = new THREE.CylinderGeometry(1.0, 1.0, 3.4, 36);
+    const liq = new THREE.Mesh(liqGeo, liquidMat);
+    liq.position.set(0, 2.1, 0);
+    group.add(liq);
+
+    // Glowing Cyan Meniscus Curve Surface
+    const meniscus = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.0, 0.88, 0.18, 36),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide })
+    );
+    meniscus.position.set(0, 3.75, 0);
+    group.add(meniscus);
+    this.animatedObjects.cylinderMeniscus = meniscus;
+
+    this.hotspots = [
+      { id: "h-meniscus", name: "Meniskus Cekung Zat Cair", pos: new THREE.Vector3(0, 3.8, 1.2), desc: "Kelengkungan permukaan air akibat gaya adhesi dinding kaca > kohesi cairan. Pembacaan volume yang benar selalu diambil pada dasar cekungan." },
+      { id: "h-scale", name: "Skala Mililiter (10 - 100 mL)", pos: new THREE.Vector3(0.9, 4.4, 0.8), desc: "Garis-garis kalibrasi presisi dengan interval 1 mL untuk mengukur volume zat cair secara kuantitatif." },
+      { id: "h-bumper", name: "Cincin Pelindung Plastik (Bumper)", pos: new THREE.Vector3(0, 6.35, 1.2), desc: "Cincin segi enam pelindung benturan untuk mencegah bibir kaca pecah saat terbentur atau terjatuh." }
+    ];
+  }
+
+  // =========================================================================
+  // 2. MODEL MIKROSKOP CAHAYA 3D (ULTRA-DETAILED)
   // =========================================================================
   buildMicroscope(group) {
     const whiteEnamel = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.15, metalness: 0.1 });
     const chromeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, metalness: 0.95, roughness: 0.08 });
     const blackStageMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.35, metalness: 0.2 });
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xa5f3fc, transmission: 0.92, transparent: true, roughness: 0.05, ior: 1.5 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xa5f3fc, transparent: true, opacity: 0.6, roughness: 0.05 });
 
     // 1. Heavy Base Stand with Anti-Slip Foot Pads
     const baseGeo = new THREE.BoxGeometry(3.6, 0.7, 4.0);
@@ -463,7 +596,7 @@ class Lab3DViewer {
     arm.castShadow = true;
     group.add(arm);
 
-    // Dual Coaxial Focusing Knobs (Makrometer & Mikrometer with knurling)
+    // Dual Coaxial Focusing Knobs
     const coarseKnobGeo = new THREE.CylinderGeometry(0.65, 0.65, 0.45, 24);
     const fineKnobGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.7, 24);
 
@@ -498,7 +631,7 @@ class Lab3DViewer {
     slide.position.set(0, 3.04, 0.2);
     group.add(slide);
 
-    const coverslip = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.05, 0.7), new THREE.MeshPhysicalMaterial({ color: 0xe879f9, transparent: true, opacity: 0.85, roughness: 0.1 }));
+    const coverslip = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.05, 0.7), new THREE.MeshBasicMaterial({ color: 0xe879f9 }));
     coverslip.position.set(0, 3.05, 0.2);
     group.add(coverslip);
 
@@ -532,11 +665,6 @@ class Lab3DViewer {
     eyecup.rotation.x = Math.PI / 2 - 0.18;
     group.add(eyecup);
 
-    const ocularLens = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.06, 20), glassMat);
-    ocularLens.position.set(0, 7.05, 0.06);
-    ocularLens.rotation.x = -0.18;
-    group.add(ocularLens);
-
     // 6. Revolving Nosepiece with 3 Color-Coded Objectives
     const noseGroup = new THREE.Group();
     noseGroup.position.set(0, 4.15, 0.52);
@@ -564,11 +692,6 @@ class Lab3DViewer {
       bandMesh.position.y = -objSpecs[i].len * 0.7;
       objGroup.add(bandMesh);
 
-      // Front Lens
-      const fLens = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.04, 16), glassMat);
-      fLens.position.y = -objSpecs[i].len;
-      objGroup.add(fLens);
-
       noseGroup.add(objGroup);
     }
     group.add(noseGroup);
@@ -583,14 +706,14 @@ class Lab3DViewer {
   }
 
   // =========================================================================
-  // 2. MODEL PEMBAKAR BUNSEN & KAKI TIGA (LENGKAP DENGAN BEAKER PEMANASAN)
+  // 3. MODEL PEMBAKAR BUNSEN & KAKI TIGA (LENGKAP DENGAN BEAKER PEMANASAN)
   // =========================================================================
   buildBunsenAndTripod(group) {
     const castIron = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.35 });
     const brassMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.9, roughness: 0.2 });
     const steelMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, metalness: 0.95, roughness: 0.1 });
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.94, transparent: true, roughness: 0.05, ior: 1.5 });
-    const waterMat = new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, transmission: 0.82, transparent: true, roughness: 0.1 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.1, metalness: 0.2 });
+    const waterMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, transparent: true, opacity: 0.82, roughness: 0.15 });
 
     // 1. Bunsen Base (Heavy Hexagonal Base with Hose Inlet)
     const bBase = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.4, 0.4, 6), castIron);
@@ -609,22 +732,15 @@ class Lab3DViewer {
     bCollar.position.set(0, 0.65, 0);
     group.add(bCollar);
 
-    // Air Holes
-    const hole1 = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.8, 12), castIron);
-    hole1.rotation.z = Math.PI / 2;
-    hole1.position.set(0, 0.65, 0);
-    group.add(hole1);
-
     // Vertical Stainless Steel Chimney Barrel
     const bTube = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 2.4, 24), steelMat);
     bTube.position.set(0, 2.0, 0);
     group.add(bTube);
 
-    // 2. Realistic Dynamic 3D Flame (Multi-Layer Core & Atmospheric Aura)
+    // 2. Realistic Dynamic 3D Flame
     const flameGroup = new THREE.Group();
     flameGroup.position.set(0, 3.2, 0);
 
-    // Outer Blue Flame Cone
     const outerFlame = new THREE.Mesh(
       new THREE.ConeGeometry(0.45, 1.8, 24),
       new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.85 })
@@ -632,7 +748,6 @@ class Lab3DViewer {
     outerFlame.position.y = 0.9;
     flameGroup.add(outerFlame);
 
-    // Inner Green/Cyan Hot Flame Core
     const innerFlame = new THREE.Mesh(
       new THREE.ConeGeometry(0.25, 1.1, 24),
       new THREE.MeshBasicMaterial({ color: 0x38ef7d, transparent: true, opacity: 0.95 })
@@ -640,17 +755,10 @@ class Lab3DViewer {
     innerFlame.position.y = 0.55;
     flameGroup.add(innerFlame);
 
-    // Outer Luminous Glow Sprite
-    const glowGeo = new THREE.SphereGeometry(0.65, 16, 16);
-    const glowMat = new THREE.MeshBasicMaterial({ color: 0x0284c7, transparent: true, opacity: 0.3 });
-    const glow = new THREE.Mesh(glowGeo, glowMat);
-    glow.position.y = 0.8;
-    flameGroup.add(glow);
-
     group.add(flameGroup);
     this.animatedObjects.flame = flameGroup;
 
-    // 3. Sturdy Laboratory Tripod Stand (Kaki Tiga Besi)
+    // 3. Sturdy Laboratory Tripod Stand
     const tripodGroup = new THREE.Group();
     const topRing = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.18, 16, 36), castIron);
     topRing.rotation.x = Math.PI / 2;
@@ -664,15 +772,10 @@ class Lab3DViewer {
       leg.rotation.z = Math.sin(angle) * 0.18;
       leg.rotation.x = Math.cos(angle) * -0.18;
       tripodGroup.add(leg);
-
-      // Rubber Feet
-      const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.25, 16), new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8 }));
-      foot.position.set(Math.sin(angle) * 2.3, 0.12, Math.cos(angle) * 2.3);
-      tripodGroup.add(foot);
     }
     group.add(tripodGroup);
 
-    // 4. Wire Gauze with Textured White Ceramic Center Disc (Kawat Kasa Asbes)
+    // 4. Wire Gauze with Textured White Ceramic Center Disc
     const gauze = new THREE.Mesh(
       new THREE.BoxGeometry(4.0, 0.06, 4.0),
       new THREE.MeshStandardMaterial({ color: 0xe2e8f0, wireframe: true })
@@ -693,22 +796,22 @@ class Lab3DViewer {
     beakerGroup.position.set(0, 4.75, 0);
 
     const beakerGeo = new THREE.CylinderGeometry(1.3, 1.25, 2.8, 36, 1, true);
-    const beakerTex = this.createBeakerTexture();
-    const beakerMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.92,
-      transparent: true,
-      roughness: 0.05,
-      ior: 1.5,
-      map: beakerTex
-    });
-    const beakerMesh = new THREE.Mesh(beakerGeo, beakerMat);
+    const beakerMesh = new THREE.Mesh(beakerGeo, glassMat);
     beakerMesh.position.y = 1.4;
     beakerGroup.add(beakerMesh);
 
-    const beakerBottom = new THREE.Mesh(new THREE.CylinderGeometry(1.24, 1.24, 0.1, 36), beakerMat);
+    const beakerBottom = new THREE.Mesh(new THREE.CylinderGeometry(1.24, 1.24, 0.1, 36), glassMat);
     beakerBottom.position.y = 0.05;
     beakerGroup.add(beakerBottom);
+
+    // Beaker Measurement Scale Decal
+    const beakerTex = this.createBeakerTexture();
+    const scaleBanner = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.4, 2.6),
+      new THREE.MeshBasicMaterial({ map: beakerTex, transparent: true, opacity: 1.0, depthWrite: false, side: THREE.DoubleSide })
+    );
+    scaleBanner.position.set(0, 1.4, 1.28);
+    beakerGroup.add(scaleBanner);
 
     // Boiling Water inside Beaker
     const waterMesh = new THREE.Mesh(new THREE.CylinderGeometry(1.22, 1.22, 1.8, 36), waterMat);
@@ -720,7 +823,7 @@ class Lab3DViewer {
     for (let i = 0; i < 10; i++) {
       const b = new THREE.Mesh(
         new THREE.SphereGeometry(0.06 + Math.random() * 0.05, 12, 12),
-        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 })
+        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85 })
       );
       b.position.set((Math.random() - 0.5) * 1.6, 0.3 + Math.random() * 1.3, (Math.random() - 0.5) * 1.6);
       bubbles.add(b);
@@ -735,84 +838,6 @@ class Lab3DViewer {
       { id: "h-flame", name: "Nyala Api Oksidasi Biru Panas", pos: new THREE.Vector3(0, 3.6, 0.6), desc: "Zona pemanasan efisien dengan suhu api mencapai ~800°C untuk memanaskan larutan kimia." },
       { id: "h-gauze", name: "Kawat Kasa Keramik Tahan Panas", pos: new THREE.Vector3(0, 4.65, 1.4), desc: "Menyebarkan titik panas api secara merata ke seluruh dasar gelas kimia agar tidak pecah mendadak." },
       { id: "h-beaker", name: "Gelas Kimia Pemanasan", pos: new THREE.Vector3(0, 5.8, 1.2), desc: "Wadah kaca borosilikat tahan panas untuk mendidihkan cairan atau mereaksikan zat pada suhu tinggi." }
-    ];
-  }
-
-  // =========================================================================
-  // 3. MODEL GELAS UKUR 3D (DENGAN SKALA MILILITER DIGITAL & MENISKUS CEKUNG)
-  // =========================================================================
-  buildGraduatedCylinder(group) {
-    const clearGlassMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.94,
-      transparent: true,
-      roughness: 0.04,
-      ior: 1.52,
-      thickness: 0.8
-    });
-    const liquidMat = new THREE.MeshPhysicalMaterial({
-      color: 0x00f0ff,
-      transmission: 0.78,
-      transparent: true,
-      roughness: 0.08,
-      ior: 1.33
-    });
-    const plasticBaseMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.3, metalness: 0.4 });
-
-    // 1. Heavy Hexagonal Base with anti-tip feet
-    const baseGeo = new THREE.CylinderGeometry(1.9, 2.1, 0.45, 6);
-    const base = new THREE.Mesh(baseGeo, plasticBaseMat);
-    base.position.set(0, 0.22, 0);
-    base.castShadow = true;
-    group.add(base);
-
-    // 2. Glass Cylinder Column with High-Resolution Scale Texture
-    const cylTex = this.createGraduationTextureCylinder();
-    const cylMatWithScale = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.92,
-      transparent: true,
-      roughness: 0.05,
-      ior: 1.5,
-      map: cylTex
-    });
-    const cylGeo = new THREE.CylinderGeometry(1.0, 1.0, 6.4, 48, 1, true);
-    const cyl = new THREE.Mesh(cylGeo, cylMatWithScale);
-    cyl.position.set(0, 3.5, 0);
-    group.add(cyl);
-
-    const cylBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.98, 0.98, 0.15, 36), clearGlassMat);
-    cylBottom.position.set(0, 0.35, 0);
-    group.add(cylBottom);
-
-    // Spout & Top Rim
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(1.02, 0.08, 16, 36), clearGlassMat);
-    rim.rotation.x = Math.PI / 2;
-    rim.position.set(0, 6.7, 0);
-    group.add(rim);
-
-    // Yellow Hexagonal Bumper Ring (Pelindung Benturan)
-    const bumper = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.3, 0.25, 6), new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.4 }));
-    bumper.position.set(0, 6.2, 0);
-    group.add(bumper);
-
-    // 3. Liquid Column with Concave Meniscus Curve (50 mL level)
-    const liqGeo = new THREE.CylinderGeometry(0.95, 0.95, 3.8, 36);
-    const liq = new THREE.Mesh(liqGeo, liquidMat);
-    liq.position.set(0, 2.25, 0);
-    group.add(liq);
-
-    // Curved Concave Meniscus Surface
-    const meniscusGeo = new THREE.CylinderGeometry(0.95, 0.88, 0.16, 36);
-    const meniscus = new THREE.Mesh(meniscusGeo, new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.92 }));
-    meniscus.position.set(0, 4.15, 0);
-    group.add(meniscus);
-    this.animatedObjects.cylinderMeniscus = meniscus;
-
-    this.hotspots = [
-      { id: "h-meniscus", name: "Meniskus Cekung Zat Cair", pos: new THREE.Vector3(0, 4.2, 1.2), desc: "Kelengkungan permukaan air akibat gaya adhesi dinding kaca > kohesi cairan. Pembacaan volume yang benar selalu diambil pada dasar cekungan." },
-      { id: "h-scale", name: "Skala Mililiter (mL)", pos: new THREE.Vector3(1.1, 4.5, 0.4), desc: "Garis-garis kalibrasi presisi dengan interval 1 mL untuk mengukur volume zat cair secara kuantitatif." },
-      { id: "h-bumper", name: "Cincin Pelindung Plastik (Bumper)", pos: new THREE.Vector3(0, 6.2, 1.2), desc: "Cincin segi enam pelindung benturan untuk mencegah bibir kaca pecah saat terbentur atau jatuh." }
     ];
   }
 
@@ -905,17 +930,14 @@ class Lab3DViewer {
     }
 
     // 3 Brass Sliding Poises (Anting Pemberat Kuningan Emas)
-    // Poise 100g (Middle)
     const poise100 = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.7, 0.38), brassPoiseMat);
     poise100.position.set(0.48, 0.22, 0);
     beamGroup.add(poise100);
 
-    // Poise 10g (Back)
     const poise10 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.3), brassPoiseMat);
     poise10.position.set(-0.85, 0.45, -0.45);
     beamGroup.add(poise10);
 
-    // Poise 1g (Front)
     const poise1 = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.38, 0.28), brassPoiseMat);
     poise1.position.set(0.95, 0.0, 0.45);
     beamGroup.add(poise1);
@@ -956,17 +978,19 @@ class Lab3DViewer {
     const stainlessSteel = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, metalness: 0.95, roughness: 0.12 });
     const brassMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.9, roughness: 0.18 });
 
-    // Main Beam with Millimeter Scale Texture
-    const scaleTex = this.createVernierScaleTexture();
-    const beamMat = new THREE.MeshStandardMaterial({
-      color: 0xf8fafc,
-      metalness: 0.92,
-      roughness: 0.15,
-      map: scaleTex
-    });
-    const beam = new THREE.Mesh(new THREE.BoxGeometry(8.4, 0.8, 0.24), beamMat);
+    // Main Beam Body
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(8.4, 0.8, 0.24), stainlessSteel);
     beam.position.set(0, 2.5, 0);
     group.add(beam);
+
+    // Front Metric Scale Decal Banner (0 - 15 cm)
+    const scaleTex = this.createVernierScaleTexture();
+    const scaleDecal = new THREE.Mesh(
+      new THREE.PlaneGeometry(8.2, 0.76),
+      new THREE.MeshBasicMaterial({ map: scaleTex, transparent: true, opacity: 1.0, depthWrite: false, side: THREE.DoubleSide })
+    );
+    scaleDecal.position.set(0, 2.5, 0.13);
+    group.add(scaleDecal);
 
     // Fixed Outside & Inside Jaws (Left End)
     const fixedLower = new THREE.Mesh(new THREE.BoxGeometry(0.8, 2.6, 0.24), stainlessSteel);
@@ -1019,24 +1043,24 @@ class Lab3DViewer {
   // 6. MODEL TERMOMETER LAB 3D (TEKSTUR CELSIUS & TANDON MERAH)
   // =========================================================================
   buildThermometer(group) {
-    const clearGlass = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.94, transparent: true, roughness: 0.04, ior: 1.5 });
-    const redFluid = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+    const clearGlass = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.05 });
+    const redFluid = new THREE.MeshBasicMaterial({ color: 0xdc2626 });
 
-    // Glass Stem with Celsius Scale
-    const scaleTex = this.createThermometerScaleTexture();
-    const stemMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.9,
-      transparent: true,
-      roughness: 0.05,
-      ior: 1.5,
-      map: scaleTex
-    });
-    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 6.4, 32), stemMat);
+    // Outer Glass Stem
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 6.4, 32), clearGlass);
     stem.position.set(0, 3.4, 0);
     group.add(stem);
 
-    // Top Hanging Glass Loop & Triangular Anti-Roll Cap
+    // Inner Solid Yellow Enamel Scale Board with Sharp Markings
+    const scaleTex = this.createThermometerScaleTexture();
+    const scaleBoard = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.52, 6.0),
+      new THREE.MeshBasicMaterial({ map: scaleTex, depthWrite: false, side: THREE.DoubleSide })
+    );
+    scaleBoard.position.set(0, 3.4, 0.02);
+    group.add(scaleBoard);
+
+    // Top Triangular Anti-Roll Cap
     const topCap = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 0.35, 3), new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.4 }));
     topCap.position.set(0, 6.7, 0);
     group.add(topCap);
@@ -1045,18 +1069,18 @@ class Lab3DViewer {
     loop.position.set(0, 7.0, 0);
     group.add(loop);
 
-    // Bottom Bulb Reservoir with Red Alcohol / Mercury
-    const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), redFluid);
+    // Bottom Bulb Reservoir with Red Alcohol
+    const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.62, 32, 32), redFluid);
     bulb.position.set(0, 0.5, 0);
     group.add(bulb);
 
-    const bulbGlass = new THREE.Mesh(new THREE.SphereGeometry(0.68, 32, 32), clearGlass);
+    const bulbGlass = new THREE.Mesh(new THREE.SphereGeometry(0.7, 32, 32), clearGlass);
     bulbGlass.position.set(0, 0.5, 0);
     group.add(bulbGlass);
 
     // Red Liquid Capillary Thread
-    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 4.2, 16), redFluid);
-    cap.position.set(0, 2.6, 0);
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 4.2, 16), redFluid);
+    cap.position.set(0, 2.6, 0.04);
     group.add(cap);
     this.animatedObjects.thermoColumn = cap;
 
@@ -1071,34 +1095,34 @@ class Lab3DViewer {
   // 7. MODEL GELAS KIMIA (BEAKER) & PIPET TETES 3D
   // =========================================================================
   buildBeakerAndPipette(group) {
-    const beakerTex = this.createBeakerTexture();
-    const beakerMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.93,
-      transparent: true,
-      roughness: 0.04,
-      ior: 1.5,
-      map: beakerTex
-    });
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.94, transparent: true, roughness: 0.05, ior: 1.5 });
-    const blueFluidMat = new THREE.MeshPhysicalMaterial({ color: 0x00a8ff, transmission: 0.8, transparent: true, roughness: 0.1 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.05, side: THREE.DoubleSide });
+    const blueFluidMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, transparent: true, opacity: 0.85, roughness: 0.1 });
     const rubberBulbMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.35 });
 
-    // Beaker Glass Body with Pouring Spout
-    const beaker = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.6, 4.0, 36, 1, true), beakerMat);
+    // Beaker Glass Body
+    const beaker = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.6, 4.0, 36, 1, true), glassMat);
     beaker.position.set(0, 2.1, 0);
     group.add(beaker);
 
-    const beakerBottom = new THREE.Mesh(new THREE.CylinderGeometry(1.58, 1.58, 0.12, 36), beakerMat);
+    const beakerBottom = new THREE.Mesh(new THREE.CylinderGeometry(1.58, 1.58, 0.12, 36), glassMat);
     beakerBottom.position.set(0, 0.18, 0);
     group.add(beakerBottom);
+
+    // Front Beaker Scale Decal
+    const beakerTex = this.createBeakerTexture();
+    const scaleBanner = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.8, 3.6),
+      new THREE.MeshBasicMaterial({ map: beakerTex, transparent: true, opacity: 1.0, depthWrite: false, side: THREE.DoubleSide })
+    );
+    scaleBanner.position.set(0, 2.1, 1.68);
+    group.add(scaleBanner);
 
     // Liquid in Beaker
     const liquid = new THREE.Mesh(new THREE.CylinderGeometry(1.56, 1.56, 2.4, 36), blueFluidMat);
     liquid.position.set(0, 1.3, 0);
     group.add(liquid);
 
-    // Suspended Dropper Pipette with Rubber Bulb
+    // Suspended Dropper Pipette
     const pipGroup = new THREE.Group();
     pipGroup.position.set(0.7, 5.2, 0.4);
     pipGroup.rotation.z = -0.22;
@@ -1110,7 +1134,6 @@ class Lab3DViewer {
     rubberBulb.position.y = 1.9;
     pipGroup.add(rubberBulb);
 
-    // Fluid inside pipette
     const pipFluid = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.04, 1.8, 16), blueFluidMat);
     pipFluid.position.y = -0.5;
     pipGroup.add(pipFluid);
@@ -1130,19 +1153,11 @@ class Lab3DViewer {
   }
 
   // =========================================================================
-  // 8. MODEL LABU ERLENMEYER 3D (REAKSI EFERVESENSI TITRASI)
+  // 8. MODEL LABU ERLENMEYER 3D
   // =========================================================================
   buildErlenmeyer(group) {
-    const beakerTex = this.createBeakerTexture();
-    const glassMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.94,
-      transparent: true,
-      roughness: 0.05,
-      ior: 1.5,
-      map: beakerTex
-    });
-    const purpleFluidMat = new THREE.MeshPhysicalMaterial({ color: 0xa855f7, transmission: 0.8, transparent: true, roughness: 0.1 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.05, side: THREE.DoubleSide });
+    const purpleFluidMat = new THREE.MeshStandardMaterial({ color: 0xa855f7, transparent: true, opacity: 0.85, roughness: 0.1 });
 
     const cone = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 2.5, 3.8, 36, 1, true), glassMat);
     cone.position.set(0, 2.2, 0);
@@ -1167,12 +1182,12 @@ class Lab3DViewer {
     fluid.position.set(0, 1.45, 0);
     group.add(fluid);
 
-    // Rising Effervescence Reaction Bubbles
+    // Rising Effervescence Bubbles
     const bubblesGroup = new THREE.Group();
     for (let i = 0; i < 12; i++) {
       const bubble = new THREE.Mesh(
         new THREE.SphereGeometry(0.08 + Math.random() * 0.06, 12, 12),
-        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.75 })
+        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 })
       );
       bubble.position.set((Math.random() - 0.5) * 2.2, 0.6 + Math.random() * 1.8, (Math.random() - 0.5) * 2.2);
       bubblesGroup.add(bubble);
@@ -1189,10 +1204,10 @@ class Lab3DViewer {
   // 9. MODEL RAK TABUNG REAKSI & 6 TABUNG REAGEN KIMIA
   // =========================================================================
   buildTestTubeRack(group) {
-    const woodMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.35, metalness: 0.1 }); // Polished Teak Wood
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.95, transparent: true, roughness: 0.04, ior: 1.5 });
+    const woodMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.35, metalness: 0.1 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.04, side: THREE.DoubleSide });
     
-    // 6 Reagent colors: CuSO4 Blue, Benedict Orange, Biuret Purple, Iodine Yellow, NiCl2 Green, Clear H2O
+    // 6 Vibrant Reagents
     const reagentColors = [0x3b82f6, 0xf97316, 0xa855f7, 0xeab308, 0x10b981, 0x38bdf8];
 
     // Wooden Rack Base Plate
@@ -1200,12 +1215,10 @@ class Lab3DViewer {
     basePlate.position.set(0, 0.2, 0);
     group.add(basePlate);
 
-    // Upper Plate with Holes
     const topPlate = new THREE.Mesh(new THREE.BoxGeometry(7.6, 0.3, 2.4), woodMat);
     topPlate.position.set(0, 2.9, 0);
     group.add(topPlate);
 
-    // Wooden Side Uprights
     [-3.6, 3.6].forEach(x => {
       const side = new THREE.Mesh(new THREE.BoxGeometry(0.35, 2.9, 2.4), woodMat);
       side.position.set(x, 1.55, 0);
@@ -1219,7 +1232,7 @@ class Lab3DViewer {
       group.add(peg);
     }
 
-    // 6 Borosilicate Test Tubes with Colorful Reagents
+    // 6 Borosilicate Test Tubes
     for (let i = 0; i < 6; i++) {
       const posX = -2.5 + i * 1.0;
       const tubeGroup = new THREE.Group();
@@ -1235,7 +1248,7 @@ class Lab3DViewer {
 
       const fluid = new THREE.Mesh(
         new THREE.CylinderGeometry(0.28, 0.28, 2.0, 24),
-        new THREE.MeshPhysicalMaterial({ color: reagentColors[i], transmission: 0.8, transparent: true, roughness: 0.1 })
+        new THREE.MeshStandardMaterial({ color: reagentColors[i], transparent: true, opacity: 0.85, roughness: 0.1 })
       );
       fluid.position.y = -0.9;
       tubeGroup.add(fluid);
@@ -1250,11 +1263,11 @@ class Lab3DViewer {
   }
 
   // =========================================================================
-  // 10. MODEL CAWAN PETRI 3D (DENGAN AGAR & KOLONI BAKTERI 3D)
+  // 10. MODEL CAWAN PETRI 3D
   // =========================================================================
   buildPetriDish(group) {
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.95, transparent: true, roughness: 0.04, ior: 1.5 });
-    const agarMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, roughness: 0.25, transparent: true, opacity: 0.88 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.04, side: THREE.DoubleSide });
+    const agarMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, roughness: 0.25, transparent: true, opacity: 0.9 });
 
     // Lower Dish
     const dish = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 0.55, 48, 1, true), glassMat);
@@ -1270,7 +1283,7 @@ class Lab3DViewer {
     agar.position.set(0, 0.52, 0);
     group.add(agar);
 
-    // 3D Bacterial Colonies (Staphylococcus golden, Serratia red, Bacillus white, Cyan)
+    // 3D Bacterial Colonies
     const cols = [0xf59e0b, 0xef4444, 0xf8fafc, 0x06b6d4, 0x10b981];
     for (let i = 0; i < 20; i++) {
       const rad = 0.12 + Math.random() * 0.22;
@@ -1285,7 +1298,7 @@ class Lab3DViewer {
       group.add(colMesh);
     }
 
-    // Upper Overlapping Glass Lid (Slightly Ajar)
+    // Upper Glass Lid (Ajar)
     const lidGroup = new THREE.Group();
     lidGroup.position.set(0.5, 1.3, 0);
     lidGroup.rotation.z = 0.16;
@@ -1311,7 +1324,7 @@ class Lab3DViewer {
   buildMagnifyingGlass(group) {
     const brassMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.94, roughness: 0.12 });
     const woodMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.45 });
-    const lensMat = new THREE.MeshPhysicalMaterial({ color: 0xa5f3fc, transmission: 0.92, transparent: true, roughness: 0.03, ior: 1.62 });
+    const lensMat = new THREE.MeshStandardMaterial({ color: 0xa5f3fc, transparent: true, opacity: 0.55, roughness: 0.03 });
 
     const rim = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.2, 20, 64), brassMat);
     rim.position.set(0, 3.2, 0);
@@ -1324,17 +1337,14 @@ class Lab3DViewer {
     lens.position.set(0, 3.2, 0);
     group.add(lens);
 
-    // Brass Ferrule Collar
     const ferrule = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.32, 0.6, 24), brassMat);
     ferrule.position.set(0, 0.8, 0);
     group.add(ferrule);
 
-    // Ergonomic Turned Wood Handle
     const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.26, 2.6, 24), woodMat);
     handle.position.set(0, -0.6, 0);
     group.add(handle);
 
-    // Brass End Finial
     const finial = new THREE.Mesh(new THREE.SphereGeometry(0.3, 20, 20), brassMat);
     finial.position.set(0, -1.9, 0);
     group.add(finial);
@@ -1355,7 +1365,7 @@ class Lab3DViewer {
   // 13. MODEL BATANG PENGADUK & KACA ARLOJI 3D
   // =========================================================================
   buildStirringRod(group) {
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.95, transparent: true, roughness: 0.04, ior: 1.5 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.04, side: THREE.DoubleSide });
     const whitePowderMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.9 });
 
     // Watch Glass (Kaca Arloji)
@@ -1365,12 +1375,12 @@ class Lab3DViewer {
     watchGlass.position.set(0, 0.8, 0);
     group.add(watchGlass);
 
-    // Chemical Powder Specimen on Watch Glass
+    // Chemical Powder Specimen
     const powder = new THREE.Mesh(new THREE.ConeGeometry(1.2, 0.4, 24), whitePowderMat);
     powder.position.set(0, 0.6, 0);
     group.add(powder);
 
-    // Solid Glass Stirring Rod Resting Across
+    // Solid Glass Stirring Rod
     const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 6.4, 24), glassMat);
     rod.position.set(0, 2.2, 0);
     rod.rotation.z = 0.55;
@@ -1387,7 +1397,7 @@ class Lab3DViewer {
   // 14. MODEL CORONG KACA & KERTAS SARING FILTRASI 3D
   // =========================================================================
   buildFunnel(group) {
-    const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.94, transparent: true, roughness: 0.05, ior: 1.5 });
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.45, roughness: 0.05, side: THREE.DoubleSide });
     const paperMat = new THREE.MeshStandardMaterial({ color: 0xfef9c3, roughness: 0.85, side: THREE.DoubleSide });
     const standMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.35 });
 
@@ -1402,7 +1412,7 @@ class Lab3DViewer {
     cone.position.set(0, 3.8, 0);
     group.add(cone);
 
-    // Fluted Filter Paper Cone inside
+    // Fluted Filter Paper Cone
     const paper = new THREE.Mesh(new THREE.CylinderGeometry(1.98, 0.34, 2.4, 36, 1, true), paperMat);
     paper.position.set(0, 3.8, 0);
     group.add(paper);
@@ -1413,16 +1423,7 @@ class Lab3DViewer {
     group.add(stem);
 
     // Receiving Beaker Below
-    const beakerTex = this.createBeakerTexture();
-    const beakerMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transmission: 0.92,
-      transparent: true,
-      roughness: 0.05,
-      ior: 1.5,
-      map: beakerTex
-    });
-    const beaker = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.35, 2.4, 36, 1, true), beakerMat);
+    const beaker = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.35, 2.4, 36, 1, true), glassMat);
     beaker.position.set(0, 1.2, 0);
     group.add(beaker);
 
