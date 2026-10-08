@@ -3036,18 +3036,18 @@ body {
 }
 
 /* ================= 15. FROGGY JUMP GAME NATIVE ================= */
-/* ================= 15. FROGGY JUMP GAME (EDUCAPLAY AUTHENTIC STYLE) ================= */
+/* ================= 15. FROGGY JUMP GAME (AUTHENTIC EDUCAPLAY STYLE) ================= */
 .froggy-game-wrapper {
   position: relative;
   width: 100%;
   max-width: 980px;
-  height: 580px;
+  height: 600px;
   margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
-  background: #0288d1;
+  background: #1eb8ea;
   border: 4px solid #ffffff;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   font-family: 'Poppins', var(--font-main), sans-serif;
@@ -3059,12 +3059,12 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 8px 24px;
-  background: #65a30d; /* Educaplay Grass Green */
+  background: #68a81d; /* Educaplay Natural Foliage Green */
   color: #ffffff;
-  z-index: 20;
+  z-index: 25;
   font-weight: 700;
-  height: 50px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  height: 48px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .froggy-lives, .froggy-score {
@@ -3076,11 +3076,11 @@ body {
   font-weight: 800;
 }
 .froggy-lives strong, .froggy-score strong {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 900;
 }
 .froggy-title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   letter-spacing: 0.5px;
   font-weight: 800;
   text-shadow: 0 1px 2px rgba(0,0,0,0.25);
@@ -3091,7 +3091,7 @@ body {
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(8, 15, 35, 0.88);
   backdrop-filter: blur(8px);
-  z-index: 50;
+  z-index: 60;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3112,7 +3112,7 @@ body {
 .froggy-arena {
   flex: 1;
   position: relative;
-  background-color: #29b6f6;
+  background: #1fb5eb;
   overflow: hidden;
 }
 
@@ -3120,30 +3120,30 @@ body {
 .water-bg-layer {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #22c1ea;
+  background-color: #1eb8ea;
   background-image: 
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.25) 0%, transparent 80%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M0 40 C30 20, 50 60, 80 40 C110 20, 130 60, 160 40 M0 80 C30 60, 50 100, 80 80 C110 60, 130 100, 160 80 M0 120 C30 100, 50 140, 80 120 C110 100, 130 140, 160 120 M40 0 C20 30, 60 50, 40 80 C20 110, 60 130, 40 160 M80 0 C60 30, 100 50, 80 80 C60 110, 100 130, 80 160 M120 0 C100 30, 140 50, 120 80 C100 110, 140 130, 120 160' fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-opacity='0.45' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-size: 100% 100%, 140px 140px;
-  animation: waterRippleShimmer 12s linear infinite alternate;
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.28) 0%, transparent 85%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cpath d='M10,20 C35,5 50,35 75,20 C100,5 115,35 140,20 M0,60 C25,45 40,75 65,60 C90,45 105,75 130,60 M10,100 C35,85 50,115 75,100 C100,85 115,115 140,100 M0,140 C25,125 40,155 65,140 C90,125 105,155 130,140 M20,0 C5,25 35,40 20,65 C5,90 35,105 20,130 M60,0 C45,25 75,40 60,65 C45,90 75,105 60,130 M100,0 C85,25 115,40 100,65 C85,90 115,105 100,130 M140,0 C125,25 155,40 140,65 C125,90 155,105 140,130' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-opacity='0.55' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 120px 120px;
+  animation: waterRippleShimmer 14s linear infinite alternate;
 }
 
 @keyframes waterRippleShimmer {
   0% { background-position: 0 0, 0 0; }
-  100% { background-position: 0 0, 20px 30px; }
+  100% { background-position: 0 0, 30px 40px; }
 }
 
 /* Decorative Background Lilypads (Lush Pond Layout) */
 .deco-lilypad {
   position: absolute;
-  width: 150px;
-  height: 150px;
+  width: 165px;
+  height: 165px;
   border-radius: 50%;
   background: 
-    radial-gradient(circle, transparent 20%, rgba(0,0,0,0.15) 80%),
-    conic-gradient(from 40deg, #1b3a0e 0deg, #1b3a0e 310deg, transparent 310deg, transparent 360deg);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-  opacity: 0.95;
+    radial-gradient(circle at 45% 45%, rgba(255,255,255,0.06) 0%, transparent 60%),
+    conic-gradient(from 40deg, #16330b 0deg, #16330b 310deg, transparent 310deg, transparent 360deg);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  opacity: 0.98;
   pointer-events: none;
 }
 .deco-lilypad::after {
@@ -3151,25 +3151,25 @@ body {
   position: absolute;
   top: 15px; left: 15px; right: 15px; bottom: 15px;
   border-radius: 50%;
-  border: 1px dashed rgba(255,255,255,0.08);
+  border: 1px dashed rgba(255,255,255,0.1);
 }
 
-.deco-lilypad-left-top   { left: -35px; top: 90px; transform: rotate(-30deg); width: 145px; height: 145px; }
-.deco-lilypad-left-mid   { left: -25px; top: 230px; transform: rotate(15deg); width: 155px; height: 155px; }
-.deco-lilypad-right-top  { right: -35px; top: 80px; transform: rotate(45deg); width: 150px; height: 150px; }
-.deco-lilypad-right-mid  { right: -25px; top: 220px; transform: rotate(-50deg); width: 160px; height: 160px; }
-.deco-lilypad-back-left  { left: 20%; top: 60px; transform: rotate(110deg); width: 135px; height: 135px; opacity: 0.85; }
-.deco-lilypad-back-right { right: 20%; top: 65px; transform: rotate(-80deg); width: 140px; height: 140px; opacity: 0.85; }
+.deco-lilypad-left-top   { left: -45px; top: 100px; transform: rotate(-30deg); width: 160px; height: 160px; }
+.deco-lilypad-left-mid   { left: -35px; top: 250px; transform: rotate(15deg); width: 170px; height: 170px; }
+.deco-lilypad-right-top  { right: -45px; top: 90px; transform: rotate(45deg); width: 165px; height: 165px; }
+.deco-lilypad-right-mid  { right: -35px; top: 240px; transform: rotate(-50deg); width: 175px; height: 175px; }
+.deco-lilypad-back-left  { left: 18%; top: 70px; transform: rotate(110deg); width: 150px; height: 150px; opacity: 0.9; }
+.deco-lilypad-back-right { right: 18%; top: 75px; transform: rotate(-80deg); width: 155px; height: 155px; opacity: 0.9; }
 
 /* Question Top Card */
 .froggy-question-container {
   position: absolute;
-  top: 12px;
+  top: 10px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 25;
+  z-index: 30;
   padding: 0 20px;
 }
 .froggy-question-badge {
@@ -3181,7 +3181,7 @@ body {
   align-self: flex-start;
   margin-bottom: -10px;
   margin-left: 15px;
-  z-index: 26;
+  z-index: 31;
   font-weight: 800;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
@@ -3206,8 +3206,8 @@ body {
 
 .froggy-q-img-wrap {
   flex-shrink: 0;
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3248,49 +3248,49 @@ body {
 
 /* Option A: Bottom-Left Tier */
 #lilypad-wrap-0 {
-  left: 21%;
-  top: 210px;
+  left: 20%;
+  top: 215px;
   animation: floatLily 4s ease-in-out infinite;
 }
 
 /* Option B: Top-Center Tier */
 #lilypad-wrap-1 {
   left: 50%;
-  top: 115px;
+  top: 120px;
   transform: translateX(-50%);
   animation: floatLily 4s ease-in-out infinite -1.3s;
 }
 
 /* Option C: Bottom-Right Tier */
 #lilypad-wrap-2 {
-  right: 21%;
-  top: 210px;
+  right: 20%;
+  top: 215px;
   animation: floatLily 4s ease-in-out infinite -2.6s;
 }
 
 .lilypad-badge {
   background: #76c828;
   color: #ffffff;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 900;
   font-size: 1.15rem;
-  margin-bottom: -18px;
+  margin-bottom: -19px;
   z-index: 22;
   box-shadow: 0 4px 8px rgba(0,0,0,0.35);
-  border: 2px solid #ffffff;
+  border: 2.5px solid #ffffff;
 }
 
 .lilypad {
-  width: 155px;
-  height: 155px;
+  width: 165px;
+  height: 165px;
   background: 
     radial-gradient(circle at 45% 45%, rgba(255,255,255,0.08) 0%, transparent 60%),
-    conic-gradient(from 45deg, #1b3a0e 0deg, #1b3a0e 310deg, transparent 310deg, transparent 360deg);
+    conic-gradient(from 45deg, #17340b 0deg, #17340b 310deg, transparent 310deg, transparent 360deg);
   border-radius: 50%;
   position: relative;
   cursor: pointer;
@@ -3299,11 +3299,11 @@ body {
   align-items: center;
   text-align: center;
   padding: 18px;
-  font-size: 0.96rem;
+  font-size: 0.98rem;
   font-weight: 800;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.45);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.45);
   transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -3317,8 +3317,8 @@ body {
 }
 
 .lilypad:hover {
-  transform: scale(1.12);
-  box-shadow: 0 16px 30px rgba(0,0,0,0.55), 0 0 20px rgba(118, 200, 40, 0.7);
+  transform: scale(1.1);
+  box-shadow: 0 18px 32px rgba(0,0,0,0.55), 0 0 25px rgba(118, 200, 40, 0.7);
 }
 
 .lilypad.correct-flash {
@@ -3335,7 +3335,7 @@ body {
 /* Bottom Lilypad & Frog Container */
 .frog-character-container {
   position: absolute;
-  bottom: 12px;
+  bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -3345,23 +3345,23 @@ body {
 }
 
 .lilypad-bottom {
-  width: 155px;
-  height: 155px;
+  width: 170px;
+  height: 170px;
   background: 
     radial-gradient(circle at 45% 45%, rgba(255,255,255,0.08) 0%, transparent 60%),
-    conic-gradient(from 225deg, #1b3a0e 0deg, #1b3a0e 310deg, transparent 310deg, transparent 360deg);
+    conic-gradient(from 225deg, #17340b 0deg, #17340b 310deg, transparent 310deg, transparent 360deg);
   border-radius: 50%;
   position: absolute;
-  bottom: -25px;
+  bottom: -30px;
   z-index: 1;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.55);
 }
 
 .frog-character {
-  width: 140px;
-  height: 140px;
+  width: 145px;
+  height: 145px;
   z-index: 2;
-  filter: drop-shadow(0 10px 12px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,0.5));
   transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   display: flex;
@@ -3398,7 +3398,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 30;
+  z-index: 35;
   pointer-events: none;
 }
 
@@ -3448,98 +3448,19 @@ body {
 .froggy-ctrl-btn {
   width: 42px;
   height: 42px;
-  border-radius: 12px;
-  background: #a7f3d0;
-  border: 2px solid #059669;
-  color: #065f46;
+  border-radius: 10px;
+  background: #bbf7d0;
+  border: 2px solid #86efac;
+  color: #14532d;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-
 .froggy-ctrl-btn:hover {
+  background: #86efac;
   transform: scale(1.08);
-  background: #6ee7b7;
 }
-
-/* Bottom Controls Bar */
-.froggy-bottom-bar {
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  right: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 20;
-  pointer-events: none;
-}
-
-.froggy-timer-box {
-  display: flex;
-  align-items: center;
-  pointer-events: auto;
-}
-
-.timer-circle {
-  width: 48px;
-  height: 48px;
-  background: #ffffff;
-  border: 4px solid #ef4444;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 900;
-  font-size: 1.3rem;
-  color: #0f172a;
-  z-index: 2;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-}
-
-.timer-bar {
-  background: #ffffff;
-  height: 36px;
-  padding: 0 16px 0 24px;
-  margin-left: -14px;
-  border-radius: 0 18px 18px 0;
-  display: flex;
-  align-items: center;
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: #0f172a;
-  z-index: 1;
-  box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
-}
-
-.froggy-action-btns {
-  display: flex;
-  gap: 10px;
-  pointer-events: auto;
-}
-
-.froggy-ctrl-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: #a7f3d0;
-  border: 2px solid #059669;
-  color: #065f46;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.2s ease;
-}
-
-.froggy-ctrl-btn:hover {
-  transform: scale(1.08);
-  background: #6ee7b7;
-}
-
