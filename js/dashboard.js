@@ -288,7 +288,7 @@ class LabDashboard {
             this.mergeLKPDs(data);
           }
         }
-      } catch (localErr) {}
+      } catch (localErr) { }
 
       this.renderMetrics();
       this.renderEvaluationTable();
@@ -346,7 +346,7 @@ class LabDashboard {
           studentClass: record.studentClass,
           data: record
         });
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // Send to Google Sheets Cloud Database (Dual submission GET & POST)
@@ -364,8 +364,8 @@ class LabDashboard {
         method: 'GET',
         mode: 'no-cors',
         cache: 'no-store'
-      }).catch(() => {});
-    } catch (e) {}
+      }).catch(() => { });
+    } catch (e) { }
 
     try {
       fetch(GOOGLE_SCRIPT_URL, {
@@ -379,8 +379,8 @@ class LabDashboard {
           benar: record.correctCount,
           totalSoal: record.totalQuestions
         })
-      }).catch(() => {});
-    } catch (e) {}
+      }).catch(() => { });
+    } catch (e) { }
 
     // POST to local API if available
     try {
@@ -389,7 +389,7 @@ class LabDashboard {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(record)
       });
-    } catch (err) {}
+    } catch (err) { }
   }
 
   // Record a new LKPD submission
@@ -425,7 +425,7 @@ class LabDashboard {
           studentClass: record.studentClass,
           data: record
         });
-      } catch (e) {}
+      } catch (e) { }
     }
 
     try {
@@ -434,7 +434,7 @@ class LabDashboard {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(record)
       });
-    } catch (err) {}
+    } catch (err) { }
   }
 
   renderDashboard() {
@@ -484,8 +484,8 @@ class LabDashboard {
     // Filter by search
     if (this.searchKeyword) {
       const kw = this.searchKeyword.toLowerCase();
-      filtered = filtered.filter(e => 
-        (e.studentName && e.studentName.toLowerCase().includes(kw)) || 
+      filtered = filtered.filter(e =>
+        (e.studentName && e.studentName.toLowerCase().includes(kw)) ||
         (e.studentClass && e.studentClass.toLowerCase().includes(kw))
       );
     }
@@ -592,7 +592,7 @@ class LabDashboard {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: id })
         });
-      } catch (e) {}
+      } catch (e) { }
 
       if (window.labAuth) window.labAuth.showToast("Data evaluasi berhasil dihapus.");
     }
@@ -610,7 +610,7 @@ class LabDashboard {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: id })
         });
-      } catch (e) {}
+      } catch (e) { }
 
       if (window.labAuth) window.labAuth.showToast("Data LKPD berhasil dihapus.");
     }
@@ -625,10 +625,10 @@ class LabDashboard {
 
       try {
         await fetch('/api/clear-all', { method: 'POST' });
-      } catch (e) {}
+      } catch (e) { }
 
       if (this.channel) {
-        try { this.channel.postMessage({ type: 'SYNC' }); } catch (e) {}
+        try { this.channel.postMessage({ type: 'SYNC' }); } catch (e) { }
       }
 
       if (window.labAuth) window.labAuth.showToast("Seluruh data nilai dan LKPD berhasil dikosongkan.");
@@ -650,7 +650,7 @@ class LabDashboard {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ evaluations: demoEvals, lkpd: demoLkpd })
       });
-    } catch (e) {}
+    } catch (e) { }
 
     if (notify && window.labAuth) {
       window.labAuth.showToast("Data demo siswa berhasil dimuat!");
