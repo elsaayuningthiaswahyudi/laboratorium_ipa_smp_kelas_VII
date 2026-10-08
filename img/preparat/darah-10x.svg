@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <rect width="500" height="500" fill="#fdf2f8"/>
+  <defs>
+    <radialGradient id="rbcGrad10x" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fca5a5"/>
+      <stop offset="45%" stop-color="#ef4444"/>
+      <stop offset="85%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </radialGradient>
+    <radialGradient id="rbcDip10x" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fecdd3"/>
+      <stop offset="70%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </radialGradient>
+    <radialGradient id="wbcGrad10x" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#d8b4fe"/>
+      <stop offset="60%" stop-color="#9333ea"/>
+      <stop offset="100%" stop-color="#581c87"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Group of medium-sized Red Blood Cells (Biconcave shape) -->
+  <g>
+    <!-- Row 1 -->
+    <g transform="translate(80, 80)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(145, 65)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(220, 85)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(300, 70)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(380, 90)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+
+    <!-- Row 2 -->
+    <g transform="translate(60, 160)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(130, 145)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(340, 155)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(420, 170)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+
+    <!-- Row 3 -->
+    <g transform="translate(90, 240)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(160, 225)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(310, 240)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(390, 255)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+
+    <!-- Row 4 -->
+    <g transform="translate(70, 330)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(140, 315)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(220, 335)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(300, 320)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(375, 340)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+
+    <!-- Row 5 -->
+    <g transform="translate(110, 410)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(185, 425)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(265, 415)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+    <g transform="translate(345, 430)"><circle cx="0" cy="0" r="22" fill="url(#rbcGrad10x)"/><circle cx="0" cy="0" r="10" fill="url(#rbcDip10x)"/></g>
+  </g>
+
+  <!-- Platelets (Trombosit Kecil) -->
+  <g fill="#7c3aed" opacity="0.7">
+    <circle cx="210" cy="180" r="4"/><circle cx="216" cy="184" r="3.5"/><circle cx="222" cy="178" r="4"/>
+    <circle cx="360" cy="280" r="4"/><circle cx="366" cy="283" r="3.5"/>
+  </g>
+
+  <!-- Center White Blood Cell (Neutrofil / Monosit) with Lobed Multi-Nucleus -->
+  <g transform="translate(235, 185)">
+    <circle cx="0" cy="0" r="36" fill="url(#wbcGrad10x)" stroke="#4c1d95" stroke-width="3"/>
+    <!-- Multi-lobed Nucleus -->
+    <path d="M -16,-12 C -24,-4 -22,14 -10,18 C 2,20 14,14 18,2 C 22,-10 10,-20 -2,-18 C -10,-16 -12,-16 -16,-12 Z" 
+      fill="#3b0764" stroke="#1e1b4b" stroke-width="2"/>
+    <circle cx="-10" cy="-6" r="8" fill="#1e1b4b"/>
+    <circle cx="8" cy="-4" r="7.5" fill="#1e1b4b"/>
+    <circle cx="0" cy="10" r="8" fill="#1e1b4b"/>
+  </g>
+</svg>

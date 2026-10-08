@@ -58,6 +58,12 @@ class VirtualLab {
     } else if (specimenId === 'pipi') {
       this.microScopeState.perfectCoarse = 70;
       this.microScopeState.perfectFine = 40;
+    } else if (specimenId === 'darah') {
+      this.microScopeState.perfectCoarse = 65;
+      this.microScopeState.perfectFine = 45;
+    } else if (specimenId === 'otot') {
+      this.microScopeState.perfectCoarse = 55;
+      this.microScopeState.perfectFine = 55;
     }
     this.updateMicroscopeView();
   }
@@ -170,6 +176,34 @@ class VirtualLab {
             <span class="organelle-tag" style="top: 25%; left: 24%;"><i class="fa-solid fa-circle-nodes"></i> Membran Sel</span>
             <span class="organelle-tag" style="top: 50%; left: 45%;"><i class="fa-solid fa-circle-dot"></i> Nukleus (Inti Sel)</span>
             <span class="organelle-tag" style="top: 72%; left: 50%;"><i class="fa-solid fa-water"></i> Sitoplasma</span>
+          `;
+        }
+      } else if (specimen === 'darah') {
+        if (mag === 40) {
+          labelHtml = `
+            <span class="organelle-tag" style="top: 20%; left: 16%;"><i class="fa-solid fa-droplet"></i> Eritrosit (Bikonkaf Tanpa Inti)</span>
+            <span class="organelle-tag" style="top: 48%; left: 45%;"><i class="fa-solid fa-shield-virus"></i> Leukosit (Inti 3 Lobus)</span>
+            <span class="organelle-tag" style="top: 20%; left: 62%;"><i class="fa-solid fa-circle-nodes"></i> Trombosit (Keping Darah)</span>
+            <span class="organelle-tag" style="top: 76%; left: 25%;"><i class="fa-solid fa-water"></i> Plasma Darah</span>
+          `;
+        } else {
+          labelHtml = `
+            <span class="organelle-tag" style="top: 25%; left: 20%;"><i class="fa-solid fa-droplet"></i> Sel Darah Merah (Eritrosit)</span>
+            <span class="organelle-tag" style="top: 50%; left: 45%;"><i class="fa-solid fa-shield-virus"></i> Sel Darah Putih (Leukosit)</span>
+            <span class="organelle-tag" style="top: 70%; left: 55%;"><i class="fa-solid fa-water"></i> Plasma Darah</span>
+          `;
+        }
+      } else if (specimen === 'otot') {
+        if (mag === 40) {
+          labelHtml = `
+            <span class="organelle-tag" style="top: 15%; left: 24%;"><i class="fa-solid fa-circle-dot"></i> Inti Sel Banyak di Tepi (Multinukleus)</span>
+            <span class="organelle-tag" style="top: 48%; left: 42%;"><i class="fa-solid fa-bars"></i> Pita Gelap-Terang (Aktin & Miosin)</span>
+            <span class="organelle-tag" style="top: 75%; left: 20%;"><i class="fa-solid fa-layer-group"></i> Sarkolema (Membran Otot)</span>
+          `;
+        } else {
+          labelHtml = `
+            <span class="organelle-tag" style="top: 25%; left: 25%;"><i class="fa-solid fa-bars"></i> Serat Otot Lurik</span>
+            <span class="organelle-tag" style="top: 50%; left: 55%;"><i class="fa-solid fa-circle-dot"></i> Inti Sel Perifer</span>
           `;
         }
       }
@@ -438,7 +472,7 @@ class VirtualLab {
 
         <div class="section-title">B. Analisis Pertanyaan Praktikum</div>
         <div class="box">
-          <p><strong>1. Bagaimana prinsip kerja mengatur perbesaran dan fokus pada mikroskop cahaya?</strong></p>
+          <p><strong>1. Prinsip pengamatan mikroskop dan analisis perbandingan struktur preparat Sel Tumbuhan (Bawang/Stomata) vs Sel Hewan (Mukosa Pipi/Darah/Otot):</strong></p>
           <p>${jawaban1}</p>
         </div>
         <div class="box">

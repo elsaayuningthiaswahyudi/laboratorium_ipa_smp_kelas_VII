@@ -1130,7 +1130,7 @@
         <!-- Virtual Lab Tabs -->
         <div class="virtual-lab-tabs">
           <button class="lab-tab-btn active" id="tab-btn-lab1" onclick="switchLabTab('mikroskop')">
-            <i class="fa-solid fa-microscope"></i> Praktikum 1: Mikroskop Sel Tumbuhan
+            <i class="fa-solid fa-microscope"></i> Praktikum 1: Mikroskop Sel
           </button>
           <button class="lab-tab-btn" id="tab-btn-lab2" onclick="switchLabTab('kimia')">
             <i class="fa-solid fa-flask-vial"></i> Praktikum 2: Uji Asam Basa & Indikator
@@ -1162,13 +1162,25 @@
           <div class="lab-controls-panel">
             <div class="control-group-box glass-box" style="padding: 1rem;">
               <h4><i class="fa-solid fa-vial"></i> 1. Pilih Spesimen Preparat:</h4>
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <div style="margin-bottom: 0.4rem; font-size: 0.78rem; color: var(--accent-cyan); font-weight: 700;">
+                🌱 Spesimen Sel Tumbuhan:
+              </div>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem;">
                 <button class="btn btn-secondary specimen-btn active" data-specimen="bawang"
                   onclick="window.virtualLab.setSpecimen('bawang')">🧅 Sel Bawang Merah</button>
                 <button class="btn btn-secondary specimen-btn" data-specimen="stomata"
                   onclick="window.virtualLab.setSpecimen('stomata')">🌿 Stomata Daun</button>
+              </div>
+              <div style="margin-bottom: 0.4rem; font-size: 0.78rem; color: #f472b6; font-weight: 700;">
+                🐾 Spesimen Sel Hewan & Manusia:
+              </div>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                 <button class="btn btn-secondary specimen-btn" data-specimen="pipi"
-                  onclick="window.virtualLab.setSpecimen('pipi')">🧬 Sel Mukosa Pipi</button>
+                  onclick="window.virtualLab.setSpecimen('pipi')">🧬 Sel Epitel Mukosa Pipi</button>
+                <button class="btn btn-secondary specimen-btn" data-specimen="darah"
+                  onclick="window.virtualLab.setSpecimen('darah')">🩸 Sel Darah (Eritrosit & Leukosit)</button>
+                <button class="btn btn-secondary specimen-btn" data-specimen="otot"
+                  onclick="window.virtualLab.setSpecimen('otot')">🧫 Sel Otot Lurik</button>
               </div>
             </div>
 
@@ -1286,10 +1298,9 @@
           </div>
 
           <div class="form-group" style="margin-bottom: 1rem;">
-            <label>1. Jelaskan prinsip kerja mengatur perbesaran dan fokus pada mikroskop cahaya berdasarkan
-              praktikum:</label>a
+            <label>1. Jelaskan prinsip pengamatan mikroskop dan analisis perbedaan struktur antara preparat Sel Tumbuhan (Bawang/Stomata) dan Sel Hewan (Mukosa Pipi/Darah/Otot) yang telah kamu amati:</label>
             <textarea id="lkpd-jawaban-1" class="form-textarea"
-              placeholder="Tuliskan analisis pengamatan mikroskop..."></textarea>
+              placeholder="Tuliskan analisis pengamatan mikroskop sel tumbuhan vs sel hewan..."></textarea>
           </div>
 
           <div class="form-group">

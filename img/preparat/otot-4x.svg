@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <rect width="500" height="500" fill="#fdf2f8"/>
+  <defs>
+    <linearGradient id="muscleGrad4x" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="50%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Parallel bundles of Skeletal Muscle Fibers (4x View) -->
+  <g fill="url(#muscleGrad4x)" opacity="0.85">
+    <rect x="0" y="30" width="500" height="55"/>
+    <rect x="0" y="95" width="500" height="55"/>
+    <rect x="0" y="160" width="500" height="55"/>
+    <rect x="0" y="225" width="500" height="55"/>
+    <rect x="0" y="290" width="500" height="55"/>
+    <rect x="0" y="355" width="500" height="55"/>
+    <rect x="0" y="420" width="500" height="55"/>
+  </g>
+
+  <!-- Connective Endomysium Lines -->
+  <g stroke="#ffffff" stroke-width="2" opacity="0.6">
+    <line x1="0" y1="88" x2="500" y2="88"/>
+    <line x1="0" y1="153" x2="500" y2="153"/>
+    <line x1="0" y1="218" x2="500" y2="218"/>
+    <line x1="0" y1="283" x2="500" y2="283"/>
+    <line x1="0" y1="348" x2="500" y2="348"/>
+    <line x1="0" y1="413" x2="500" y2="413"/>
+  </g>
+
+  <!-- Peripheral Nuclei Dots along fibers -->
+  <g fill="#1e1b4b" opacity="0.8">
+    <ellipse cx="80" cy="35" rx="7" ry="4"/><ellipse cx="240" cy="80" rx="7" ry="4"/><ellipse cx="410" cy="36" rx="7" ry="4"/>
+    <ellipse cx="120" cy="100" rx="7" ry="4"/><ellipse cx="290" cy="145" rx="7" ry="4"/><ellipse cx="450" cy="102" rx="7" ry="4"/>
+    <ellipse cx="60" cy="165" rx="7" ry="4"/><ellipse cx="210" cy="210" rx="7" ry="4"/><ellipse cx="380" cy="168" rx="7" ry="4"/>
+    <ellipse cx="150" cy="230" rx="7" ry="4"/><ellipse cx="320" cy="275" rx="7" ry="4"/><ellipse cx="440" cy="232" rx="7" ry="4"/>
+    <ellipse cx="90" cy="295" rx="7" ry="4"/><ellipse cx="250" cy="340" rx="7" ry="4"/><ellipse cx="400" cy="298" rx="7" ry="4"/>
+    <ellipse cx="130" cy="360" rx="7" ry="4"/><ellipse cx="300" cy="405" rx="7" ry="4"/><ellipse cx="460" cy="362" rx="7" ry="4"/>
+  </g>
+</svg>

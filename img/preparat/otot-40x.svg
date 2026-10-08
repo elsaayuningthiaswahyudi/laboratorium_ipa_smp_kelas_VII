@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <rect width="500" height="500" fill="#fdf2f8"/>
+  <defs>
+    <linearGradient id="muscleFiber40x" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="50%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+    <pattern id="striations40x" width="14" height="500" patternUnits="userSpaceOnUse">
+      <!-- Dark A Band (Pita Gelap Miosin) -->
+      <rect x="0" y="0" width="7" height="500" fill="#7f1d1d" opacity="0.8"/>
+      <!-- Light I Band (Pita Terang Aktin) with Z-Disc -->
+      <rect x="7" y="0" width="7" height="500" fill="#fca5a5" opacity="0.75"/>
+      <!-- Thin Z-Line (Garis Z) -->
+      <line x1="10.5" y1="0" x2="10.5" y2="500" stroke="#450a0a" stroke-width="1.5"/>
+    </pattern>
+    <radialGradient id="muscleNuc40x" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#4338ca"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Large Close-up Single Skeletal Muscle Fiber (40x View) -->
+  <g transform="translate(0, 80)">
+    <!-- Sarcolemma Border (Membran Sel Otot) -->
+    <rect x="0" y="0" width="500" height="340" fill="url(#muscleFiber40x)" stroke="#7f1d1d" stroke-width="6"/>
+    <!-- Cross Striation Myofibrils (Garis Lurik Pita Gelap-Terang) -->
+    <rect x="0" y="0" width="500" height="340" fill="url(#striations40x)"/>
+
+    <!-- Peripheral Multinucleated Nuclei (Inti Sel Lonjong Berada di Tepi) -->
+    <!-- Nucleus 1 (Top Edge) -->
+    <g transform="translate(130, 15)">
+      <ellipse cx="0" cy="0" rx="48" ry="16" fill="url(#muscleNuc40x)" stroke="#020617" stroke-width="3"/>
+      <circle cx="-12" cy="-3" r="5" fill="#e0e7ff" opacity="0.7"/>
+    </g>
+
+    <!-- Nucleus 2 (Bottom Edge) -->
+    <g transform="translate(360, 325)">
+      <ellipse cx="0" cy="0" rx="52" ry="17" fill="url(#muscleNuc40x)" stroke="#020617" stroke-width="3"/>
+      <circle cx="10" cy="2" r="5.5" fill="#e0e7ff" opacity="0.7"/>
+    </g>
+
+    <!-- Longitudinal Myofibril Faint Strands -->
+    <line x1="0" y1="90" x2="500" y2="90" stroke="#ffffff" stroke-width="1.5" opacity="0.4"/>
+    <line x1="0" y1="170" x2="500" y2="170" stroke="#ffffff" stroke-width="1.5" opacity="0.4"/>
+    <line x1="0" y1="250" x2="500" y2="250" stroke="#ffffff" stroke-width="1.5" opacity="0.4"/>
+  </g>
+
+  <!-- Surrounding Connective Tissue Endomysium -->
+  <rect x="0" y="0" width="500" height="77" fill="#fee2e2" opacity="0.5"/>
+  <rect x="0" y="423" width="500" height="77" fill="#fee2e2" opacity="0.5"/>
+</svg>
