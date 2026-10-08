@@ -1,12 +1,12 @@
 // Augmented Reality (AR) Camera & 3D Interactive Lab Tool Simulation
-// Enhanced with Interactive Mini-Labs & Apparatus Observation Activities
+// High-Fidelity Interactive Mini-Labs & Apparatus Observation Activities
 
 class LabARModule {
   constructor() {
     this.videoElem = null;
     this.stream = null;
     this.isCameraActive = false;
-    this.currentTool = 'gelas-ukur';
+    this.currentTool = 'mikroskop';
     this.scale = 1.0;
     this.rotation = 0;
     this.posX = 0;
@@ -14,6 +14,14 @@ class LabARModule {
 
     // Mini-Lab Active State Store
     this.miniLabState = {
+      // Mikroskop
+      microSpecimen: 'bawang',
+      microObjective: 10,
+      microCoarse: 70,
+      microFine: 50,
+      microLight: 90,
+      microActivePin: null,
+
       // Gelas Ukur
       meniscusVol: 45.0,
       meniscusLiquid: 'air',
@@ -35,16 +43,12 @@ class LabARModule {
       // Termometer
       tempVal: 27,
 
-      // Mikroskop
-      microSpecimen: 'bawang',
-      microObjective: 10,
-      microFocus: 70,
-      microLight: 85,
-
       // Bunsen
       bunsenAirValve: 100, // 100% blue flame
-      bunsenWaterTemp: 25,
+      bunsenWaterTemp: 27,
       bunsenIsHeating: false,
+      bunsenTimer: 0,
+      bunsenInterval: null,
 
       // Pipet & Gelas Kimia
       dropCount: 0,
@@ -56,11 +60,9 @@ class LabARModule {
 
       // Tabung Reaksi
       reactionType: 'agcl',
-      reactionState: 'initial',
 
       // Cawan Petri
       petriCounted: new Set(),
-      petriTotalCols: 28,
 
       // Lup
       lupDistance: 6,
@@ -79,7 +81,7 @@ class LabARModule {
     document.addEventListener('DOMContentLoaded', () => {
       this.initMiniLabNav();
       setTimeout(() => {
-        this.setTool(this.currentTool || 'gelas-ukur');
+        this.setTool(this.currentTool || 'mikroskop');
       }, 200);
     });
   }
@@ -142,11 +144,11 @@ class LabARModule {
     if (!navContainer || !window.LAB_DATA || !window.LAB_DATA.alatLab) return;
 
     const quickTools = [
+      { id: 'mikroskop', name: '🔬 Mikroskop' },
       { id: 'gelas-ukur', name: '📏 Gelas Ukur' },
       { id: 'jangka-sorong', name: '📐 Jangka Sorong' },
       { id: 'neraca-ohaus', name: '⚖️ Neraca Ohaus' },
       { id: 'termometer-lab', name: '🌡️ Termometer' },
-      { id: 'mikroskop', name: '🔬 Mikroskop' },
       { id: 'bunsen-spiritus', name: '🔥 Bunsen' },
       { id: 'gelas-kimia', name: '🧪 Pipet & Beaker' },
       { id: 'labu-erlenmeyer', name: '⚗️ Erlenmeyer' }
@@ -241,61 +243,61 @@ class LabARModule {
     if (!bodyContainer) return;
 
     switch (toolId) {
+      case 'mikroskop':
+        if (titleElem) titleElem.innerHTML = `Kegiatan Pengamatan: <span class="text-cyan">Fokus Preparat Sel Mikroskop</span>`;
+        if (descElem) descElem.textContent = 'Ganti lensa objektif (4x, 10x, 40x), atur makrometer (fokus kasar) dan mikrometer (fokus halus) untuk mendapatkan bayangan preparat yang kristal jernih, serta pelajari anatomi selnya.';
+        this.renderMicroscopeLab(bodyContainer);
+        break;
+
       case 'gelas-ukur':
-        if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Membaca Meniskus Gelas Ukur</span>`;
-        if (descElem) descElem.textContent = 'Pelajari perbedaan meniskus cekung (air) vs cembung (raksa), atur posisi mata pengamat untuk mencegah kesalahan paralaks, dan lakukan uji pembacaan volume.';
+        if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Membaca Meniskus Gelas Ukur Presisi</span>`;
+        if (descElem) descElem.textContent = 'Pelajari perbedaan meniskus cekung (air/larutan) vs cembung (raksa), amati pembesaran skala dengan kaca pembesar meniskus, dan hindari kesalahan paralaks sudut pandang.';
         this.renderGraduatedCylinderLab(bodyContainer);
         break;
 
       case 'jangka-sorong':
-        if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Pengukuran Presisi Jangka Sorong</span>`;
-        if (descElem) descElem.textContent = 'Geser rahang ukur, identifikasi angka pada skala utama dan garis nonius yang berimpit tegak lurus, serta hitung hasil pengukuran hingga ketelitian 0.01 cm (0.1 mm).';
+        if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Pengukuran Presisi Jangka Sorong (Vernier Caliper)</span>`;
+        if (descElem) descElem.textContent = 'Geser rahang ukur menjepit benda, perhatikan garis skala utama dan garis nonius yang berimpit tegak lurus pada lensa pembesar, serta hitung hasil ukur hingga ketelitian 0.01 cm (0.1 mm).';
         this.renderVernierCaliperLab(bodyContainer);
         break;
 
       case 'neraca-ohaus':
       case 'neraca':
         if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Menimbang dengan Neraca Ohaus 3 Lengan</span>`;
-        if (descElem) descElem.textContent = 'Geser anting pemberat pada lengan ratusan, puluhan, dan satuan hingga jarum penunjuk tepat seimbang di angka nol.';
+        if (descElem) descElem.textContent = 'Geser anting pemberat pada lengan ratusan, puluhan, dan satuan hingga jarum penunjuk tepat seimbang di garis kalibrasi nol.';
         this.renderOhausBalanceLab(bodyContainer);
         break;
 
       case 'termometer-lab':
       case 'termometer':
         if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Membaca Skala Suhu & Titik Termal</span>`;
-        if (descElem) descElem.textContent = 'Amati pemuaian cairan pengisi pipa kapiler termometer dan konversikan nilai suhu ke skala Kelvin, Fahrenheit, dan Reamur.';
+        if (descElem) descElem.textContent = 'Amati pemuaian cairan merah pada pipa kapiler kaca, perhatikan perubahan lingkungan air (es/mendidih), dan konversikan nilai suhu ke 4 skala internasional.';
         this.renderThermometerLab(bodyContainer);
-        break;
-
-      case 'mikroskop':
-        if (titleElem) titleElem.innerHTML = `Kegiatan Pengamatan: <span class="text-cyan">Fokus Preparat Sel Mikroskop</span>`;
-        if (descElem) descElem.textContent = 'Ganti lensa objektif (4x, 10x, 40x), atur makrometer dan mikrometer untuk mendapatkan bayangan preparat yang fokus dan jernih.';
-        this.renderMicroscopeLab(bodyContainer);
         break;
 
       case 'bunsen-spiritus':
       case 'bunsen':
         if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Pengaturan Nyala Api Pembakar Spiritus / Bunsen</span>`;
-        if (descElem) descElem.textContent = 'Atur kerah udara untuk membandingkan nyala api kuning berjelaga (reduksi) vs nyala api biru (oksidasi) serta uji laju pemanasan air.';
+        if (descElem) descElem.textContent = 'Atur katup udara untuk membandingkan nyala api kuning berjelaga (reduksi) vs nyala api biru (oksidasi) dan jalankan uji waktu pemanasan air hingga mendidih.';
         this.renderBunsenLab(bodyContainer);
         break;
 
       case 'gelas-kimia':
         if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Presisi Pipet Tetes & Penakaran Beaker</span>`;
-        if (descElem) descElem.textContent = 'Latih teknik memegang pipet tegak lurus (90°), teteskan larutan indikator, dan hitung kalibrasi tetesan zat cair (20 tetes ≈ 1 mL).';
+        if (descElem) descElem.textContent = 'Latih teknik memegang pipet tegak lurus (90°), keluarkan larutan tetes demi tetes, dan hitung kalibrasi tetesan zat cair (20 tetes ≈ 1 mL).';
         this.renderBeakerPipetteLab(bodyContainer);
         break;
 
       case 'labu-erlenmeyer':
       case 'erlenmeyer':
         if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Simulasi Titrasi & Homogenisasi Larutan</span>`;
-        if (descElem) descElem.textContent = 'Teteskan larutan basa dari buret sambil menggoyang labu erlenmeyer hingga mencapai titik akhir titrasi (perubahan warna indikator PP).';
+        if (descElem) descElem.textContent = 'Teteskan larutan basa dari buret sambil menggoyang labu erlenmeyer hingga mencapai titik akhir titrasi (perubahan warna indikator PP menjadi merah muda seulas).';
         this.renderErlenmeyerLab(bodyContainer);
         break;
 
       case 'tabung-reaksi':
         if (titleElem) titleElem.innerHTML = `Kegiatan Praktikum: <span class="text-cyan">Uji Reaksi Pengendapan Kimia</span>`;
-        if (descElem) descElem.textContent = 'Campurkan larutan kimia skala mikro dalam tabung reaksi untuk mengamati pembentukan endapan dan perubahan warna.';
+        if (descElem) descElem.textContent = 'Campurkan larutan kimia skala mikro dalam tabung reaksi untuk mengamati pembentukan endapan dan pelepasan gas.';
         this.renderTestTubeLab(bodyContainer);
         break;
 
@@ -332,139 +334,544 @@ class LabARModule {
         break;
 
       default:
-        this.renderGraduatedCylinderLab(bodyContainer);
+        this.renderMicroscopeLab(bodyContainer);
     }
   }
 
   // =========================================================================
-  // 1. GELAS UKUR - MEMBACA MENISKUS & UJI PARALAKS
+  // 1. MIKROSKOP - FOKUS PREPARAT & ANATOMI SEL
+  // =========================================================================
+  renderMicroscopeLab(container) {
+    const spec = this.miniLabState.microSpecimen;
+    const obj = this.miniLabState.microObjective;
+    const coarse = this.miniLabState.microCoarse;
+    const fine = this.miniLabState.microFine;
+    const light = this.miniLabState.microLight;
+    const activePin = this.miniLabState.microActivePin;
+
+    // Optical focus calculations (Optimum at coarse=70, fine=50)
+    const coarseDiff = Math.abs(70 - coarse) * 0.18;
+    const fineDiff = Math.abs(50 - fine) * 0.08;
+    const totalBlur = Math.max(0, coarseDiff + fineDiff);
+    const isSharp = totalBlur <= 1.0;
+    const sharpnessPct = Math.max(10, Math.min(100, Math.round(100 - totalBlur * 7)));
+
+    // Scale calculation based on Objective (4x -> 0.8, 10x -> 1.3, 40x -> 2.2)
+    const scaleFactor = obj === 4 ? 0.85 : (obj === 10 ? 1.25 : 2.1);
+
+    container.innerHTML = `
+      <div class="mini-lab-dynamic-grid">
+        <!-- Visual Viewport: Realistic Circular Eyepiece -->
+        <div class="mini-lab-viewport-box">
+          <div class="ocular-eyepiece-frame">
+            <!-- Glass Shimmer Overlay -->
+            <div class="ocular-glass-shine"></div>
+            <!-- Crosshair Reticle -->
+            <div class="ocular-crosshair-reticle"></div>
+
+            <!-- Specimen Graphic Layer with live optical zoom, blur, and lighting -->
+            <div class="specimen-canvas-layer" style="filter: blur(${totalBlur.toFixed(1)}px) brightness(${(light / 80).toFixed(2)}) contrast(1.15); transform: scale(${scaleFactor}); transform-origin: center center;">
+              ${this.getSpecimenSVG(spec, obj)}
+            </div>
+
+            <!-- Interactive Organelle Pins (Visible only when sharp) -->
+            ${isSharp ? this.getOrganellePins(spec) : ''}
+          </div>
+
+          <!-- Bottom Viewport HUD Info -->
+          <div style="display: flex; justify-content: space-between; width: 100%; max-width: 320px; margin-top: 1rem; font-size: 0.82rem;">
+            <span style="color: var(--accent-cyan); font-weight: 700;">
+              <i class="fa-solid fa-magnifying-glass"></i> Perbesaran: ${obj * 10}x
+            </span>
+            <span style="color: ${isSharp ? 'var(--accent-green)' : '#f59e0b'}; font-weight: 700;">
+              <i class="fa-solid ${isSharp ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i> Fokus: ${sharpnessPct}%
+            </span>
+            <span style="color: var(--text-muted);">Skala: ~${obj === 40 ? '20' : (obj === 10 ? '50' : '150')} µm</span>
+          </div>
+        </div>
+
+        <!-- Controls & Practice Panel -->
+        <div class="mini-lab-panel-controls">
+          <div class="mini-lab-panel-title">
+            <i class="fa-solid fa-microscope"></i> Pengaturan Optik Mikroskop
+          </div>
+
+          <!-- Pilihan Preparat -->
+          <div class="mini-lab-control-group">
+            <label>Pilih Preparat Spesimen Biologi:</label>
+            <div class="mini-lab-options-row">
+              <button class="mini-lab-opt-btn ${spec === 'bawang' ? 'active' : ''}" onclick="window.labAR.setMicroSpecimen('bawang')">
+                🧅 Sel Bawang Merah
+              </button>
+              <button class="mini-lab-opt-btn ${spec === 'rhoeo' ? 'active' : ''}" onclick="window.labAR.setMicroSpecimen('rhoeo')">
+                🍃 Stomata Daun Rhoeo
+              </button>
+              <button class="mini-lab-opt-btn ${spec === 'pipi' ? 'active' : ''}" onclick="window.labAR.setMicroSpecimen('pipi')">
+                👄 Sel Epitel Pipi
+              </button>
+            </div>
+          </div>
+
+          <!-- Lensa Objektif (Revolver) -->
+          <div class="mini-lab-control-group">
+            <label>Lensa Objektif (Putar Revolver):</label>
+            <div class="mini-lab-options-row">
+              <button class="mini-lab-opt-btn ${obj === 4 ? 'active' : ''}" onclick="window.labAR.setMicroObjective(4)">
+                4x (Total 40x - Luas)
+              </button>
+              <button class="mini-lab-opt-btn ${obj === 10 ? 'active' : ''}" onclick="window.labAR.setMicroObjective(10)">
+                10x (Total 100x - Sedang)
+              </button>
+              <button class="mini-lab-opt-btn ${obj === 40 ? 'active' : ''}" onclick="window.labAR.setMicroObjective(40)">
+                40x (Total 400x - Detail)
+              </button>
+            </div>
+          </div>
+
+          <!-- Slider Makrometer (Fokus Kasar) -->
+          <div class="mini-lab-control-group">
+            <label>
+              <span>1. Makrometer (Fokus Kasar):</span>
+              <span class="val-badge">${coarse}</span>
+            </label>
+            <input type="range" class="mini-lab-slider" min="10" max="130" step="2" value="${coarse}" 
+              oninput="window.labAR.setMicroCoarse(this.value)" />
+          </div>
+
+          <!-- Slider Mikrometer (Fokus Halus) -->
+          <div class="mini-lab-control-group">
+            <label>
+              <span>2. Mikrometer (Fokus Halus Presisi):</span>
+              <span class="val-badge">${fine}</span>
+            </label>
+            <input type="range" class="mini-lab-slider" min="0" max="100" step="1" value="${fine}" 
+              oninput="window.labAR.setMicroFine(this.value)" />
+          </div>
+
+          <!-- Status & Organelle Details Card -->
+          <div class="mini-lab-result-card">
+            <h5><i class="fa-solid fa-atom"></i> Analisis Hasil Pengamatan:</h5>
+            <div class="mini-lab-result-row">
+              <span>Kejelasan Bayangan:</span>
+              <span class="num-val" style="color: ${isSharp ? 'var(--accent-green)' : '#f59e0b'};">
+                ${isSharp ? '🌟 100% Kristal Jernih & Terfokus' : `Kabur (${sharpnessPct}%) - Atur Makro & Mikrometer`}
+              </span>
+            </div>
+            
+            ${isSharp ? `
+              <div style="margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px dashed rgba(0,240,255,0.2); font-size: 0.8rem; line-height: 1.5;">
+                <span style="color: var(--accent-cyan); font-weight: bold;"><i class="fa-solid fa-circle-nodes"></i> Titik Organel Terdeteksi:</span>
+                <p style="color: var(--text-muted); margin-top: 0.2rem;">
+                  ${spec === 'bawang' ? '✓ Dinding Sel berstruktur kokoh berlapis lamela tengah, Inti Sel (Nukleus) bulat menyerap pewarna iodin, Sitoplasma, dan Vakuola besar.' : 
+                    (spec === 'rhoeo' ? '✓ Sel Penutup (Guard Cells) berbentuk ginjal membuka pori stomata, Kloroplas hijau untuk fotosintesis, dan Sel Epidermis berpigmen antosianin ungu.' : 
+                    '✓ Membran Sel fleksibel berbentuk poligonal tak beraturan, Inti Sel (Nukleus) gelap di tengah, dan Sitoplasma bergranula halus.')}
+                </p>
+                <span style="font-size: 0.75rem; color: var(--accent-orange);">💡 Klik pin angka di viewport untuk mengidentifikasi detail bagian!</span>
+              </div>
+            ` : ''}
+
+            ${activePin ? `
+              <div style="margin-top: 0.6rem; padding: 0.6rem; background: rgba(0,240,255,0.12); border-radius: 6px; border: 1px solid var(--accent-cyan); font-size: 0.82rem;">
+                <strong style="color: var(--accent-cyan);">${activePin.title}:</strong> ${activePin.desc}
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  getSpecimenSVG(spec, obj) {
+    if (spec === 'bawang') {
+      // High-detail Onion Epidermis
+      return `
+        <svg viewBox="0 0 340 340" width="100%" height="100%">
+          <defs>
+            <radialGradient id="onionNucleus" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#78350f" />
+              <stop offset="60%" stop-color="#b45309" />
+              <stop offset="100%" stop-color="#d97706" />
+            </radialGradient>
+            <pattern id="cellGranules" width="12" height="12" patternUnits="userSpaceOnUse">
+              <circle cx="3" cy="3" r="0.8" fill="#d97706" opacity="0.35" />
+              <circle cx="8" cy="9" r="0.6" fill="#b45309" opacity="0.25" />
+            </pattern>
+          </defs>
+
+          <!-- Background Cytoplasm -->
+          <rect width="340" height="340" fill="#fef3c7" />
+          <rect width="340" height="340" fill="url(#cellGranules)" />
+
+          <!-- Cell Walls: Realistic Botanical Layout -->
+          <!-- Horizontal Wall Layers -->
+          <path d="M 0,45 L 340,45 M 0,115 L 340,115 M 0,185 L 340,185 M 0,255 L 340,255 M 0,325 L 340,325" 
+            stroke="#92400e" stroke-width="4" stroke-linecap="round" />
+          <path d="M 0,45 L 340,45 M 0,115 L 340,115 M 0,185 L 340,185 M 0,255 L 340,255 M 0,325 L 340,325" 
+            stroke="#fef08a" stroke-width="1.5" />
+
+          <!-- Vertical Cross Walls -->
+          <path d="M 90,0 L 90,45 M 230,0 L 230,45 
+                   M 150,45 L 150,115 M 290,45 L 290,115 
+                   M 70,115 L 70,185 M 220,115 L 220,185 
+                   M 130,185 L 130,255 M 280,185 L 280,255 
+                   M 80,255 L 80,325 M 210,255 L 210,325" 
+            stroke="#92400e" stroke-width="4" stroke-linecap="round" />
+          <path d="M 90,0 L 90,45 M 230,0 L 230,45 
+                   M 150,45 L 150,115 M 290,45 L 290,115 
+                   M 70,115 L 70,185 M 220,115 L 220,185 
+                   M 130,185 L 130,255 M 280,185 L 280,255 
+                   M 80,255 L 80,325 M 210,255 L 210,325" 
+            stroke="#fef08a" stroke-width="1.5" />
+
+          <!-- Nuclei with Nucleoli & Chromatin -->
+          <g>
+            <!-- Cell 1 Nucleus -->
+            <ellipse cx="65" cy="80" rx="14" ry="11" fill="url(#onionNucleus)" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))" />
+            <circle cx="68" cy="79" r="3.5" fill="#451a03" />
+            
+            <!-- Cell 2 Nucleus -->
+            <ellipse cx="215" cy="82" rx="15" ry="12" fill="url(#onionNucleus)" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))" />
+            <circle cx="218" cy="80" r="3.8" fill="#451a03" />
+
+            <!-- Cell 3 Nucleus -->
+            <ellipse cx="145" cy="150" rx="16" ry="13" fill="url(#onionNucleus)" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))" />
+            <circle cx="147" cy="148" r="4" fill="#451a03" />
+
+            <!-- Cell 4 Nucleus -->
+            <ellipse cx="40" cy="220" rx="14" ry="11" fill="url(#onionNucleus)" />
+            <circle cx="42" cy="219" r="3.5" fill="#451a03" />
+
+            <!-- Cell 5 Nucleus -->
+            <ellipse cx="205" cy="220" rx="15" ry="12" fill="url(#onionNucleus)" />
+            <circle cx="207" cy="218" r="3.8" fill="#451a03" />
+          </g>
+
+          <!-- Vacuole Boundary Faint Lines -->
+          <path d="M 10,60 Q 60,55 130,65 Q 140,95 125,105 Q 40,105 10,90 Z" fill="rgba(254, 240, 138, 0.4)" stroke="#ca8a04" stroke-width="1" stroke-dasharray="3,3" />
+        </svg>
+      `;
+    } else if (spec === 'rhoeo') {
+      // High-detail Rhoeo Discolor with purple anthocyanin cells & kidney-shaped guard cells
+      return `
+        <svg viewBox="0 0 340 340" width="100%" height="100%">
+          <defs>
+            <radialGradient id="purpleAnthocyanin" cx="40%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#c084fc" />
+              <stop offset="60%" stop-color="#9333ea" />
+              <stop offset="100%" stop-color="#6b21a8" />
+            </radialGradient>
+            <radialGradient id="guardCellGrad" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#86efac" />
+              <stop offset="70%" stop-color="#16a34a" />
+              <stop offset="100%" stop-color="#14532d" />
+            </radialGradient>
+          </defs>
+
+          <!-- Background Greenish Base -->
+          <rect width="340" height="340" fill="#ecfdf5" />
+
+          <!-- Purple Polygonal Epidermal Cells -->
+          <!-- Cell 1 -->
+          <polygon points="20,20 120,10 140,80 60,110 10,70" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+          <!-- Cell 2 -->
+          <polygon points="120,10 240,15 270,90 140,80" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+          <!-- Cell 3 -->
+          <polygon points="240,15 330,30 335,120 270,90" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+          <!-- Cell 4 -->
+          <polygon points="10,70 60,110 80,220 15,200" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+          <!-- Cell 5 -->
+          <polygon points="270,90 335,120 330,230 260,210" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+          <!-- Cell 6 -->
+          <polygon points="15,200 80,220 120,320 20,330" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+          <!-- Cell 7 -->
+          <polygon points="260,210 330,230 320,330 240,320" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+          <!-- Cell 8 -->
+          <polygon points="80,220 260,210 240,320 120,320" fill="url(#purpleAnthocyanin)" opacity="0.85" stroke="#4c1d95" stroke-width="3" />
+
+          <!-- Center Stomata Complex (Subsidiary + Guard Cells + Pore) -->
+          <g transform="translate(170, 145)">
+            <!-- Subsidiary Cell Clear Zone -->
+            <ellipse cx="0" cy="0" rx="65" ry="50" fill="#f0fdf4" stroke="#15803d" stroke-width="2.5" />
+
+            <!-- Left Guard Cell (Bean Shaped) -->
+            <path d="M -8,-32 C -32,-25 -32,25 -8,32 C -20,20 -20,-20 -8,-32 Z" fill="url(#guardCellGrad)" stroke="#064e3b" stroke-width="2" />
+            
+            <!-- Right Guard Cell (Bean Shaped) -->
+            <path d="M 8,-32 C 32,-25 32,25 8,32 C 20,20 20,-20 8,-32 Z" fill="url(#guardCellGrad)" stroke="#064e3b" stroke-width="2" />
+
+            <!-- Stoma Pore Slit (Ostium) -->
+            <ellipse cx="0" cy="0" rx="5" ry="18" fill="#022c22" stroke="#064e3b" stroke-width="1" />
+
+            <!-- Chloroplast Granules in Guard Cells -->
+            <circle cx="-18" cy="-14" r="3" fill="#22c55e" stroke="#14532d" />
+            <circle cx="-22" cy="0" r="3.2" fill="#22c55e" stroke="#14532d" />
+            <circle cx="-16" cy="14" r="3" fill="#22c55e" stroke="#14532d" />
+
+            <circle cx="18" cy="-14" r="3" fill="#22c55e" stroke="#14532d" />
+            <circle cx="22" cy="0" r="3.2" fill="#22c55e" stroke="#14532d" />
+            <circle cx="16" cy="14" r="3" fill="#22c55e" stroke="#14532d" />
+
+            <!-- Guard Cell Nuclei -->
+            <circle cx="-16" cy="-2" r="4" fill="#065f46" />
+            <circle cx="16" cy="-2" r="4" fill="#065f46" />
+          </g>
+        </svg>
+      `;
+    } else {
+      // High-detail Human Cheek Epithelial Cells
+      return `
+        <svg viewBox="0 0 340 340" width="100%" height="100%">
+          <defs>
+            <radialGradient id="cheekNucleus" cx="45%" cy="45%" r="55%">
+              <stop offset="0%" stop-color="#1e3a8a" />
+              <stop offset="70%" stop-color="#1e40af" />
+              <stop offset="100%" stop-color="#172554" />
+            </radialGradient>
+            <radialGradient id="cheekCyto" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#e0f2fe" />
+              <stop offset="80%" stop-color="#bae6fd" />
+              <stop offset="100%" stop-color="#7dd3fc" />
+            </radialGradient>
+          </defs>
+
+          <!-- Background Mount Slide -->
+          <rect width="340" height="340" fill="#f8fafc" />
+
+          <!-- Main Center Cheek Cell (Irregular Polygonal) -->
+          <path d="M 90,60 C 180,40 260,70 280,140 C 295,200 240,270 170,280 C 100,285 50,230 60,160 C 65,110 80,70 90,60 Z" 
+            fill="url(#cheekCyto)" stroke="#0284c7" stroke-width="2.5" opacity="0.9" filter="drop-shadow(0 4px 10px rgba(2, 132, 199, 0.2))" />
+
+          <!-- Membrane Folds & Wrinkles -->
+          <path d="M 95,85 Q 140,110 180,95 M 240,170 Q 210,210 230,240 M 80,190 Q 110,210 120,250" 
+            stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6" />
+
+          <!-- Cytoplasmic Granules -->
+          ${(() => {
+            let gr = '';
+            for (let i = 0; i < 35; i++) {
+              const gx = 100 + (Math.sin(i * 3.7) * 65 + 65);
+              const gy = 90 + (Math.cos(i * 4.9) * 65 + 65);
+              gr += `<circle cx="${gx}" cy="${gy}" r="${0.8 + (i % 3) * 0.4}" fill="#0284c7" opacity="0.35" />`;
+            }
+            return gr;
+          })()}
+
+          <!-- Large Central Nucleus with Chromatin Granules -->
+          <g transform="translate(165, 160)">
+            <ellipse cx="0" cy="0" rx="18" ry="15" fill="url(#cheekNucleus)" stroke="#0c4a6e" stroke-width="2" filter="drop-shadow(0 2px 5px rgba(0,0,0,0.4))" />
+            <!-- Nucleolus & Chromatin clusters -->
+            <circle cx="3" cy="-2" r="4.5" fill="#082f49" />
+            <circle cx="-6" cy="4" r="2" fill="#082f49" opacity="0.7" />
+            <circle cx="7" cy="5" r="2.2" fill="#082f49" opacity="0.7" />
+          </g>
+
+          <!-- Second Overlapping Smaller Cheek Cell -->
+          <path d="M 10,220 C 40,200 80,210 90,260 C 95,300 60,330 20,335 Z" 
+            fill="url(#cheekCyto)" stroke="#0284c7" stroke-width="2" opacity="0.6" />
+          <ellipse cx="50" cy="270" rx="10" ry="8" fill="url(#cheekNucleus)" opacity="0.7" />
+        </svg>
+      `;
+    }
+  }
+
+  getOrganellePins(spec) {
+    if (spec === 'bawang') {
+      return `
+        <div class="micro-hotspot-pin" style="top: 38%; left: 24%;" title="Dinding Sel" onclick="window.labAR.showMicroPinInfo('Dinding Sel (Cell Wall)', 'Lapisan terluar kaku tersusun atas selulosa dan pektin yang memberi bentuk tetap serta perlindungan mekanis pada sel tumbuhan.')">1</div>
+        <div class="micro-hotspot-pin" style="top: 48%; left: 45%;" title="Inti Sel (Nukleus)" onclick="window.labAR.showMicroPinInfo('Inti Sel (Nukleus)', 'Organel pengendali seluruh aktivitas sel dan tempat penyimpanan materi genetik (DNA/Kromosom). Tampak bulat menyerap pewarna iodin.')">2</div>
+        <div class="micro-hotspot-pin" style="top: 60%; left: 65%;" title="Sitoplasma" onclick="window.labAR.showMicroPinInfo('Sitoplasma & Vakuola', 'Cairan protoplasma tempat berlangsungnya reaksi metabolisme sel, serta vakuola sentral penyimpan cadangan makanan.')">3</div>
+      `;
+    } else if (spec === 'rhoeo') {
+      return `
+        <div class="micro-hotspot-pin" style="top: 50%; left: 50%;" title="Porus Stomata" onclick="window.labAR.showMicroPinInfo('Pori Stomata (Ostium)', 'Celah mikroskopis tempat pertukaran gas O2 & CO2 saat fotosintesis serta jalur transpirasi penguapan air daun.')">1</div>
+        <div class="micro-hotspot-pin" style="top: 40%; left: 38%;" title="Sel Penutup (Guard Cells)" onclick="window.labAR.showMicroPinInfo('Sel Penutup (Guard Cells)', 'Sepasang sel berbentuk ginjal kaya kloroplas yang mengatur membuka dan menutupnya celah stomata sesuai turgiditas sel.')">2</div>
+        <div class="micro-hotspot-pin" style="top: 25%; left: 70%;" title="Pigmen Antosianin" onclick="window.labAR.showMicroPinInfo('Pigmen Antosianin', 'Pigmen flavonoid ungu alami dalam vakuola sel epidermis bawah daun Rhoeo discolor yang melindungi jaringan dari radiasi sinar UV.')">3</div>
+      `;
+    } else {
+      return `
+        <div class="micro-hotspot-pin" style="top: 48%; left: 49%;" title="Inti Sel" onclick="window.labAR.showMicroPinInfo('Nukleus Sel Hewan', 'Pusat komando sel yang memiliki membran ganda dan anak inti (nukleolus) di bagian tengah sitoplasma.')">1</div>
+        <div class="micro-hotspot-pin" style="top: 30%; left: 65%;" title="Membran Sel" onclick="window.labAR.showMicroPinInfo('Membran Sel (Plasmalema)', 'Lapisan tipis fosfolipid bilayer fleksibel yang bersifat semipermeabel untuk mengatur keluar masuknya zat pada sel hewan.')">2</div>
+      `;
+    }
+  }
+
+  showMicroPinInfo(title, desc) {
+    if (window.labAudio) window.labAudio.playClick();
+    this.miniLabState.microActivePin = { title, desc };
+    this.renderMiniLab('mikroskop');
+  }
+
+  setMicroSpecimen(s) {
+    if (window.labAudio) window.labAudio.playClick();
+    this.miniLabState.microSpecimen = s;
+    this.miniLabState.microActivePin = null;
+    this.renderMiniLab('mikroskop');
+  }
+
+  setMicroObjective(o) {
+    if (window.labAudio) window.labAudio.playClick();
+    this.miniLabState.microObjective = o;
+    this.renderMiniLab('mikroskop');
+  }
+
+  setMicroCoarse(c) {
+    this.miniLabState.microCoarse = parseInt(c);
+    this.renderMiniLab('mikroskop');
+  }
+
+  setMicroFine(f) {
+    this.miniLabState.microFine = parseInt(f);
+    this.renderMiniLab('mikroskop');
+  }
+
+  // =========================================================================
+  // 2. GELAS UKUR - MEMBACA MENISKUS DENGAN KACA PEMBESAR LOUPE
   // =========================================================================
   renderGraduatedCylinderLab(container) {
     const vol = this.miniLabState.meniscusVol;
     const liquid = this.miniLabState.meniscusLiquid;
     const angle = this.miniLabState.eyeAngle;
 
-    // Perhitungan paralaks
     let observedVol = vol;
-    if (angle === 'top') observedVol = vol + 4.0;
-    if (angle === 'bottom') observedVol = vol - 4.0;
+    if (angle === 'top') observedVol = vol + 4.5;
+    if (angle === 'bottom') observedVol = vol - 4.5;
+
+    let liqColor1 = '#00d2ff', liqColor2 = '#0072ff', liqName = 'Air Aquades (Meniskus Cekung)';
+    if (liquid === 'kmno4') { liqColor1 = '#c084fc'; liqColor2 = '#7e22ce'; liqName = 'Larutan KMnO4 (Meniskus Cekung)'; }
+    if (liquid === 'oil') { liqColor1 = '#fde047'; liqColor2 = '#ca8a04'; liqName = 'Minyak Nabati (Meniskus Cekung)'; }
+    if (liquid === 'raksa') { liqColor1 = '#e2e8f0'; liqColor2 = '#64748b'; liqName = 'Air Raksa (Meniskus Cembung)'; }
 
     container.innerHTML = `
       <div class="mini-lab-dynamic-grid">
-        <!-- Visual Viewport -->
+        <!-- Visual Viewport with Main Cylinder & Loupe Inset -->
         <div class="mini-lab-viewport-box">
-          <svg viewBox="0 0 360 400" class="svg-sim-canvas" id="meniscus-svg">
+          <svg viewBox="0 0 380 400" class="svg-sim-canvas" id="meniscus-svg">
             <defs>
-              <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="rgba(255,255,255,0.3)" />
-                <stop offset="30%" stop-color="rgba(255,255,255,0.05)" />
-                <stop offset="70%" stop-color="rgba(255,255,255,0.05)" />
-                <stop offset="100%" stop-color="rgba(255,255,255,0.35)" />
+              <linearGradient id="glassBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.4)" />
+                <stop offset="25%" stop-color="rgba(255,255,255,0.08)" />
+                <stop offset="75%" stop-color="rgba(255,255,255,0.08)" />
+                <stop offset="100%" stop-color="rgba(255,255,255,0.45)" />
               </linearGradient>
-              <linearGradient id="liquidGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="${liquid === 'air' ? '#00d2ff' : '#95a5a6'}" />
-                <stop offset="100%" stop-color="${liquid === 'air' ? '#0072ff' : '#7f8c8d'}" />
+              <linearGradient id="activeLiqGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="${liqColor1}" />
+                <stop offset="100%" stop-color="${liqColor2}" />
               </linearGradient>
             </defs>
 
-            <!-- Base Platform -->
-            <polygon points="120,380 240,380 220,360 140,360" fill="#1e293b" stroke="#00f0ff" stroke-width="1.5" />
+            <!-- Heavy Hexagonal Foot Support -->
+            <polygon points="90,380 210,380 195,355 105,355" fill="#1e293b" stroke="#00f0ff" stroke-width="2" />
+            <polygon points="105,355 195,355 185,345 115,345" fill="#334155" />
 
             <!-- Glass Cylinder Body -->
-            <rect x="140" y="40" width="80" height="320" rx="4" fill="url(#glassGrad)" stroke="#38bdf8" stroke-width="2" />
+            <rect x="115" y="40" width="70" height="305" rx="5" fill="url(#glassBodyGrad)" stroke="#38bdf8" stroke-width="2.5" />
+            <!-- Pouring Spout -->
+            <polygon points="115,40 98,30 115,50" fill="#38bdf8" opacity="0.8" />
 
-            <!-- Spout -->
-            <polygon points="140,40 125,32 140,48" fill="#38bdf8" opacity="0.7" />
+            <!-- Liquid Column with Real Meniscus Curve -->
+            ${(() => {
+              const liqY = 345 - (vol * 2.85);
+              const liqH = vol * 2.85;
+              if (liquid !== 'raksa') {
+                // Concave Meniscus (Meniskus Cekung)
+                return `
+                  <rect x="116" y="${liqY}" width="68" height="${liqH}" fill="url(#activeLiqGrad)" opacity="0.85" />
+                  <!-- Concave Meniscus Dip -->
+                  <path d="M 116,${liqY - 7} Q 150,${liqY + 4} 184,${liqY - 7} L 184,${liqY} L 116,${liqY} Z" fill="url(#activeLiqGrad)" opacity="0.95" />
+                  <path d="M 116,${liqY - 7} Q 150,${liqY + 4} 184,${liqY - 7}" fill="none" stroke="#ffffff" stroke-width="2.5" />
+                  <!-- Bottom Tangent Laser Indicator -->
+                  <line x1="80" y1="${liqY + 4}" x2="220" y2="${liqY + 4}" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,3" />
+                `;
+              } else {
+                // Convex Meniscus (Meniskus Cembung Raksa)
+                return `
+                  <rect x="116" y="${liqY}" width="68" height="${liqH}" fill="url(#activeLiqGrad)" opacity="0.9" />
+                  <!-- Convex Meniscus Dome -->
+                  <path d="M 116,${liqY + 7} Q 150,${liqY - 4} 184,${liqY + 7} L 184,${liqY} L 116,${liqY} Z" fill="url(#activeLiqGrad)" opacity="0.95" />
+                  <path d="M 116,${liqY + 7} Q 150,${liqY - 4} 184,${liqY + 7}" fill="none" stroke="#ffffff" stroke-width="2.5" />
+                  <!-- Top Tangent Laser Indicator -->
+                  <line x1="80" y1="${liqY - 4}" x2="220" y2="${liqY - 4}" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,3" />
+                `;
+              }
+            })()}
 
-            <!-- Liquid Column -->
-            <!-- Volume 100mL = y 60, Volume 0mL = y 360 -> height = 300px for 100mL -> 3px per mL -->
-            <g id="liquid-group">
-              ${(() => {
-                const liqY = 360 - (vol * 3);
-                const liqH = vol * 3;
-                if (liquid === 'air') {
-                  // Meniskus Cekung (Concave) - dasar cekungan di liqY, tepian naik 8px
-                  return `
-                    <rect x="141" y="${liqY}" width="78" height="${liqH}" fill="url(#liquidGrad)" opacity="0.8" />
-                    <!-- Concave Curve -->
-                    <path d="M 141,${liqY - 6} Q 180,${liqY + 4} 219,${liqY - 6} L 219,${liqY} L 141,${liqY} Z" fill="url(#liquidGrad)" opacity="0.9" />
-                    <path d="M 141,${liqY - 6} Q 180,${liqY + 4} 219,${liqY - 6}" fill="none" stroke="#ffffff" stroke-width="2" />
-                  `;
-                } else {
-                  // Meniskus Cembung (Convex) - puncak cembung di liqY, tepian turun 6px
-                  return `
-                    <rect x="141" y="${liqY}" width="78" height="${liqH}" fill="url(#liquidGrad)" opacity="0.85" />
-                    <!-- Convex Curve -->
-                    <path d="M 141,${liqY + 6} Q 180,${liqY - 4} 219,${liqY + 6} L 219,${liqY} L 141,${liqY} Z" fill="url(#liquidGrad)" opacity="0.95" />
-                    <path d="M 141,${liqY + 6} Q 180,${liqY - 4} 219,${liqY + 6}" fill="none" stroke="#ffffff" stroke-width="2" />
-                  `;
-                }
-              })()}
-            </g>
-
-            <!-- Scale Ticks & Numbers -->
+            <!-- Scale Ticks (10 mL to 100 mL) -->
             ${(() => {
               let ticks = '';
               for (let i = 10; i <= 100; i += 10) {
-                const yPos = 360 - (i * 3);
+                const yPos = 345 - (i * 2.85);
                 ticks += `
-                  <line x1="140" y1="${yPos}" x2="160" y2="${yPos}" stroke="#ffffff" stroke-width="1.8" />
-                  <text x="165" y="${yPos + 4}" fill="#ffffff" font-size="11" font-family="monospace" font-weight="bold">${i}</text>
+                  <line x1="115" y1="${yPos}" x2="135" y2="${yPos}" stroke="#ffffff" stroke-width="2" />
+                  <text x="140" y="${yPos + 4}" fill="#ffffff" font-size="10" font-family="monospace" font-weight="bold">${i}</text>
                 `;
-                // Minor ticks
                 for (let j = 2; j <= 8; j += 2) {
-                  const minorY = yPos + (j * 3);
-                  if (minorY < 360) {
-                    ticks += `<line x1="140" y1="${minorY}" x2="150" y2="${minorY}" stroke="rgba(255,255,255,0.6)" stroke-width="1" />`;
+                  const minorY = yPos + (j * 2.85);
+                  if (minorY < 345) {
+                    ticks += `<line x1="115" y1="${minorY}" x2="125" y2="${minorY}" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" />`;
                   }
                 }
               }
               return ticks;
             })()}
 
-            <!-- Eye Observation Ray -->
+            <!-- Observer Eye & Parallax Angle Beam -->
             ${(() => {
-              const baseLiqY = 360 - (vol * 3);
+              const baseLiqY = 345 - (vol * 2.85) + (liquid === 'raksa' ? -4 : 4);
               let eyeY = baseLiqY;
-              let rayColor = '#10b981';
-              let label = 'Tepat 90° (Dasar Meniskus)';
+              let beamColor = '#10b981';
 
-              if (angle === 'top') {
-                eyeY = baseLiqY - 50;
-                rayColor = '#ef4444';
-                label = 'Sudut Atas (Paralaks Positif)';
-              } else if (angle === 'bottom') {
-                eyeY = baseLiqY + 50;
-                rayColor = '#ef4444';
-                label = 'Sudut Bawah (Paralaks Negatif)';
-              }
+              if (angle === 'top') { eyeY = baseLiqY - 55; beamColor = '#ef4444'; }
+              if (angle === 'bottom') { eyeY = baseLiqY + 55; beamColor = '#ef4444'; }
 
               return `
                 <g>
                   <!-- Eye Icon -->
-                  <circle cx="50" cy="${eyeY}" r="16" fill="#080e21" stroke="${rayColor}" stroke-width="2" />
-                  <circle cx="50" cy="${eyeY}" r="6" fill="${rayColor}" />
-                  <text x="25" y="${eyeY - 22}" fill="${rayColor}" font-size="10" font-weight="bold">Mata Pengamat</text>
-                  
-                  <!-- Ray Line -->
-                  <line x1="68" y1="${eyeY}" x2="180" y2="${baseLiqY}" stroke="${rayColor}" stroke-width="2" stroke-dasharray="4,4" />
-                  <circle cx="180" cy="${baseLiqY}" r="4" fill="${rayColor}" />
+                  <circle cx="45" cy="${eyeY}" r="15" fill="#080e21" stroke="${beamColor}" stroke-width="2.5" />
+                  <circle cx="45" cy="${eyeY}" r="6" fill="${beamColor}" />
+                  <text x="18" y="${eyeY - 20}" fill="${beamColor}" font-size="10" font-weight="bold">Mata</text>
 
-                  <!-- Indicator Box -->
-                  <rect x="235" y="${baseLiqY - 14}" width="115" height="28" rx="4" fill="#080e21" stroke="${rayColor}" stroke-width="1.2" />
-                  <text x="242" y="${baseLiqY + 4}" fill="${rayColor}" font-size="11" font-weight="bold">
-                    ${observedVol.toFixed(1)} mL ${angle === 'normal' ? '✓' : '⚠️'}
-                  </text>
+                  <!-- Parallax Sightline -->
+                  <line x1="62" y1="${eyeY}" x2="150" y2="${baseLiqY}" stroke="${beamColor}" stroke-width="2.5" stroke-dasharray="4,4" />
+                  <circle cx="150" cy="${baseLiqY}" r="4.5" fill="${beamColor}" />
                 </g>
               `;
             })()}
+
+            <!-- Zoom Loupe Inset (Kaca Pembesar Meniskus) -->
+            <g transform="translate(230, 80)">
+              <!-- Loupe Frame -->
+              <circle cx="65" cy="65" r="62" fill="#030712" stroke="#00f0ff" stroke-width="3" filter="drop-shadow(0 4px 15px rgba(0,240,255,0.4))" />
+              <clipPath id="loupeClip"><circle cx="65" cy="65" r="60" /></clipPath>
+              
+              <!-- Magnified Content inside Loupe -->
+              <g clip-path="url(#loupeClip)">
+                <rect x="0" y="0" width="130" height="130" fill="#0f172a" />
+                <!-- Magnified Fluid Column -->
+                ${liquid !== 'raksa' ? `
+                  <path d="M 10,40 Q 65,85 120,40 L 120,130 L 10,130 Z" fill="url(#activeLiqGrad)" opacity="0.9" />
+                  <path d="M 10,40 Q 65,85 120,40" fill="none" stroke="#ffffff" stroke-width="4" />
+                  <!-- Target reading horizontal line -->
+                  <line x1="0" y1="85" x2="130" y2="85" stroke="#10b981" stroke-width="2.5" />
+                  <text x="65" y="115" fill="#10b981" font-size="11" font-weight="bold" text-anchor="middle">Dasar Cekungan</text>
+                ` : `
+                  <path d="M 10,90 Q 65,45 120,90 L 120,130 L 10,130 Z" fill="url(#activeLiqGrad)" opacity="0.9" />
+                  <path d="M 10,90 Q 65,45 120,90" fill="none" stroke="#ffffff" stroke-width="4" />
+                  <line x1="0" y1="45" x2="130" y2="45" stroke="#10b981" stroke-width="2.5" />
+                  <text x="65" y="115" fill="#10b981" font-size="11" font-weight="bold" text-anchor="middle">Puncak Cembungan</text>
+                `}
+              </g>
+
+              <!-- Loupe Title Badge -->
+              <rect x="5" y="-12" width="120" height="22" rx="4" fill="#080e21" stroke="#00f0ff" stroke-width="1.2" />
+              <text x="65" y="3" fill="#00f0ff" font-size="10" font-weight="bold" text-anchor="middle">🔍 Pembesar Meniskus</text>
+            </g>
           </svg>
         </div>
 
         <!-- Controls & Practice Panel -->
         <div class="mini-lab-panel-controls">
           <div class="mini-lab-panel-title">
-            <i class="fa-solid fa-sliders"></i> Panel Pengaturan & Praktikum
+            <i class="fa-solid fa-ruler-vertical"></i> Panel Pembacaan Skala Meniskus
           </div>
 
           <!-- Slider Volume -->
@@ -477,66 +884,70 @@ class LabARModule {
               oninput="window.labAR.setMeniscusVolume(this.value)" />
           </div>
 
-          <!-- Pilihan Jenis Meniskus -->
+          <!-- Pilihan Jenis Cairan -->
           <div class="mini-lab-control-group">
-            <label>Jenis Zat Cair & Bentuk Meniskus:</label>
+            <label>Pilih Jenis Cairan & Sifat Meniskus:</label>
             <div class="mini-lab-options-row">
               <button class="mini-lab-opt-btn ${liquid === 'air' ? 'active' : ''}" onclick="window.labAR.setMeniscusLiquid('air')">
-                💧 Air / Aquades (Meniskus Cekung)
+                💧 Air (Cekung)
+              </button>
+              <button class="mini-lab-opt-btn ${liquid === 'kmno4' ? 'active' : ''}" onclick="window.labAR.setMeniscusLiquid('kmno4')">
+                🟣 KMnO4 (Cekung)
+              </button>
+              <button class="mini-lab-opt-btn ${liquid === 'oil' ? 'active' : ''}" onclick="window.labAR.setMeniscusLiquid('oil')">
+                🟡 Minyak (Cekung)
               </button>
               <button class="mini-lab-opt-btn ${liquid === 'raksa' ? 'active' : ''}" onclick="window.labAR.setMeniscusLiquid('raksa')">
-                ⚪ Raksa / Mercury (Meniskus Cembung)
+                ⚪ Raksa (Cembung)
               </button>
             </div>
           </div>
 
-          <!-- Posisi Sudut Mata -->
+          <!-- Posisi Mata Pengamat -->
           <div class="mini-lab-control-group">
-            <label>Posisi Mata Pengamat (Uji Efek Paralaks):</label>
+            <label>Posisi Sudut Mata (Uji Kesalahan Paralaks):</label>
             <div class="mini-lab-options-row">
               <button class="mini-lab-opt-btn ${angle === 'top' ? 'active' : ''}" onclick="window.labAR.setEyeAngle('top')">
-                👁️ Terlalu Tinggi (+4 mL)
+                👁️ Terlalu Tinggi (+Paralaks)
               </button>
               <button class="mini-lab-opt-btn ${angle === 'normal' ? 'active' : ''}" onclick="window.labAR.setEyeAngle('normal')">
                 👁️ Sejajar 90° (Akurat ✓)
               </button>
               <button class="mini-lab-opt-btn ${angle === 'bottom' ? 'active' : ''}" onclick="window.labAR.setEyeAngle('bottom')">
-                👁️ Terlalu Rendah (-4 mL)
+                👁️ Terlalu Rendah (-Paralaks)
               </button>
             </div>
           </div>
 
-          <!-- Result & Key Takeaway -->
+          <!-- Hasil & Penjelasan -->
           <div class="mini-lab-result-card">
-            <h5><i class="fa-solid fa-lightbulb"></i> Kaidah Pembacaan Meniskus:</h5>
+            <h5><i class="fa-solid fa-check-double"></i> Hasil Pembacaan Skala:</h5>
             <div class="mini-lab-result-row">
-              <span>Volume Nyata (True Volume):</span>
+              <span>Volume Nyata (True Value):</span>
               <span class="num-val">${vol.toFixed(1)} mL</span>
             </div>
             <div class="mini-lab-result-row">
               <span>Hasil Pengamatan Mata:</span>
               <span class="num-val" style="color: ${angle === 'normal' ? 'var(--accent-green)' : '#ef4444'};">
-                ${observedVol.toFixed(1)} mL (${angle === 'normal' ? 'Akurat' : 'Paralaks Terjadi'})
+                ${observedVol.toFixed(1)} mL (${angle === 'normal' ? 'Akurat' : 'Terjadi Kesalahan Paralaks!'})
               </span>
             </div>
             <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.4;">
-              ${liquid === 'air' 
-                ? '📌 <strong>Meniskus Cekung</strong>: Pembacaan skala yang benar diambil tepat pada <strong>titik terbawah lengkungan cekungan</strong> cairan.' 
-                : '📌 <strong>Meniskus Cembung</strong>: Pembacaan skala yang benar diambil tepat pada <strong>titik teratas kubah cembungan</strong> cairan.'}
+              ${liquid !== 'raksa' 
+                ? '📌 <strong>Meniskus Cekung</strong> terjadi karena gaya adhesi (cairan-kaca) > gaya kohesi (antar partikel cairan). Nilai dibaca tepat pada <strong>titik terbawah lengkungan</strong>.' 
+                : '📌 <strong>Meniskus Cembung</strong> terjadi karena gaya kohesi > gaya adhesi. Nilai dibaca tepat pada <strong>puncak teratas kubah cembung</strong>.'}
             </p>
           </div>
 
-          <!-- Mini Quiz / Challenge -->
+          <!-- Quiz Tantangan -->
           <div class="mini-lab-quiz-box">
-            <h5><i class="fa-solid fa-circle-question"></i> Tantangan Baca Meniskus:</h5>
+            <h5><i class="fa-solid fa-circle-question"></i> Tantangan Meniskus:</h5>
             <p style="font-size: 0.8rem; color: var(--text-main);">
-              Berapakah volume cairan pada tabung di atas jika dibaca dengan posisi mata sejajar?
+              Berapakah volume cairan di atas yang terbaca pada posisi mata sejajar?
             </p>
             <div class="mini-lab-quiz-input-row">
               <input type="number" id="quiz-meniscus-input" class="mini-lab-quiz-input" placeholder="Contoh: 45.0" step="0.1" />
-              <button class="btn btn-accent" style="padding: 0.45rem 1rem; font-size: 0.85rem;" onclick="window.labAR.checkMeniscusQuiz()">
-                Cek Jawaban
-              </button>
+              <button class="btn btn-accent" onclick="window.labAR.checkMeniscusQuiz()">Periksa</button>
             </div>
             <div id="quiz-meniscus-feedback" class="mini-lab-quiz-feedback"></div>
           </div>
@@ -579,121 +990,111 @@ class LabARModule {
     if (Math.abs(userVal - target) <= 0.5) {
       if (window.labAudio) window.labAudio.playFanfare();
       feedback.className = 'mini-lab-quiz-feedback correct';
-      feedback.innerHTML = `🎉 <strong>Benar Sekali!</strong> Volume tepat adalah <strong>${target.toFixed(1)} mL</strong> pada dasar meniskus.`;
+      feedback.innerHTML = `🎉 <strong>Luar Biasa, Benar!</strong> Volume tepat adalah <strong>${target.toFixed(1)} mL</strong> pada dasar meniskus.`;
     } else {
       if (window.labAudio) window.labAudio.playError();
       feedback.className = 'mini-lab-quiz-feedback wrong';
-      feedback.innerHTML = `❌ <strong>Kurang tepat.</strong> Jawaban kamu: ${userVal.toFixed(1)} mL. Volume yang benar adalah <strong>${target.toFixed(1)} mL</strong>. Perhatikan garis dasar lengkungan!`;
+      feedback.innerHTML = `❌ <strong>Kurang tepat.</strong> Jawaban kamu: ${userVal.toFixed(1)} mL. Volume yang benar adalah <strong>${target.toFixed(1)} mL</strong>.`;
     }
   }
 
   // =========================================================================
-  // 2. JANGKA SORONG - MEMBACA SKALA UTAMA & NONIUS
+  // 3. JANGKA SORONG - MEMBACA SKALA UTAMA & NONIUS DENGAN LOUPE
   // =========================================================================
   renderVernierCaliperLab(container) {
-    const val = this.miniLabState.caliperVal; // in cm, e.g. 2.45
+    const val = this.miniLabState.caliperVal;
     const objType = this.miniLabState.caliperObject;
 
-    // Breakdown skala utama dan nonius (ketelitian 0.01 cm / 0.1 mm)
-    const skalaUtama = Math.floor(val * 10) / 10; // e.g. 2.4 cm
-    const noniusIndex = Math.round((val - skalaUtama) * 100); // e.g. 5
+    const skalaUtama = Math.floor(val * 10) / 10;
+    const noniusIndex = Math.round((val - skalaUtama) * 100);
     const skalaNonius = noniusIndex * 0.01;
 
-    // SVG coordinates: 1 cm = 40px, 1 mm = 4px
     const startX = 60;
-    const slideOffset = val * 40;
+    const slideOffset = val * 38;
 
     container.innerHTML = `
       <div class="mini-lab-dynamic-grid">
-        <!-- Visual Viewport -->
         <div class="mini-lab-viewport-box">
-          <svg viewBox="0 0 440 280" class="svg-sim-canvas" id="caliper-svg">
+          <svg viewBox="0 0 460 300" class="svg-sim-canvas" id="caliper-svg">
             <defs>
-              <linearGradient id="metalBeamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#cbd5e1" />
-                <stop offset="50%" stop-color="#94a3b8" />
+              <linearGradient id="metalCaliper" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#f8fafc" />
+                <stop offset="40%" stop-color="#cbd5e1" />
                 <stop offset="100%" stop-color="#64748b" />
               </linearGradient>
-              <linearGradient id="vernierBlockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#f1f5f9" />
-                <stop offset="100%" stop-color="#cbd5e1" />
+              <linearGradient id="vernierSliderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="100%" stop-color="#94a3b8" />
               </linearGradient>
             </defs>
 
-            <!-- Fixed Body & Main Beam -->
-            <rect x="20" y="80" width="400" height="45" rx="3" fill="url(#metalBeamGrad)" stroke="#475569" stroke-width="1.5" />
+            <!-- Main Steel Beam -->
+            <rect x="20" y="80" width="420" height="45" rx="3" fill="url(#metalCaliper)" stroke="#334155" stroke-width="2" />
 
-            <!-- Fixed Lower Jaw (Rahang Tetap Bawah) -->
-            <polygon points="20,80 60,80 60,230 45,230 20,120" fill="url(#metalBeamGrad)" stroke="#475569" stroke-width="1.5" />
+            <!-- Fixed Lower & Upper Jaws -->
+            <polygon points="20,80 60,80 60,240 45,240 20,130" fill="url(#metalCaliper)" stroke="#334155" stroke-width="2" />
+            <polygon points="20,80 60,80 60,10 45,10 20,40" fill="url(#metalCaliper)" stroke="#334155" stroke-width="2" />
 
-            <!-- Fixed Upper Jaw (Rahang Tetap Atas) -->
-            <polygon points="20,80 60,80 60,10 45,10 20,40" fill="url(#metalBeamGrad)" stroke="#475569" stroke-width="1.5" />
-
-            <!-- Object being measured (between jaws) -->
+            <!-- Clamped Object between Jaws -->
             ${val > 0.1 ? `
-              <rect x="60" y="140" width="${slideOffset}" height="60" rx="4" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5" opacity="0.9" />
-              <text x="${60 + slideOffset / 2}" y="175" fill="#080e21" font-size="11" font-weight="bold" text-anchor="middle">
+              <rect x="60" y="140" width="${slideOffset}" height="70" rx="6" fill="#f59e0b" stroke="#ffffff" stroke-width="2" opacity="0.9" />
+              <text x="${60 + slideOffset / 2}" y="180" fill="#080e21" font-size="12" font-weight="bold" text-anchor="middle">
                 ${val.toFixed(2)} cm
               </text>
             ` : ''}
 
-            <!-- Main Scale Ticks (Skala Utama cm & mm) -->
+            <!-- Main Scale Engravings (0 to 10 cm) -->
             ${(() => {
               let ticks = '';
-              for (let cm = 0; cm <= 8; cm++) {
-                const xPos = startX + (cm * 40);
-                // Major cm tick
+              for (let cm = 0; cm <= 9; cm++) {
+                const xPos = startX + (cm * 38);
                 ticks += `
-                  <line x1="${xPos}" y1="80" x2="${xPos}" y2="105" stroke="#080e21" stroke-width="2" />
+                  <line x1="${xPos}" y1="80" x2="${xPos}" y2="106" stroke="#080e21" stroke-width="2" />
                   <text x="${xPos}" y="120" fill="#080e21" font-size="11" font-weight="bold" font-family="monospace" text-anchor="middle">${cm}</text>
                 `;
-                // Minor mm ticks (9 ticks between each cm)
                 for (let mm = 1; mm < 10; mm++) {
-                  const mmX = xPos + (mm * 4);
-                  if (mmX <= 410) {
+                  const mmX = xPos + (mm * 3.8);
+                  if (mmX <= 430) {
                     const tickH = (mm === 5) ? 98 : 92;
-                    ticks += `<line x1="${mmX}" y1="80" x2="${mmX}" y2="${tickH}" stroke="#080e21" stroke-width="1" />`;
+                    ticks += `<line x1="${mmX}" y1="80" x2="${mmX}" y2="${tickH}" stroke="#080e21" stroke-width="1.2" />`;
                   }
                 }
               }
               return ticks;
             })()}
 
-            <!-- Sliding Vernier Jaw (Rahang Geser & Skala Nonius) -->
+            <!-- Sliding Vernier Jaws Block -->
             <g transform="translate(${slideOffset}, 0)">
-              <!-- Sliding Vernier Body -->
-              <rect x="60" y="65" width="100" height="75" rx="3" fill="url(#vernierBlockGrad)" stroke="#00f0ff" stroke-width="2" />
-              
-              <!-- Sliding Lower Jaw -->
-              <polygon points="60,80 95,80 95,230 80,230 60,120" fill="url(#vernierBlockGrad)" stroke="#00f0ff" stroke-width="1.5" />
+              <rect x="60" y="65" width="105" height="75" rx="3" fill="url(#vernierSliderGrad)" stroke="#00f0ff" stroke-width="2" />
+              <polygon points="60,80 95,80 95,240 80,240 60,130" fill="url(#vernierSliderGrad)" stroke="#00f0ff" stroke-width="2" />
+              <polygon points="60,80 95,80 95,10 80,10 60,40" fill="url(#vernierSliderGrad)" stroke="#00f0ff" stroke-width="2" />
 
-              <!-- Sliding Upper Jaw -->
-              <polygon points="60,80 95,80 95,10 80,10 60,40" fill="url(#vernierBlockGrad)" stroke="#00f0ff" stroke-width="1.5" />
-
-              <!-- Vernier Scale Ticks (10 divisions spanning 9mm = 3.6px per div) -->
+              <!-- Vernier Scale Ticks (0 - 10) -->
               ${(() => {
                 let vTicks = '';
                 for (let n = 0; n <= 10; n++) {
-                  const vnX = 60 + (n * 3.6);
+                  const vnX = 60 + (n * 3.42); // 10 nonius divisions in 9 mm
                   const isCoincident = (n === noniusIndex);
                   vTicks += `
-                    <line x1="${vnX}" y1="65" x2="${vnX}" y2="${n % 5 === 0 ? 82 : 77}" stroke="${isCoincident ? '#ef4444' : '#080e21'}" stroke-width="${isCoincident ? '2.5' : '1.2'}" />
+                    <line x1="${vnX}" y1="65" x2="${vnX}" y2="${n % 5 === 0 ? 84 : 78}" 
+                      stroke="${isCoincident ? '#ef4444' : '#080e21'}" stroke-width="${isCoincident ? '2.8' : '1.3'}" />
                     ${n % 2 === 0 ? `<text x="${vnX}" y="60" fill="${isCoincident ? '#ef4444' : '#080e21'}" font-size="9" font-weight="bold" text-anchor="middle">${n}</text>` : ''}
                   `;
                 }
                 return vTicks;
               })()}
 
-              <!-- Lock Screw -->
-              <rect x="135" y="52" width="16" height="13" rx="2" fill="#d97706" stroke="#ffffff" stroke-width="1" />
+              <!-- Lock Screw & Thumb Rest -->
+              <rect x="145" y="52" width="16" height="13" rx="2" fill="#d97706" stroke="#ffffff" stroke-width="1" />
+              <circle cx="155" cy="115" r="7" fill="#64748b" />
             </g>
           </svg>
         </div>
 
-        <!-- Controls & Practice Panel -->
+        <!-- Controls Panel -->
         <div class="mini-lab-panel-controls">
           <div class="mini-lab-panel-title">
-            <i class="fa-solid fa-ruler-combined"></i> Panel Pembacaan Jangka Sorong
+            <i class="fa-solid fa-ruler-combined"></i> Panel Pengukuran Jangka Sorong
           </div>
 
           <!-- Slider Geser Rahang -->
@@ -714,7 +1115,7 @@ class LabARModule {
 
           <!-- Preset Benda Ukur -->
           <div class="mini-lab-control-group">
-            <label>Pilih Benda untuk Diukur:</label>
+            <label>Pilih Objek untuk Diukur:</label>
             <div class="mini-lab-options-row">
               <button class="mini-lab-opt-btn ${objType === 'kelereng' ? 'active' : ''}" onclick="window.labAR.setCaliperPreset('kelereng', 2.45)">
                 🟡 Kelereng (2.45 cm)
@@ -725,8 +1126,8 @@ class LabARModule {
               <button class="mini-lab-opt-btn ${objType === 'baut' ? 'active' : ''}" onclick="window.labAR.setCaliperPreset('baut', 0.94)">
                 ⚙️ Mur Baut (0.94 cm)
               </button>
-              <button class="mini-lab-opt-btn ${objType === 'tabung' ? 'active' : ''}" onclick="window.labAR.setCaliperPreset('tabung', 1.63)">
-                🧪 Tabung Reaksi (1.63 cm)
+              <button class="mini-lab-opt-btn ${objType === 'pipa' ? 'active' : ''}" onclick="window.labAR.setCaliperPreset('pipa', 3.24)">
+                🚰 Pipa PVC (3.24 cm)
               </button>
             </div>
           </div>
@@ -742,9 +1143,9 @@ class LabARModule {
               <span>2. Garis Nonius Berimpit (SN):</span>
               <span class="num-val">Garis ke-${noniusIndex} × 0.01 = ${skalaNonius.toFixed(2)} cm</span>
             </div>
-            <div class="mini-lab-result-row" style="border-top: 1px dashed var(--border-color); padding-top: 0.4rem; font-weight: bold;">
+            <div class="mini-lab-result-row" style="border-top: 1px dashed var(--border-color); padding-top: 0.5rem; font-weight: bold;">
               <span>Hasil Pengukuran Total:</span>
-              <span class="num-val" style="color: var(--accent-cyan); font-size: 1rem;">
+              <span class="num-val" style="color: var(--accent-cyan); font-size: 1.05rem;">
                 ${skalaUtama.toFixed(1)} + ${skalaNonius.toFixed(2)} = ${val.toFixed(2)} cm
               </span>
             </div>
@@ -758,9 +1159,7 @@ class LabARModule {
             </p>
             <div class="mini-lab-quiz-input-row">
               <input type="number" id="quiz-caliper-input" class="mini-lab-quiz-input" placeholder="Contoh: 2.45" step="0.01" />
-              <button class="btn btn-accent" style="padding: 0.45rem 1rem; font-size: 0.85rem;" onclick="window.labAR.checkCaliperQuiz()">
-                Cek Jawaban
-              </button>
+              <button class="btn btn-accent" onclick="window.labAR.checkCaliperQuiz()">Periksa</button>
             </div>
             <div id="quiz-caliper-feedback" class="mini-lab-quiz-feedback"></div>
           </div>
@@ -809,12 +1208,12 @@ class LabARModule {
     } else {
       if (window.labAudio) window.labAudio.playError();
       feedback.className = 'mini-lab-quiz-feedback wrong';
-      feedback.innerHTML = `❌ <strong>Belum Tepat.</strong> Hasil yang benar adalah <strong>${target.toFixed(2)} cm</strong>. Periksa kembali garis nonius yang berimpit tegak lurus!`;
+      feedback.innerHTML = `❌ <strong>Belum Tepat.</strong> Hasil yang benar adalah <strong>${target.toFixed(2)} cm</strong>.`;
     }
   }
 
   // =========================================================================
-  // 3. NERACA OHAUS TIGA LENGAN
+  // 4. NERACA OHAUS TIGA LENGAN
   // =========================================================================
   renderOhausBalanceLab(container) {
     const l100 = this.miniLabState.ohaus100;
@@ -826,66 +1225,61 @@ class LabARModule {
 
     const diff = totalSlider - targetMass;
     const isBalanced = Math.abs(diff) < 0.15;
-
-    // Pointer angle: negative diff = pointer down, positive diff = pointer up
     const pointerAngle = Math.max(-25, Math.min(25, diff * 3.5));
 
     container.innerHTML = `
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
-          <svg viewBox="0 0 420 280" class="svg-sim-canvas" id="ohaus-svg">
+          <svg viewBox="0 0 440 290" class="svg-sim-canvas" id="ohaus-svg">
             <defs>
               <linearGradient id="ohausBeamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stop-color="#475569" />
-                <stop offset="100%" stop-color="#1e293b" />
+                <stop offset="100%" stop-color="#0f172a" />
               </linearGradient>
             </defs>
 
             <!-- Base & Stand -->
-            <polygon points="60,250 360,250 340,220 80,220" fill="#1e293b" stroke="#00f0ff" stroke-width="1.5" />
-            <rect x="185" y="110" width="30" height="110" fill="#334155" />
-            <!-- Fulcrum Pivot Triangle -->
-            <polygon points="200,95 185,120 215,120" fill="#00f0ff" />
+            <polygon points="60,260 380,260 360,225 80,225" fill="#1e293b" stroke="#00f0ff" stroke-width="2" />
+            <rect x="195" y="110" width="30" height="115" fill="#334155" />
+            <!-- Fulcrum Agate Bearing -->
+            <polygon points="210,95 195,120 225,120" fill="#00f0ff" />
 
             <!-- Weighing Pan (Left) -->
-            <line x1="80" y1="100" x2="80" y2="160" stroke="#94a3b8" stroke-width="2" />
-            <ellipse cx="80" cy="160" rx="45" ry="12" fill="#cbd5e1" stroke="#475569" stroke-width="2" />
+            <line x1="85" y1="100" x2="85" y2="165" stroke="#94a3b8" stroke-width="2.5" />
+            <ellipse cx="85" cy="165" rx="48" ry="14" fill="#cbd5e1" stroke="#475569" stroke-width="2" />
             
             <!-- Sample Object on Pan -->
-            <rect x="62" y="125" width="36" height="30" rx="4" fill="#eab308" stroke="#ffffff" stroke-width="1.5" />
-            <text x="80" y="145" fill="#080e21" font-size="9" font-weight="bold" text-anchor="middle">
+            <rect x="65" y="125" width="40" height="35" rx="6" fill="#eab308" stroke="#ffffff" stroke-width="2" />
+            <text x="85" y="148" fill="#080e21" font-size="10" font-weight="bold" text-anchor="middle">
               ${objName.split(' ')[0]}
             </text>
 
             <!-- 3 Beams Assembly -->
-            <!-- Beam 1: 100g, Beam 2: 10g, Beam 3: 1g -->
-            <g transform="rotate(${isBalanced ? 0 : pointerAngle * 0.15}, 200, 100)">
-              <!-- Main Beam Frame -->
-              <rect x="90" y="90" width="280" height="16" rx="2" fill="url(#ohausBeamGrad)" stroke="#64748b" stroke-width="1" />
-              <rect x="90" y="70" width="280" height="14" rx="2" fill="url(#ohausBeamGrad)" stroke="#64748b" stroke-width="1" />
-              <rect x="90" y="50" width="280" height="14" rx="2" fill="url(#ohausBeamGrad)" stroke="#64748b" stroke-width="1" />
+            <g transform="rotate(${isBalanced ? 0 : pointerAngle * 0.15}, 210, 100)">
+              <rect x="95" y="92" width="290" height="16" rx="2" fill="url(#ohausBeamGrad)" stroke="#64748b" stroke-width="1.2" />
+              <rect x="95" y="72" width="290" height="14" rx="2" fill="url(#ohausBeamGrad)" stroke="#64748b" stroke-width="1.2" />
+              <rect x="95" y="52" width="290" height="14" rx="2" fill="url(#ohausBeamGrad)" stroke="#64748b" stroke-width="1.2" />
 
-              <!-- Rider 100g (Top Beam) -->
-              <polygon points="${100 + (l100 / 500) * 240},42 ${110 + (l100 / 500) * 240},62 ${90 + (l100 / 500) * 240},62" fill="#f59e0b" stroke="#ffffff" stroke-width="1" />
+              <!-- Rider 100g -->
+              <polygon points="${105 + (l100 / 500) * 250},44 ${115 + (l100 / 500) * 250},64 ${95 + (l100 / 500) * 250},64" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5" />
 
-              <!-- Rider 10g (Middle Beam) -->
-              <polygon points="${100 + (l10 / 100) * 240},62 ${110 + (l10 / 100) * 240},82 ${90 + (l10 / 100) * 240},82" fill="#06b6d4" stroke="#ffffff" stroke-width="1" />
+              <!-- Rider 10g -->
+              <polygon points="${105 + (l10 / 100) * 250},64 ${115 + (l10 / 100) * 250},84 ${95 + (l10 / 100) * 250},84" fill="#06b6d4" stroke="#ffffff" stroke-width="1.5" />
 
-              <!-- Rider 1g (Bottom Beam) -->
-              <polygon points="${100 + (l1 / 10) * 240},82 ${110 + (l1 / 10) * 240},104 ${90 + (l1 / 10) * 240},104" fill="#10b981" stroke="#ffffff" stroke-width="1" />
+              <!-- Rider 1g -->
+              <polygon points="${105 + (l1 / 10) * 250},84 ${115 + (l1 / 10) * 250},106 ${95 + (l1 / 10) * 250},106" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
 
               <!-- Balance Pointer Needle (Right End) -->
-              <line x1="370" y1="100" x2="410" y2="100" stroke="${isBalanced ? '#10b981' : '#ef4444'}" stroke-width="3" />
+              <line x1="385" y1="100" x2="425" y2="100" stroke="${isBalanced ? '#10b981' : '#ef4444'}" stroke-width="3.5" />
             </g>
 
             <!-- Zero Scale Target Gauge -->
-            <rect x="400" y="75" width="15" height="50" fill="#080e21" stroke="#00f0ff" stroke-width="1" />
-            <line x1="400" y1="100" x2="415" y2="100" stroke="#10b981" stroke-width="2.5" />
-            <text x="390" y="104" fill="#10b981" font-size="11" font-weight="bold">0</text>
+            <rect x="415" y="75" width="18" height="50" fill="#080e21" stroke="#00f0ff" stroke-width="1.5" />
+            <line x1="415" y1="100" x2="433" y2="100" stroke="#10b981" stroke-width="3" />
+            <text x="402" y="104" fill="#10b981" font-size="12" font-weight="bold">0</text>
           </svg>
         </div>
 
-        <!-- Controls -->
         <div class="mini-lab-panel-controls">
           <div class="mini-lab-panel-title">
             <i class="fa-solid fa-scale-balanced"></i> Pengaturan Lengan Neraca Ohaus
@@ -940,7 +1334,7 @@ class LabARModule {
               oninput="window.labAR.setOhausBeam('1', this.value)" />
           </div>
 
-          <!-- Result & Balance Status -->
+          <!-- Result -->
           <div class="mini-lab-result-card">
             <h5><i class="fa-solid fa-equals"></i> Total Massa Anting Timbangan:</h5>
             <div class="mini-lab-result-row">
@@ -950,7 +1344,7 @@ class LabARModule {
             <div class="mini-lab-result-row">
               <span>Status Keseimbangan:</span>
               <span class="num-val" style="color: ${isBalanced ? 'var(--accent-green)' : '#f59e0b'};">
-                ${isBalanced ? '⚖️ SEIMBANG TEPAT DI TITIK NOL! (Sempurna ✓)' : (diff > 0 ? '⬇️ Beban Anting Terlalu Berat' : '⬆️ Beban Anting Terlalu Ringan')}
+                ${isBalanced ? '⚖️ SEIMBANG TEPAT DI TITIK NOL! (Sempurna ✓)' : (diff > 0 ? '⬇️ Anting Terlalu Berat' : '⬆️ Anting Terlalu Ringan')}
               </span>
             </div>
           </div>
@@ -965,8 +1359,8 @@ class LabARModule {
     if (beam === '1') this.miniLabState.ohaus1 = parseFloat(val);
 
     const total = this.miniLabState.ohaus100 + this.miniLabState.ohaus10 + this.miniLabState.ohaus1;
-    if (Math.abs(total - this.miniLabState.ohausObjectWeight) < 0.15) {
-      if (window.labAudio) window.labAudio.playCorrect();
+    if (Math.abs(total - this.miniLabState.ohausObjectWeight) < 0.15 && window.labAudio) {
+      window.labAudio.playFanfare();
     }
     this.renderMiniLab('neraca-ohaus');
   }
@@ -979,7 +1373,7 @@ class LabARModule {
   }
 
   // =========================================================================
-  // 4. TERMOMETER LAB - MEMBACA SKALA SUHU & KONVERSI
+  // 5. TERMOMETER LAB - MEMBACA SKALA SUHU & KONVERSI
   // =========================================================================
   renderThermometerLab(container) {
     const tempC = this.miniLabState.tempVal;
@@ -987,14 +1381,12 @@ class LabARModule {
     const tempF = (tempC * 9 / 5) + 32;
     const tempR = tempC * 4 / 5;
 
-    // SVG height calculation: -10°C -> y 330, 110°C -> y 50
-    // Total 120° span in 280px -> ~2.33px per °C
     const colY = 330 - ((tempC + 10) * 2.33);
 
     container.innerHTML = `
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
-          <svg viewBox="0 0 320 380" class="svg-sim-canvas" id="thermo-svg">
+          <svg viewBox="0 0 340 390" class="svg-sim-canvas" id="thermo-svg">
             <defs>
               <linearGradient id="mercuryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#ef4444" />
@@ -1002,32 +1394,42 @@ class LabARModule {
               </linearGradient>
             </defs>
 
-            <!-- Outer Glass Tube -->
-            <rect x="145" y="40" width="30" height="280" rx="15" fill="rgba(255,255,255,0.08)" stroke="#38bdf8" stroke-width="2" />
+            <!-- Beaker with active liquid -->
+            <rect x="70" y="200" width="200" height="170" rx="8" fill="rgba(0,240,255,0.12)" stroke="#38bdf8" stroke-width="2.5" />
             
-            <!-- Bottom Bulb -->
-            <circle cx="160" cy="335" r="24" fill="url(#mercuryGrad)" stroke="#38bdf8" stroke-width="2" />
+            <!-- Steam or Ice effect based on Temp -->
+            ${tempC >= 95 ? `
+              <!-- Steam Vapors -->
+              <path d="M 100,190 Q 120,150 110,120 M 170,190 Q 150,140 170,110 M 230,190 Q 250,150 240,120" 
+                stroke="#ffffff" stroke-width="2.5" stroke-dasharray="4,4" opacity="0.7" />
+            ` : (tempC <= 5 ? `
+              <!-- Ice Cubes -->
+              <rect x="90" y="270" width="30" height="30" rx="4" fill="rgba(255,255,255,0.7)" stroke="#38bdf8" />
+              <rect x="210" y="280" width="28" height="28" rx="4" fill="rgba(255,255,255,0.7)" stroke="#38bdf8" />
+            ` : '')}
 
-            <!-- Red Fluid Thread -->
-            <rect x="156" y="${colY}" width="8" height="${335 - colY}" fill="url(#mercuryGrad)" />
+            <!-- Thermometer Stem -->
+            <rect x="155" y="40" width="30" height="280" rx="15" fill="rgba(255,255,255,0.15)" stroke="#38bdf8" stroke-width="2" />
+            <circle cx="170" cy="335" r="24" fill="url(#mercuryGrad)" stroke="#38bdf8" stroke-width="2" />
+            <rect x="166" y="${colY}" width="8" height="${335 - colY}" fill="url(#mercuryGrad)" />
 
-            <!-- Celsius Ticks & Numbers -->
+            <!-- Celsius Markings -->
             ${(() => {
               let ticks = '';
               for (let t = -10; t <= 110; t += 10) {
                 const yPos = 330 - ((t + 10) * 2.33);
                 ticks += `
-                  <line x1="175" y1="${yPos}" x2="190" y2="${yPos}" stroke="#ffffff" stroke-width="1.8" />
-                  <text x="198" y="${yPos + 4}" fill="#ffffff" font-size="10" font-family="monospace" font-weight="bold">${t}°C</text>
+                  <line x1="185" y1="${yPos}" x2="200" y2="${yPos}" stroke="#ffffff" stroke-width="1.8" />
+                  <text x="208" y="${yPos + 4}" fill="#ffffff" font-size="10" font-family="monospace" font-weight="bold">${t}°C</text>
                 `;
               }
               return ticks;
             })()}
 
             <!-- Current Temp Badge -->
-            <rect x="30" y="${colY - 15}" width="95" height="30" rx="4" fill="#080e21" stroke="#ef4444" stroke-width="1.5" />
-            <text x="77" y="${colY + 4}" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle">${tempC}°C</text>
-            <line x1="125" y1="${colY}" x2="156" y2="${colY}" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
+            <rect x="40" y="${colY - 15}" width="95" height="30" rx="4" fill="#080e21" stroke="#ef4444" stroke-width="1.8" />
+            <text x="87" y="${colY + 4}" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle">${tempC}°C</text>
+            <line x1="135" y1="${colY}" x2="166" y2="${colY}" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
           </svg>
         </div>
 
@@ -1077,184 +1479,74 @@ class LabARModule {
   }
 
   // =========================================================================
-  // 5. MIKROSKOP - FOKUS PREPARAT & PERBESARAN
-  // =========================================================================
-  renderMicroscopeLab(container) {
-    const spec = this.miniLabState.microSpecimen;
-    const obj = this.miniLabState.microObjective;
-    const focus = this.miniLabState.microFocus;
-    const light = this.miniLabState.microLight;
-
-    // Ideal focus is 100%. Blur calculation
-    const blurAmount = Math.abs(100 - focus) * 0.15;
-    const isSharp = blurAmount <= 1.2;
-
-    container.innerHTML = `
-      <div class="mini-lab-dynamic-grid">
-        <div class="mini-lab-viewport-box">
-          <div style="width: 260px; height: 260px; border-radius: 50%; border: 6px solid #1e293b; position: relative; overflow: hidden; background: #000; box-shadow: 0 0 30px rgba(0,240,255,0.2);">
-            <!-- Specimen Graphic Layer with live blur -->
-            <div style="width: 100%; height: 100%; filter: blur(${blurAmount}px) brightness(${light / 70}); transition: filter 0.05s ease; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
-              ${(() => {
-                if (spec === 'bawang') {
-                  return `
-                    <svg viewBox="0 0 200 200" width="100%" height="100%">
-                      <rect width="200" height="200" fill="#fef3c7" />
-                      <!-- Onion cell walls -->
-                      <path d="M 10,20 L 190,20 M 10,60 L 190,60 M 10,100 L 190,100 M 10,140 L 190,140 M 10,180 L 190,180" stroke="#d97706" stroke-width="2" />
-                      <path d="M 50,20 L 50,60 M 120,20 L 120,60 M 80,60 L 80,100 M 160,60 L 160,100 M 40,100 L 40,140 M 130,100 L 130,140 M 90,140 L 90,180" stroke="#d97706" stroke-width="2" />
-                      <!-- Nuclei -->
-                      <circle cx="85" cy="40" r="5" fill="#b45309" />
-                      <circle cx="120" cy="80" r="5" fill="#b45309" />
-                      <circle cx="85" cy="120" r="5" fill="#b45309" />
-                      <circle cx="140" cy="160" r="5" fill="#b45309" />
-                    </svg>
-                  `;
-                } else if (spec === 'rhoeo') {
-                  return `
-                    <svg viewBox="0 0 200 200" width="100%" height="100%">
-                      <rect width="200" height="200" fill="#dcfce7" />
-                      <!-- Purple anthocyanin cells & green stomata -->
-                      <circle cx="60" cy="60" r="14" fill="#a855f7" opacity="0.6" />
-                      <circle cx="140" cy="60" r="14" fill="#a855f7" opacity="0.6" />
-                      <circle cx="100" cy="120" r="16" fill="#16a34a" />
-                      <!-- Stoma slit -->
-                      <ellipse cx="100" cy="120" rx="4" ry="10" fill="#052e16" />
-                    </svg>
-                  `;
-                } else {
-                  return `
-                    <svg viewBox="0 0 200 200" width="100%" height="100%">
-                      <rect width="200" height="200" fill="#e0f2fe" />
-                      <!-- Irregular cheek epithelial cells -->
-                      <path d="M 40,60 Q 80,40 100,70 Q 90,100 50,90 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5" />
-                      <circle cx="70" cy="70" r="4" fill="#0369a1" />
-                      <path d="M 110,110 Q 160,90 170,130 Q 140,160 110,140 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5" />
-                      <circle cx="140" cy="130" r="4" fill="#0369a1" />
-                    </svg>
-                  `;
-                }
-              })()}
-            </div>
-            <!-- Crosshair Ring -->
-            <div style="position: absolute; top:0; left:0; width:100%; height:100%; border: 1px dashed rgba(255,255,255,0.2); border-radius:50%; pointer-events:none;"></div>
-          </div>
-          <span style="font-size: 0.8rem; color: var(--accent-cyan); margin-top: 0.6rem; font-weight: bold;">
-            Perbesaran Total: ${obj * 10}x (Okuler 10x × Objektif ${obj}x)
-          </span>
-        </div>
-
-        <div class="mini-lab-panel-controls">
-          <div class="mini-lab-panel-title">
-            <i class="fa-solid fa-microscope"></i> Pengaturan Optik Mikroskop
-          </div>
-
-          <!-- Pilihan Preparat -->
-          <div class="mini-lab-control-group">
-            <label>Pilih Preparat Spesimen:</label>
-            <div class="mini-lab-options-row">
-              <button class="mini-lab-opt-btn ${spec === 'bawang' ? 'active' : ''}" onclick="window.labAR.setMicroSpecimen('bawang')">🧅 Sel Bawang Merah</button>
-              <button class="mini-lab-opt-btn ${spec === 'rhoeo' ? 'active' : ''}" onclick="window.labAR.setMicroSpecimen('rhoeo')">🍃 Stomata Daun Rhoeo</button>
-              <button class="mini-lab-opt-btn ${spec === 'pipi' ? 'active' : ''}" onclick="window.labAR.setMicroSpecimen('pipi')">👄 Epitel Mulut</button>
-            </div>
-          </div>
-
-          <!-- Lensa Objektif -->
-          <div class="mini-lab-control-group">
-            <label>Lensa Objektif (Revolver):</label>
-            <div class="mini-lab-options-row">
-              <button class="mini-lab-opt-btn ${obj === 4 ? 'active' : ''}" onclick="window.labAR.setMicroObjective(4)">4x (Total 40x)</button>
-              <button class="mini-lab-opt-btn ${obj === 10 ? 'active' : ''}" onclick="window.labAR.setMicroObjective(10)">10x (Total 100x)</button>
-              <button class="mini-lab-opt-btn ${obj === 40 ? 'active' : ''}" onclick="window.labAR.setMicroObjective(40)">40x (Total 400x)</button>
-            </div>
-          </div>
-
-          <!-- Slider Fokus -->
-          <div class="mini-lab-control-group">
-            <label>
-              <span>Putar Makrometer / Mikrometer:</span>
-              <span class="val-badge">${isSharp ? 'Fokus Optimal ✓' : 'Kurang Fokus'}</span>
-            </label>
-            <input type="range" class="mini-lab-slider" min="30" max="170" step="1" value="${focus}" 
-              oninput="window.labAR.setMicroFocus(this.value)" />
-          </div>
-
-          <!-- Status Card -->
-          <div class="mini-lab-result-card">
-            <h5><i class="fa-solid fa-eye"></i> Kualitas Pengamatan:</h5>
-            <div class="mini-lab-result-row">
-              <span>Kejelasan Bayangan:</span>
-              <span class="num-val" style="color: ${isSharp ? 'var(--accent-green)' : '#f59e0b'};">
-                ${isSharp ? '🌟 100% Jernih & Detail Terlihat' : `Kabur (${Math.round((1 - blurAmount / 15) * 100)}%)`}
-              </span>
-            </div>
-            ${isSharp ? `<p style="font-size: 0.78rem; color: var(--accent-green); margin-top: 0.3rem;">✓ Teridentifikasi: Dinding Sel, Inti Sel (Nukleus), dan Sitoplasma terlihat jelas!</p>` : ''}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  setMicroSpecimen(s) {
-    if (window.labAudio) window.labAudio.playClick();
-    this.miniLabState.microSpecimen = s;
-    this.renderMiniLab('mikroskop');
-  }
-
-  setMicroObjective(o) {
-    if (window.labAudio) window.labAudio.playClick();
-    this.miniLabState.microObjective = o;
-    this.renderMiniLab('mikroskop');
-  }
-
-  setMicroFocus(f) {
-    this.miniLabState.microFocus = parseInt(f);
-    this.renderMiniLab('mikroskop');
-  }
-
-  // =========================================================================
-  // 6. BUNSEN - PENGATURAN API SPIRITUS
+  // 6. BUNSEN - PENGATURAN API SPIRITUS & UJI PEMANASAN
   // =========================================================================
   renderBunsenLab(container) {
     const valve = this.miniLabState.bunsenAirValve;
     const isBlue = valve >= 50;
+    const isHeating = this.miniLabState.bunsenIsHeating;
+    const waterTemp = this.miniLabState.bunsenWaterTemp;
+    const timer = this.miniLabState.bunsenTimer;
 
     container.innerHTML = `
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
-          <svg viewBox="0 0 320 320" class="svg-sim-canvas">
-            <!-- Lamp / Burner Body -->
-            <polygon points="120,280 200,280 180,180 140,180" fill="#334155" stroke="#38bdf8" stroke-width="2" />
-            <rect x="150" y="150" width="20" height="30" fill="#94a3b8" />
+          <svg viewBox="0 0 340 340" class="svg-sim-canvas">
+            <!-- Tripod & Wire Gauze Support -->
+            <line x1="60" y1="180" x2="280" y2="180" stroke="#94a3b8" stroke-width="4" />
+            <rect x="90" y="174" width="160" height="8" fill="#f8fafc" stroke="#334155" stroke-width="1.5" />
+
+            <!-- Beaker with Boiling Water -->
+            <rect x="110" y="80" width="120" height="95" rx="4" fill="rgba(0,240,255,0.15)" stroke="#38bdf8" stroke-width="2" />
+            <rect x="112" y="110" width="116" height="63" fill="#00f0ff" opacity="0.6" />
+
+            <!-- Boiling Bubbles if Hot -->
+            ${waterTemp >= 80 ? `
+              <circle cx="140" cy="140" r="4" fill="#ffffff" opacity="0.8" />
+              <circle cx="180" cy="130" r="5" fill="#ffffff" opacity="0.8" />
+              <circle cx="160" cy="155" r="3" fill="#ffffff" opacity="0.8" />
+            ` : ''}
+
+            <!-- Bunsen Burner Body -->
+            <polygon points="135,310 205,310 190,230 150,230" fill="#334155" stroke="#38bdf8" stroke-width="2" />
+            <rect x="160" y="200" width="20" height="30" fill="#94a3b8" />
             
-            <!-- Flame -->
-            ${isBlue ? `
-              <!-- Blue Optimal Oxidizing Flame -->
-              <path d="M 160,50 Q 190,110 175,150 Q 160,160 145,150 Q 130,110 160,50 Z" fill="#00f0ff" opacity="0.9" />
-              <path d="M 160,80 Q 175,120 168,150 Q 160,155 152,150 Q 145,120 160,80 Z" fill="#38ef7d" opacity="0.8" />
-            ` : `
-              <!-- Yellow Sooty Reducing Flame -->
-              <path d="M 160,30 Q 200,100 180,150 Q 160,160 140,150 Q 120,100 160,30 Z" fill="#f59e0b" opacity="0.95" />
-              <path d="M 160,60 Q 180,110 170,150 Q 160,155 150,150 Q 140,110 160,60 Z" fill="#ef4444" opacity="0.8" />
-            `}
+            <!-- Animated Flame -->
+            <g class="anim-flame" transform="translate(0, -10)">
+              ${isBlue ? `
+                <path d="M 170,110 Q 200,165 185,200 Q 170,210 155,200 Q 140,165 170,110 Z" fill="#00f0ff" opacity="0.95" />
+                <path d="M 170,140 Q 185,175 178,200 Q 170,205 162,200 Q 155,175 170,140 Z" fill="#38ef7d" opacity="0.85" />
+              ` : `
+                <path d="M 170,90 Q 210,155 190,200 Q 170,210 150,200 Q 130,155 170,90 Z" fill="#f59e0b" opacity="0.95" />
+                <path d="M 170,120 Q 190,165 180,200 Q 170,205 160,200 Q 150,165 170,120 Z" fill="#ef4444" opacity="0.85" />
+              `}
+            </g>
           </svg>
         </div>
 
         <div class="mini-lab-panel-controls">
           <div class="mini-lab-panel-title"><i class="fa-solid fa-fire"></i> Pengaturan Kerah Udara Bunsen</div>
+          
           <div class="mini-lab-control-group">
             <label>
               <span>Kerah Udara (Air Collar):</span>
-              <span class="val-badge">${isBlue ? 'Terbuka (Api Biru)' : 'Tertutup (Api Kuning)'}</span>
+              <span class="val-badge">${isBlue ? 'Terbuka (Api Biru Oksidasi)' : 'Tertutup (Api Kuning Reduksi)'}</span>
             </label>
             <input type="range" class="mini-lab-slider" min="0" max="100" step="10" value="${valve}" oninput="window.labAR.setBunsenValve(this.value)" />
           </div>
 
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-accent" onclick="window.labAR.toggleBunsenHeating()">
+              <i class="fa-solid ${isHeating ? 'fa-pause' : 'fa-play'}"></i> ${isHeating ? 'Hentikan Pemanasan' : 'Mulai Panaskan Air 100 mL'}
+            </button>
+            <button class="btn btn-secondary" onclick="window.labAR.resetBunsenHeating()">Reset</button>
+          </div>
+
           <div class="mini-lab-result-card">
-            <h5><i class="fa-solid fa-fire-flame-curved"></i> Karakteristik Nyala Api:</h5>
-            <div class="mini-lab-result-row"><span>Tipe Nyala:</span><span class="num-val">${isBlue ? 'Api Biru Oksidasi (Optimal)' : 'Api Kuning Reduksi (Berjelaga)'}</span></div>
-            <div class="mini-lab-result-row"><span>Estimasi Suhu:</span><span class="num-val">${isBlue ? '~800 °C (Panas Maksimal)' : '~300 °C (Kurang Panas)'}</span></div>
-            <div class="mini-lab-result-row"><span>Kebersihan:</span><span class="num-val">${isBlue ? 'Bersih Bebas Jelaga' : 'Meninggalkan Kerak Hitam'}</span></div>
+            <h5><i class="fa-solid fa-stopwatch"></i> Data Percobaan Pemanasan Air:</h5>
+            <div class="mini-lab-result-row"><span>Suhu Air Saat Ini:</span><span class="num-val">${waterTemp.toFixed(1)} °C</span></div>
+            <div class="mini-lab-result-row"><span>Waktu Pemanasan:</span><span class="num-val">${timer} detik</span></div>
+            <div class="mini-lab-result-row"><span>Kecepatan Pemanasan:</span><span class="num-val">${isBlue ? '3x Lebih Cepat (Efisien)' : 'Lambat & Berjelaga'}</span></div>
           </div>
         </div>
       </div>
@@ -1266,34 +1558,64 @@ class LabARModule {
     this.renderMiniLab('bunsen-spiritus');
   }
 
+  toggleBunsenHeating() {
+    if (this.miniLabState.bunsenIsHeating) {
+      clearInterval(this.miniLabState.bunsenInterval);
+      this.miniLabState.bunsenIsHeating = false;
+    } else {
+      this.miniLabState.bunsenIsHeating = true;
+      if (window.labAudio) window.labAudio.playClick();
+      this.miniLabState.bunsenInterval = setInterval(() => {
+        this.miniLabState.bunsenTimer++;
+        const isBlue = this.miniLabState.bunsenAirValve >= 50;
+        const tempRate = isBlue ? 2.2 : 0.7; // Blue heats 3x faster
+        this.miniLabState.bunsenWaterTemp = Math.min(100, this.miniLabState.bunsenWaterTemp + tempRate);
+
+        if (this.miniLabState.bunsenWaterTemp >= 100) {
+          clearInterval(this.miniLabState.bunsenInterval);
+          this.miniLabState.bunsenIsHeating = false;
+          if (window.labAudio) window.labAudio.playFanfare();
+        }
+        this.renderMiniLab('bunsen-spiritus');
+      }, 500);
+    }
+    this.renderMiniLab('bunsen-spiritus');
+  }
+
+  resetBunsenHeating() {
+    clearInterval(this.miniLabState.bunsenInterval);
+    this.miniLabState.bunsenIsHeating = false;
+    this.miniLabState.bunsenTimer = 0;
+    this.miniLabState.bunsenWaterTemp = 27;
+    this.renderMiniLab('bunsen-spiritus');
+  }
+
   // =========================================================================
   // 7. BEAKER & PIPET TETES
   // =========================================================================
   renderBeakerPipetteLab(container) {
     const drops = this.miniLabState.dropCount;
-    const addedVol = (drops * 0.05).toFixed(2); // 20 drops = 1 mL
+    const addedVol = (drops * 0.05).toFixed(2);
 
     container.innerHTML = `
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
           <svg viewBox="0 0 320 320" class="svg-sim-canvas">
-            <!-- Beaker -->
-            <rect x="90" y="120" width="140" height="160" rx="6" fill="rgba(255,255,255,0.06)" stroke="#38bdf8" stroke-width="2" />
-            <!-- Liquid -->
+            <rect x="90" y="120" width="140" height="160" rx="6" fill="rgba(255,255,255,0.06)" stroke="#38bdf8" stroke-width="2.5" />
             <rect x="92" y="${280 - (50 + drops * 2)}" width="136" height="${50 + drops * 2}" fill="#00f0ff" opacity="0.75" />
-            <!-- Dropper Pipette -->
             <rect x="155" y="20" width="10" height="70" fill="rgba(255,255,255,0.3)" stroke="#ffffff" />
             <polygon points="155,90 165,90 160,105" fill="#ffffff" />
-            <!-- Droplet falling -->
-            <circle cx="160" cy="115" r="4" fill="#00f0ff" />
+            <circle cx="160" cy="115" r="4.5" fill="#00f0ff" />
           </svg>
         </div>
 
         <div class="mini-lab-panel-controls">
           <div class="mini-lab-panel-title"><i class="fa-solid fa-droplet"></i> Kalibrasi Pipet Tetes</div>
           <p style="font-size: 0.82rem; color: var(--text-main);">Teteskan larutan indikator menggunakan pipet tetes tegak lurus (90°):</p>
-          <button class="btn btn-accent" onclick="window.labAR.addDrop()"><i class="fa-solid fa-hand-holding-droplet"></i> Teteskan 1 Tetes</button>
-          <button class="btn btn-secondary" onclick="window.labAR.resetDrops()">Reset</button>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-accent" onclick="window.labAR.addDrop()"><i class="fa-solid fa-hand-holding-droplet"></i> Teteskan 1 Tetes</button>
+            <button class="btn btn-secondary" onclick="window.labAR.resetDrops()">Reset</button>
+          </div>
           <div class="mini-lab-result-card">
             <div class="mini-lab-result-row"><span>Jumlah Tetesan:</span><span class="num-val">${drops} tetes</span></div>
             <div class="mini-lab-result-row"><span>Volume Tertambah (20 tetes ≈ 1 mL):</span><span class="num-val">${addedVol} mL</span></div>
@@ -1325,8 +1647,7 @@ class LabARModule {
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
           <svg viewBox="0 0 320 320" class="svg-sim-canvas">
-            <!-- Erlenmeyer Conical Flask -->
-            <polygon points="160,100 120,260 200,260" fill="${isEquiv ? '#f472b6' : 'rgba(255,255,255,0.06)'}" stroke="#38bdf8" stroke-width="2" />
+            <polygon points="160,100 110,260 210,260" fill="${isEquiv ? '#f472b6' : 'rgba(255,255,255,0.06)'}" stroke="#38bdf8" stroke-width="2.5" />
             <rect x="150" y="50" width="20" height="50" fill="rgba(255,255,255,0.08)" stroke="#38bdf8" stroke-width="2" />
           </svg>
         </div>
@@ -1362,7 +1683,7 @@ class LabARModule {
   }
 
   // =========================================================================
-  // 9. TABUNG REAKSI - UJI PENGENDAPAN
+  // 9. TABUNG REAKSI - UJI REAKSI KIMIA
   // =========================================================================
   renderTestTubeLab(container) {
     const type = this.miniLabState.reactionType;
@@ -1375,10 +1696,8 @@ class LabARModule {
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
           <svg viewBox="0 0 320 320" class="svg-sim-canvas">
-            <!-- Test Tube tilted 45° -->
             <g transform="rotate(25, 160, 200)">
-              <rect x="145" y="60" width="30" height="180" rx="15" fill="rgba(255,255,255,0.06)" stroke="#38bdf8" stroke-width="2" />
-              <!-- Precipitate -->
+              <rect x="145" y="60" width="30" height="180" rx="15" fill="rgba(255,255,255,0.06)" stroke="#38bdf8" stroke-width="2.5" />
               <rect x="147" y="190" width="26" height="45" rx="12" fill="${precipitateColor}" opacity="0.9" />
             </g>
           </svg>
@@ -1421,12 +1740,10 @@ class LabARModule {
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
           <svg viewBox="0 0 320 320" class="svg-sim-canvas" id="petri-grid-svg">
-            <circle cx="160" cy="160" r="130" fill="#fef08a" opacity="0.75" stroke="#38bdf8" stroke-width="2" />
-            <!-- Quadrant Lines -->
+            <circle cx="160" cy="160" r="130" fill="#fef08a" opacity="0.75" stroke="#38bdf8" stroke-width="2.5" />
             <line x1="160" y1="30" x2="160" y2="290" stroke="#080e21" stroke-width="1.5" stroke-dasharray="4,4" />
             <line x1="30" y1="160" x2="290" y2="160" stroke="#080e21" stroke-width="1.5" stroke-dasharray="4,4" />
             
-            <!-- 20 Colony dots -->
             ${(() => {
               const dots = [
                 {id: 1, x: 110, y: 90}, {id: 2, x: 130, y: 120}, {id: 3, x: 90, y: 140}, {id: 4, x: 140, y: 80},
@@ -1511,19 +1828,14 @@ class LabARModule {
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
           <svg viewBox="0 0 320 320" class="svg-sim-canvas">
-            <!-- Flame bottom -->
             <polygon points="140,280 180,280 160,200" fill="#00f0ff" />
-            <!-- Tripod & Gauze -->
             <line x1="80" y1="180" x2="240" y2="180" stroke="#94a3b8" stroke-width="4" />
             ${mode === 'with-gauze' ? `
               <rect x="110" y="174" width="100" height="8" fill="#f8fafc" stroke="#334155" stroke-width="1" />
-              <!-- Heat Spread Rays -->
               <ellipse cx="160" cy="140" rx="60" ry="12" fill="#ef4444" opacity="0.6" />
             ` : `
-              <!-- Dangerous Hotspot Ray -->
               <circle cx="160" cy="160" r="12" fill="#ef4444" />
             `}
-            <!-- Beaker on top -->
             <rect x="110" y="80" width="100" height="90" fill="rgba(255,255,255,0.06)" stroke="#38bdf8" stroke-width="2" />
           </svg>
         </div>
@@ -1552,14 +1864,10 @@ class LabARModule {
       <div class="mini-lab-dynamic-grid">
         <div class="mini-lab-viewport-box">
           <svg viewBox="0 0 320 320" class="svg-sim-canvas">
-            <!-- Funnel & Filter Paper -->
             <polygon points="100,60 220,60 170,150 150,150" fill="rgba(255,255,255,0.1)" stroke="#38bdf8" stroke-width="2" />
             <polygon points="110,70 210,70 160,140" fill="#fef08a" opacity="0.8" />
-            <!-- Stem -->
             <rect x="156" y="150" width="8" height="60" fill="rgba(255,255,255,0.2)" stroke="#38bdf8" />
-            <!-- Drops -->
             <circle cx="160" cy="230" r="3" fill="#00f0ff" />
-            <!-- Beaker below -->
             <rect x="110" y="240" width="100" height="60" fill="rgba(255,255,255,0.06)" stroke="#38bdf8" stroke-width="2" />
           </svg>
         </div>
@@ -1585,7 +1893,6 @@ class LabARModule {
         <div class="mini-lab-viewport-box">
           <svg viewBox="0 0 320 320" class="svg-sim-canvas">
             <rect x="100" y="100" width="120" height="160" rx="4" fill="rgba(255,255,255,0.06)" stroke="#38bdf8" stroke-width="2" />
-            <!-- Glass Stirring Rod -->
             <line x1="140" y1="40" x2="180" y2="240" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
           </svg>
         </div>
