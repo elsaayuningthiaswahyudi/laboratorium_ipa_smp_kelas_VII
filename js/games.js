@@ -571,7 +571,10 @@ class LabGames {
     }
 
     if (isCorrect) {
-      if (window.labAudio) window.labAudio.playCorrect();
+      if (window.labAudio) {
+        window.labAudio.playJump();
+        setTimeout(() => window.labAudio.playCorrect(), 200);
+      }
       this.froggyScore += 100;
       
       if (chosenPadBtn) chosenPadBtn.classList.add('correct-flash');
@@ -590,7 +593,11 @@ class LabGames {
       }, 750);
       
     } else {
-      if (window.labAudio) window.labAudio.playWrong();
+      if (window.labAudio) {
+        window.labAudio.playJump();
+        setTimeout(() => window.labAudio.playSplash(), 450);
+        setTimeout(() => window.labAudio.playWrong(), 200);
+      }
       this.froggyLives--;
       this.updateFroggyUI();
 

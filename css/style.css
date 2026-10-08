@@ -3036,17 +3036,18 @@ body {
 }
 
 /* ================= 15. FROGGY JUMP GAME NATIVE ================= */
+/* ================= 15. FROGGY JUMP GAME (EDUCAPLAY AUTHENTIC STYLE) ================= */
 .froggy-game-wrapper {
   position: relative;
   width: 100%;
-  max-width: 960px;
-  height: 560px;
+  max-width: 980px;
+  height: 580px;
   margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
-  background: var(--bg-card);
+  background: #0288d1;
   border: 4px solid #ffffff;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.4);
   display: flex;
   flex-direction: column;
   font-family: 'Poppins', var(--font-main), sans-serif;
@@ -3058,30 +3059,31 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 8px 24px;
-  background: linear-gradient(180deg, #65a30d 0%, #4d7c0f 100%);
-  color: #fff;
-  z-index: 10;
+  background: #65a30d; /* Educaplay Grass Green */
+  color: #ffffff;
+  z-index: 20;
   font-weight: 700;
-  height: 52px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  height: 50px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
 }
 
 .froggy-lives, .froggy-score {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   display: flex;
   align-items: center;
   gap: 6px;
   letter-spacing: 0.5px;
+  font-weight: 800;
 }
 .froggy-lives strong, .froggy-score strong {
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-size: 1.2rem;
+  font-weight: 900;
 }
 .froggy-title {
   font-size: 1.1rem;
   letter-spacing: 0.5px;
   font-weight: 800;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
 
 .froggy-overlay {
@@ -3089,7 +3091,7 @@ body {
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(8, 15, 35, 0.88);
   backdrop-filter: blur(8px);
-  z-index: 30;
+  z-index: 50;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3110,41 +3112,56 @@ body {
 .froggy-arena {
   flex: 1;
   position: relative;
-  background: radial-gradient(circle at 50% 40%, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  background-color: #29b6f6;
   overflow: hidden;
 }
 
+/* Authentic Swimming Pool Caustic Water Texture */
 .water-bg-layer {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #22c1ea;
   background-image: 
-    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 60%),
-    radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 2px, transparent 2px, transparent 40px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 2px, transparent 2px, transparent 40px);
-  background-size: 100% 100%, 100% 100%, 80px 80px, 80px 80px;
-  animation: waterShimmer 8s ease-in-out infinite alternate;
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.25) 0%, transparent 80%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M0 40 C30 20, 50 60, 80 40 C110 20, 130 60, 160 40 M0 80 C30 60, 50 100, 80 80 C110 60, 130 100, 160 80 M0 120 C30 100, 50 140, 80 120 C110 100, 130 140, 160 120 M40 0 C20 30, 60 50, 40 80 C20 110, 60 130, 40 160 M80 0 C60 30, 100 50, 80 80 C60 110, 100 130, 80 160 M120 0 C100 30, 140 50, 120 80 C100 110, 140 130, 120 160' fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-opacity='0.45' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 140px 140px;
+  animation: waterRippleShimmer 12s linear infinite alternate;
 }
 
-@keyframes waterShimmer {
-  0% { opacity: 0.7; transform: scale(1); }
-  100% { opacity: 0.95; transform: scale(1.03); }
+@keyframes waterRippleShimmer {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 0 0, 20px 30px; }
 }
 
-/* Decorative Background Lilypads */
+/* Decorative Background Lilypads (Lush Pond Layout) */
 .deco-lilypad {
   position: absolute;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  background: conic-gradient(from 40deg, #1b3611 0deg, #1b3611 315deg, transparent 315deg, transparent 360deg);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-  opacity: 0.85;
+  background: 
+    radial-gradient(circle, transparent 20%, rgba(0,0,0,0.15) 80%),
+    conic-gradient(from 40deg, #1b3a0e 0deg, #1b3a0e 310deg, transparent 310deg, transparent 360deg);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  opacity: 0.95;
   pointer-events: none;
 }
-.deco-lilypad-1 { width: 130px; height: 130px; left: -25px; top: 120px; transform: rotate(-20deg); }
-.deco-lilypad-2 { width: 140px; height: 140px; right: -30px; top: 110px; transform: rotate(45deg); }
-.deco-lilypad-3 { width: 110px; height: 110px; left: 16%; top: 70px; transform: rotate(110deg); opacity: 0.7; }
-.deco-lilypad-4 { width: 115px; height: 115px; right: 16%; top: 75px; transform: rotate(-80deg); opacity: 0.7; }
+.deco-lilypad::after {
+  content: '';
+  position: absolute;
+  top: 15px; left: 15px; right: 15px; bottom: 15px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255,255,255,0.08);
+}
 
+.deco-lilypad-left-top   { left: -35px; top: 90px; transform: rotate(-30deg); width: 145px; height: 145px; }
+.deco-lilypad-left-mid   { left: -25px; top: 230px; transform: rotate(15deg); width: 155px; height: 155px; }
+.deco-lilypad-right-top  { right: -35px; top: 80px; transform: rotate(45deg); width: 150px; height: 150px; }
+.deco-lilypad-right-mid  { right: -25px; top: 220px; transform: rotate(-50deg); width: 160px; height: 160px; }
+.deco-lilypad-back-left  { left: 20%; top: 60px; transform: rotate(110deg); width: 135px; height: 135px; opacity: 0.85; }
+.deco-lilypad-back-right { right: 20%; top: 65px; transform: rotate(-80deg); width: 140px; height: 140px; opacity: 0.85; }
+
+/* Question Top Card */
 .froggy-question-container {
   position: absolute;
   top: 12px;
@@ -3152,7 +3169,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 10;
+  z-index: 25;
   padding: 0 20px;
 }
 .froggy-question-badge {
@@ -3164,19 +3181,19 @@ body {
   align-self: flex-start;
   margin-bottom: -10px;
   margin-left: 15px;
-  z-index: 11;
+  z-index: 26;
   font-weight: 800;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 .froggy-question-box {
   background: #ffffff;
   color: #0f172a;
-  padding: 12px 24px;
+  padding: 10px 24px;
   border-radius: 14px;
   font-weight: 800;
   font-size: 1.15rem;
   line-height: 1.4;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
   width: 100%;
   min-height: 72px;
   display: flex;
@@ -3189,8 +3206,8 @@ body {
 
 .froggy-q-img-wrap {
   flex-shrink: 0;
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3216,7 +3233,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 12;
+  z-index: 20;
   pointer-events: none;
 }
 
@@ -3231,28 +3248,28 @@ body {
 
 /* Option A: Bottom-Left Tier */
 #lilypad-wrap-0 {
-  left: 20%;
-  top: 220px;
+  left: 21%;
+  top: 210px;
   animation: floatLily 4s ease-in-out infinite;
 }
 
 /* Option B: Top-Center Tier */
 #lilypad-wrap-1 {
   left: 50%;
-  top: 130px;
+  top: 115px;
   transform: translateX(-50%);
   animation: floatLily 4s ease-in-out infinite -1.3s;
 }
 
 /* Option C: Bottom-Right Tier */
 #lilypad-wrap-2 {
-  right: 20%;
-  top: 220px;
+  right: 21%;
+  top: 210px;
   animation: floatLily 4s ease-in-out infinite -2.6s;
 }
 
 .lilypad-badge {
-  background: #65a30d;
+  background: #76c828;
   color: #ffffff;
   width: 36px;
   height: 36px;
@@ -3263,15 +3280,17 @@ body {
   font-weight: 900;
   font-size: 1.15rem;
   margin-bottom: -18px;
-  z-index: 15;
+  z-index: 22;
   box-shadow: 0 4px 8px rgba(0,0,0,0.35);
   border: 2px solid #ffffff;
 }
 
 .lilypad {
-  width: 150px;
-  height: 150px;
-  background: conic-gradient(from 45deg, #1b3611 0deg, #1b3611 310deg, transparent 310deg, transparent 360deg);
+  width: 155px;
+  height: 155px;
+  background: 
+    radial-gradient(circle at 45% 45%, rgba(255,255,255,0.08) 0%, transparent 60%),
+    conic-gradient(from 45deg, #1b3a0e 0deg, #1b3a0e 310deg, transparent 310deg, transparent 360deg);
   border-radius: 50%;
   position: relative;
   cursor: pointer;
@@ -3279,12 +3298,12 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 16px;
-  font-size: 0.95rem;
+  padding: 18px;
+  font-size: 0.96rem;
   font-weight: 800;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.45);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.45);
   transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -3292,54 +3311,57 @@ body {
   content: '';
   position: absolute;
   top: 12px; left: 12px; right: 12px; bottom: 12px;
-  border: 1px dashed rgba(255,255,255,0.15);
+  border: 1px dashed rgba(255,255,255,0.18);
   border-radius: 50%;
   pointer-events: none;
 }
 
 .lilypad:hover {
   transform: scale(1.12);
-  box-shadow: 0 14px 28px rgba(0,0,0,0.55), 0 0 20px rgba(132, 204, 22, 0.7);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.55), 0 0 20px rgba(118, 200, 40, 0.7);
 }
 
 .lilypad.correct-flash {
   background: conic-gradient(from 45deg, #15803d 0deg, #15803d 310deg, transparent 310deg, transparent 360deg) !important;
-  box-shadow: 0 0 35px #22c55e !important;
+  box-shadow: 0 0 40px #22c55e !important;
   transform: scale(1.15);
 }
 
 .lilypad.wrong-flash {
   background: conic-gradient(from 45deg, #991b1b 0deg, #991b1b 310deg, transparent 310deg, transparent 360deg) !important;
-  box-shadow: 0 0 35px #ef4444 !important;
+  box-shadow: 0 0 40px #ef4444 !important;
 }
 
+/* Bottom Lilypad & Frog Container */
 .frog-character-container {
   position: absolute;
-  bottom: 20px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 15;
+  z-index: 25;
 }
 
 .lilypad-bottom {
-  width: 150px;
-  height: 150px;
-  background: conic-gradient(from 225deg, #1b3611 0deg, #1b3611 310deg, transparent 310deg, transparent 360deg);
+  width: 155px;
+  height: 155px;
+  background: 
+    radial-gradient(circle at 45% 45%, rgba(255,255,255,0.08) 0%, transparent 60%),
+    conic-gradient(from 225deg, #1b3a0e 0deg, #1b3a0e 310deg, transparent 310deg, transparent 360deg);
   border-radius: 50%;
   position: absolute;
   bottom: -25px;
   z-index: 1;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.5);
 }
 
 .frog-character {
   width: 140px;
   height: 140px;
   z-index: 2;
-  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 10px 12px rgba(0,0,0,0.5));
   transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   display: flex;
@@ -3365,6 +3387,83 @@ body {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
   100% { transform: translateY(0px); }
+}
+
+/* Bottom Controls Bar */
+.froggy-bottom-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.froggy-timer-box {
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.timer-circle {
+  width: 48px;
+  height: 48px;
+  background: #ffffff;
+  border: 4px solid #76c828; /* Educaplay Green */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  font-size: 1.3rem;
+  color: #0f172a;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.timer-bar {
+  background: #ffffff;
+  height: 36px;
+  padding: 0 16px 0 24px;
+  margin-left: -14px;
+  border-radius: 0 18px 18px 0;
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #0f172a;
+  z-index: 1;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+}
+
+.froggy-action-btns {
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.froggy-ctrl-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #a7f3d0;
+  border: 2px solid #059669;
+  color: #065f46;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.froggy-ctrl-btn:hover {
+  transform: scale(1.08);
+  background: #6ee7b7;
 }
 
 /* Bottom Controls Bar */

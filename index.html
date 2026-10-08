@@ -1392,11 +1392,13 @@
               <!-- Water Caustics Shimmer Layer -->
               <div class="water-bg-layer"></div>
 
-              <!-- Decorative Background Lilies -->
-              <div class="deco-lilypad deco-lilypad-1"></div>
-              <div class="deco-lilypad deco-lilypad-2"></div>
-              <div class="deco-lilypad deco-lilypad-3"></div>
-              <div class="deco-lilypad deco-lilypad-4"></div>
+              <!-- Decorative Background Lilies (Lush Pond Layout) -->
+              <div class="deco-lilypad deco-lilypad-left-top"></div>
+              <div class="deco-lilypad deco-lilypad-left-mid"></div>
+              <div class="deco-lilypad deco-lilypad-right-top"></div>
+              <div class="deco-lilypad deco-lilypad-right-mid"></div>
+              <div class="deco-lilypad deco-lilypad-back-left"></div>
+              <div class="deco-lilypad deco-lilypad-back-right"></div>
 
               <!-- Question Top Card -->
               <div class="froggy-question-container">
@@ -1404,7 +1406,9 @@
                   Question: <span id="froggy-q-number">1 / 15</span>
                 </div>
                 <div class="froggy-question-box" id="froggy-question-text">
-                  Ilmu yang mempelajari tentang serangga disebut ....
+                  <div class="froggy-q-text-body">
+                    Memuat pertanyaan....
+                  </div>
                 </div>
               </div>
 
@@ -1414,41 +1418,39 @@
               <!-- Frog Character on Bottom Lilypad -->
               <div class="frog-character-container">
                 <div class="frog-character" id="frog-character">
-                  <svg viewBox="0 0 160 160" width="130" height="130">
+                  <svg viewBox="0 0 160 160" width="135" height="135">
                     <defs>
                       <radialGradient id="frogSkinGrad" cx="50%" cy="40%" r="60%">
                         <stop offset="0%" stop-color="#84cc16"/>
-                        <stop offset="70%" stop-color="#65a30d"/>
-                        <stop offset="100%" stop-color="#3f6212"/>
+                        <stop offset="65%" stop-color="#65a30d"/>
+                        <stop offset="100%" stop-color="#365314"/>
                       </radialGradient>
                       <radialGradient id="frogPackGrad" cx="40%" cy="40%" r="60%">
                         <stop offset="0%" stop-color="#c084fc"/>
                         <stop offset="100%" stop-color="#7e22ce"/>
                       </radialGradient>
                     </defs>
-                    <!-- Feet -->
-                    <path d="M28 115 C18 128 8 138 14 148 C18 154 32 150 42 138 C48 148 58 150 64 142 C66 135 56 122 46 118 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
-                    <path d="M132 115 C142 128 152 138 146 148 C142 154 128 150 118 138 C112 148 102 150 96 142 C94 135 104 122 114 118 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
-                    <!-- Hands -->
-                    <path d="M38 72 C24 62 14 48 20 42 C28 36 40 50 46 62 C40 48 50 40 56 46 C60 52 54 66 48 74 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
-                    <path d="M122 72 C136 62 146 48 140 42 C132 36 120 50 114 62 C120 48 110 40 104 46 C100 52 106 66 112 74 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
-                    <!-- Body -->
-                    <ellipse cx="80" cy="98" rx="42" ry="38" fill="url(#frogSkinGrad)" stroke="#365314" stroke-width="3.5"/>
-                    <!-- Head -->
-                    <ellipse cx="80" cy="66" rx="36" ry="26" fill="url(#frogSkinGrad)" stroke="#365314" stroke-width="3.5"/>
-                    <!-- Eyeballs -->
-                    <circle cx="62" cy="46" r="14" fill="#ffffff" stroke="#365314" stroke-width="3"/>
-                    <circle cx="98" cy="46" r="14" fill="#ffffff" stroke="#365314" stroke-width="3"/>
-                    <!-- Pupils Looking Up -->
-                    <ellipse cx="64" cy="42" rx="6.5" ry="7.5" fill="#0f172a"/>
-                    <circle cx="66.5" cy="40" r="2.5" fill="#ffffff"/>
-                    <ellipse cx="96" cy="42" rx="6.5" ry="7.5" fill="#0f172a"/>
-                    <circle cx="98.5" cy="40" r="2.5" fill="#ffffff"/>
+                    <!-- Webbed Rear Feet (Splayed on leaf) -->
+                    <path d="M22 110 C10 125 4 140 12 148 C20 156 34 146 42 134 C48 146 60 148 66 138 C68 130 56 116 46 112 Z" fill="#65a30d" stroke="#2d4a0f" stroke-width="3.5" stroke-linejoin="round"/>
+                    <path d="M138 110 C150 125 156 140 148 148 C140 156 126 146 118 134 C112 146 100 148 94 138 C92 130 104 116 114 112 Z" fill="#65a30d" stroke="#2d4a0f" stroke-width="3.5" stroke-linejoin="round"/>
+                    <!-- Webbed Front Hands (Gripping leaf) -->
+                    <path d="M36 68 C20 56 10 42 16 34 C24 26 38 42 44 56 C38 40 48 32 56 38 C62 46 54 62 48 70 Z" fill="#65a30d" stroke="#2d4a0f" stroke-width="3.5" stroke-linejoin="round"/>
+                    <path d="M124 68 C140 56 150 42 144 34 C136 26 122 42 116 56 C122 40 112 32 104 38 C98 46 106 62 112 70 Z" fill="#65a30d" stroke="#2d4a0f" stroke-width="3.5" stroke-linejoin="round"/>
+                    <!-- Frog Round Body -->
+                    <ellipse cx="80" cy="95" rx="42" ry="38" fill="url(#frogSkinGrad)" stroke="#2d4a0f" stroke-width="3.5"/>
+                    <!-- Frog Cute Head -->
+                    <ellipse cx="80" cy="62" rx="36" ry="26" fill="url(#frogSkinGrad)" stroke="#2d4a0f" stroke-width="3.5"/>
+                    <!-- Bulging Eyes on Top of Head -->
+                    <circle cx="60" cy="40" r="15" fill="#ffffff" stroke="#2d4a0f" stroke-width="3.5"/>
+                    <circle cx="100" cy="40" r="15" fill="#ffffff" stroke="#2d4a0f" stroke-width="3.5"/>
+                    <!-- Pupils Looking Upwards -->
+                    <ellipse cx="62" cy="36" rx="7" ry="8" fill="#0f172a"/>
+                    <circle cx="65" cy="33" r="3" fill="#ffffff"/>
+                    <ellipse cx="98" cy="36" rx="7" ry="8" fill="#0f172a"/>
+                    <circle cx="101" cy="33" r="3" fill="#ffffff"/>
                     <!-- Purple Backpack with 'e' -->
-                    <rect x="58" y="92" width="44" height="42" rx="14" fill="url(#frogPackGrad)" stroke="#4c1d95" stroke-width="3"/>
-                    <text x="80" y="121" font-family="'Poppins', sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle">e</text>
-                    <!-- Smile -->
-                    <path d="M72 75 Q80 82 88 75" fill="none" stroke="#365314" stroke-width="2.5" stroke-linecap="round"/>
+                    <rect x="56" y="86" width="48" height="44" rx="15" fill="url(#frogPackGrad)" stroke="#4c1d95" stroke-width="3.5"/>
+                    <text x="80" y="117" font-family="'Poppins', sans-serif" font-weight="900" font-size="26" fill="#ffffff" text-anchor="middle">e</text>
                   </svg>
                 </div>
                 <div class="lilypad-bottom"></div>
