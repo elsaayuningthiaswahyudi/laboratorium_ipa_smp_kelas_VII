@@ -53,8 +53,10 @@ function initNavigation() {
       if (!window.labViewer3D) {
         setTimeout(() => {
           window.labViewer3D = new window.Lab3DViewer('threejs-canvas-container');
-          window.labAR.setTool('mikroskop');
+          if (window.labAR) window.labAR.setTool(window.labAR.currentTool || 'gelas-ukur');
         }, 100);
+      } else {
+        if (window.labAR) window.labAR.setTool(window.labAR.currentTool || 'gelas-ukur');
       }
     } else if (pageId === 'praktikum') {
       if (window.virtualLab) {
