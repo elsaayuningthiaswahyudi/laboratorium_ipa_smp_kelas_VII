@@ -1332,6 +1332,9 @@
           <button class="game-tab-btn" data-game="memory" onclick="window.labGames.switchGame('memory')">
             <i class="fa-solid fa-clone"></i> Game 3: Memory Lab Cards
           </button>
+          <button class="game-tab-btn" data-game="froggy" onclick="window.labGames.switchGame('froggy')">
+            <i class="fa-solid fa-frog"></i> Game 4: Froggy Jumps
+          </button>
         </div>
 
         <!-- Panel Game 1: Drag and Drop -->
@@ -1366,6 +1369,126 @@
                 id="memory-moves-count">0</strong></span>
           </div>
           <div class="memory-cards-grid" id="memory-cards-grid"></div>
+        </div>
+
+        <!-- Panel Game 4: Froggy Jumps -->
+        <div class="game-panel" id="game-panel-froggy">
+          <div class="froggy-game-wrapper" id="froggy-game-wrapper">
+            <!-- Top Green Header Bar -->
+            <div class="froggy-header">
+              <div class="froggy-lives">
+                LIVES ❤️ <strong id="froggy-lives-count">3</strong>
+              </div>
+              <div class="froggy-title">
+                Hakikat Ilmu Sains dan Metode Ilmiah
+              </div>
+              <div class="froggy-score">
+                SCORE 🪙 <strong id="froggy-score-count">0</strong>
+              </div>
+            </div>
+
+            <!-- Main Pond Game Arena -->
+            <div class="froggy-arena">
+              <!-- Water Caustics Shimmer Layer -->
+              <div class="water-bg-layer"></div>
+
+              <!-- Decorative Background Lilies -->
+              <div class="deco-lilypad deco-lilypad-1"></div>
+              <div class="deco-lilypad deco-lilypad-2"></div>
+              <div class="deco-lilypad deco-lilypad-3"></div>
+              <div class="deco-lilypad deco-lilypad-4"></div>
+
+              <!-- Question Top Card -->
+              <div class="froggy-question-container">
+                <div class="froggy-question-badge">
+                  Question: <span id="froggy-q-number">1 / 15</span>
+                </div>
+                <div class="froggy-question-box" id="froggy-question-text">
+                  Ilmu yang mempelajari tentang serangga disebut ....
+                </div>
+              </div>
+
+              <!-- Answer Lilypads (A, B, C) -->
+              <div class="lilypads-container" id="lilypads-container"></div>
+
+              <!-- Frog Character on Bottom Lilypad -->
+              <div class="frog-character-container">
+                <div class="frog-character" id="frog-character">
+                  <svg viewBox="0 0 160 160" width="130" height="130">
+                    <defs>
+                      <radialGradient id="frogSkinGrad" cx="50%" cy="40%" r="60%">
+                        <stop offset="0%" stop-color="#84cc16"/>
+                        <stop offset="70%" stop-color="#65a30d"/>
+                        <stop offset="100%" stop-color="#3f6212"/>
+                      </radialGradient>
+                      <radialGradient id="frogPackGrad" cx="40%" cy="40%" r="60%">
+                        <stop offset="0%" stop-color="#c084fc"/>
+                        <stop offset="100%" stop-color="#7e22ce"/>
+                      </radialGradient>
+                    </defs>
+                    <!-- Feet -->
+                    <path d="M28 115 C18 128 8 138 14 148 C18 154 32 150 42 138 C48 148 58 150 64 142 C66 135 56 122 46 118 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
+                    <path d="M132 115 C142 128 152 138 146 148 C142 154 128 150 118 138 C112 148 102 150 96 142 C94 135 104 122 114 118 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
+                    <!-- Hands -->
+                    <path d="M38 72 C24 62 14 48 20 42 C28 36 40 50 46 62 C40 48 50 40 56 46 C60 52 54 66 48 74 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
+                    <path d="M122 72 C136 62 146 48 140 42 C132 36 120 50 114 62 C120 48 110 40 104 46 C100 52 106 66 112 74 Z" fill="#65a30d" stroke="#365314" stroke-width="3"/>
+                    <!-- Body -->
+                    <ellipse cx="80" cy="98" rx="42" ry="38" fill="url(#frogSkinGrad)" stroke="#365314" stroke-width="3.5"/>
+                    <!-- Head -->
+                    <ellipse cx="80" cy="66" rx="36" ry="26" fill="url(#frogSkinGrad)" stroke="#365314" stroke-width="3.5"/>
+                    <!-- Eyeballs -->
+                    <circle cx="62" cy="46" r="14" fill="#ffffff" stroke="#365314" stroke-width="3"/>
+                    <circle cx="98" cy="46" r="14" fill="#ffffff" stroke="#365314" stroke-width="3"/>
+                    <!-- Pupils Looking Up -->
+                    <ellipse cx="64" cy="42" rx="6.5" ry="7.5" fill="#0f172a"/>
+                    <circle cx="66.5" cy="40" r="2.5" fill="#ffffff"/>
+                    <ellipse cx="96" cy="42" rx="6.5" ry="7.5" fill="#0f172a"/>
+                    <circle cx="98.5" cy="40" r="2.5" fill="#ffffff"/>
+                    <!-- Purple Backpack with 'e' -->
+                    <rect x="58" y="92" width="44" height="42" rx="14" fill="url(#frogPackGrad)" stroke="#4c1d95" stroke-width="3"/>
+                    <text x="80" y="121" font-family="'Poppins', sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle">e</text>
+                    <!-- Smile -->
+                    <path d="M72 75 Q80 82 88 75" fill="none" stroke="#365314" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="lilypad-bottom"></div>
+              </div>
+
+              <!-- Bottom Bar Controls (Timer, Audio, Fullscreen) -->
+              <div class="froggy-bottom-bar">
+                <div class="froggy-timer-box">
+                  <div class="timer-circle" id="froggy-q-badge-bottom">1</div>
+                  <div class="timer-bar">
+                    <span id="froggy-timer-text">00:20</span>
+                  </div>
+                </div>
+
+                <div class="froggy-action-btns">
+                  <button class="froggy-ctrl-btn" onclick="window.toggleAudio()" title="Musik Latar">
+                    <i class="fa-solid fa-volume-high"></i>
+                  </button>
+                  <button class="froggy-ctrl-btn" onclick="window.labGames.toggleFroggyFullscreen()" title="Layar Penuh">
+                    <i class="fa-solid fa-expand"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Start / Game Over / Win Overlay -->
+              <div class="froggy-overlay" id="froggy-overlay" style="display: none;">
+                <div class="froggy-overlay-content">
+                  <div id="froggy-overlay-icon" style="margin-bottom: 1rem;">
+                    <i class="fa-solid fa-frog" style="font-size: 3.5rem; color: #84cc16;"></i>
+                  </div>
+                  <h3 id="froggy-overlay-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #0f172a;">Froggy Jumps IPA</h3>
+                  <p id="froggy-overlay-desc" style="color: #64748b; margin-bottom: 1.2rem; font-size: 0.95rem;">Lompati daun teratai dengan memilih jawaban yang benar!</p>
+                  <div id="froggy-final-score" style="display: none; font-size: 1.3rem; font-weight: 800; color: #16a34a; margin-bottom: 1.5rem;"></div>
+                  <button class="btn btn-primary btn-block" onclick="window.labGames.initFroggyGame()">
+                    <i class="fa-solid fa-play"></i> Main Sekarang
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
 

@@ -319,92 +319,137 @@ class LabGames {
     const overlay = document.getElementById('froggy-overlay');
     if (overlay) overlay.style.display = 'none';
     
-    // 10 Pertanyaan Spesifik Alat Laboratorium IPA
+    // Bank 15 Soal Materi Laboratorium IPA & Hakikat Sains SMP Kelas VII
     this.froggyQuestions = [
       {
-        question: "Apa yang digunakan untuk mencampur bahan kimia dalam jumlah kecil?",
+        question: "Ilmu yang mempelajari tentang serangga disebut ....",
         options: [
-          { text: "Tabung Reaksi", isCorrect: true },
-          { text: "Gelas Beaker", isCorrect: false },
-          { text: "Labu Ukur", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+          { text: "entomologi", isCorrect: true },
+          { text: "mikrobiologi", isCorrect: false },
+          { text: "zoologi", isCorrect: false }
+        ]
       },
       {
-        question: "Alat untuk mengukur volume cairan dengan sangat presisi adalah...",
+        question: "Alat laboratorium yang digunakan untuk mengukur massa benda dengan ketelitian tinggi adalah ....",
+        options: [
+          { text: "Neraca Ohaus", isCorrect: true },
+          { text: "Gelas Ukur", isCorrect: false },
+          { text: "Jangka Sorong", isCorrect: false }
+        ]
+      },
+      {
+        question: "Alat untuk mengukur volume zat cair secara presisi dan kuantitatif adalah ....",
         options: [
           { text: "Gelas Ukur", isCorrect: true },
-          { text: "Erlenmeyer", isCorrect: false },
+          { text: "Labu Erlenmeyer", isCorrect: false },
           { text: "Gelas Kimia", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+        ]
       },
       {
-        question: "Digunakan untuk meneteskan cairan dalam jumlah yang sangat kecil:",
+        question: "Alat yang digunakan untuk mengambil dan meneteskan cairan dalam volume kecil adalah ....",
         options: [
           { text: "Pipet Tetes", isCorrect: true },
           { text: "Corong Kaca", isCorrect: false },
           { text: "Batang Pengaduk", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+        ]
       },
       {
-        question: "Alat yang berfungsi untuk mengukur massa suatu benda adalah?",
-        options: [
-          { text: "Neraca Ohaus", isCorrect: true },
-          { text: "Jangka Sorong", isCorrect: false },
-          { text: "Termometer", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
-      },
-      {
-        question: "Wadah yang cocok untuk memanaskan cairan agar tidak mudah tumpah saat diaduk adalah...",
+        question: "Wadah berbentuk kerucut leher sempit untuk mencampur dan mengocok larutan tanpa tumpah adalah ....",
         options: [
           { text: "Labu Erlenmeyer", isCorrect: true },
           { text: "Gelas Beaker", isCorrect: false },
-          { text: "Kaca Arloji", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+          { text: "Cawan Penguap", isCorrect: false }
+        ]
       },
       {
-        question: "Untuk menjepit tabung reaksi saat dipanaskan, kita menggunakan:",
+        question: "Alat yang berfungsi untuk menjepit tabung reaksi dengan aman saat pemanasan adalah ....",
         options: [
           { text: "Penjepit Kayu", isCorrect: true },
           { text: "Pinset Besi", isCorrect: false },
           { text: "Klem Statif", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+        ]
       },
       {
-        question: "Alat ukur suhu larutan di laboratorium disebut?",
+        question: "Alat ukur derajat panas atau suhu larutan di laboratorium disebut ....",
         options: [
           { text: "Termometer", isCorrect: true },
           { text: "Barometer", isCorrect: false },
           { text: "Higrometer", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+        ]
       },
       {
-        question: "Saat ingin menyaring campuran padat dan cair, alat apa yang digunakan sebagai penyangga kertas saring?",
+        question: "Simbol bahaya berupa gambar tengkorak dan tulang bersilang menunjukkan sifat bahan ....",
         options: [
-          { text: "Corong Kaca", isCorrect: true },
-          { text: "Gelas Kimia", isCorrect: false },
-          { text: "Cawan Porselen", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+          { text: "Beracun (Toksik)", isCorrect: true },
+          { text: "Mudah Terbakar", isCorrect: false },
+          { text: "Mudah Meledak", isCorrect: false }
+        ]
       },
       {
-        question: "Digunakan sebagai alas wadah saat proses pemanasan dengan pembakar spiritus:",
+        question: "Kawat kasa yang dilapisi keramik di atas kaki tiga berfungsi untuk ....",
         options: [
-          { text: "Kawat Kasa & Kaki Tiga", isCorrect: true },
-          { text: "Rak Tabung", isCorrect: false },
-          { text: "Statif & Klem", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+          { text: "Meratakan Panas Api", isCorrect: true },
+          { text: "Mendinginkan Tabung", isCorrect: false },
+          { text: "Menyaring Larutan", isCorrect: false }
+        ]
       },
       {
-        question: "Alat untuk menghaluskan bahan kimia padat menjadi serbuk adalah?",
+        question: "Alat laboratorium untuk menghaluskan zat padat kimia menjadi serbuk halus adalah ....",
         options: [
           { text: "Mortal & Alu", isCorrect: true },
           { text: "Kaca Arloji", isCorrect: false },
-          { text: "Cawan Porselen", isCorrect: false }
-        ].sort(() => Math.random() - 0.5)
+          { text: "Cawan Petri", isCorrect: false }
+        ]
+      },
+      {
+        question: "Alat optik yang digunakan untuk mengamati sel dan jaringan mikroorganisme renik adalah ....",
+        options: [
+          { text: "Mikroskop Cahaya", isCorrect: true },
+          { text: "Kaca Pembesar (Lup)", isCorrect: false },
+          { text: "Teleskop Optik", isCorrect: false }
+        ]
+      },
+      {
+        question: "Alat pelindung diri (APD) utama untuk melindungi mata dari percikan bahan kimia berbahaya adalah ....",
+        options: [
+          { text: "Kacamata Goggles", isCorrect: true },
+          { text: "Masker Medis", isCorrect: false },
+          { text: "Jas Laboratorium", isCorrect: false }
+        ]
+      },
+      {
+        question: "Cabang ilmu sains yang mempelajari tentang zat, materi, dan perubahannya adalah ....",
+        options: [
+          { text: "Ilmu Kimia", isCorrect: true },
+          { text: "Ilmu Fisika", isCorrect: false },
+          { text: "Ilmu Geologi", isCorrect: false }
+        ]
+      },
+      {
+        question: "Saat mata terkena percikan bahan kimia korosif, tindakan pertama yang wajib dilakukan adalah ....",
+        options: [
+          { text: "Bilas Air Mengalir Segera", isCorrect: true },
+          { text: "Mengucek dengan Tisu", isCorrect: false },
+          { text: "Menutup Mata Rapat", isCorrect: false }
+        ]
+      },
+      {
+        question: "Langkah pertama dalam metode ilmiah sebelum merumuskan hipotesis adalah ....",
+        options: [
+          { text: "Merumuskan Masalah", isCorrect: true },
+          { text: "Melakukan Eksperimen", isCorrect: false },
+          { text: "Menarik Kesimpulan", isCorrect: false }
+        ]
       }
     ].sort(() => Math.random() - 0.5);
 
+    // Randomize options for each question
+    this.froggyQuestions.forEach(q => {
+      q.options = [...q.options].sort(() => Math.random() - 0.5);
+    });
+
     this.froggyIndex = 0;
-    this.froggyLives = 4; // match the screenshot which shows Nyawa 4 (maybe started with 5 but let's just make it 4 or 5)
+    this.froggyLives = 3;
     this.froggyScore = 0;
     
     this.updateFroggyUI();
@@ -429,77 +474,96 @@ class LabGames {
     const currentQ = this.froggyQuestions[this.froggyIndex];
     const qBox = document.getElementById('froggy-question-text');
     const qNum = document.getElementById('froggy-q-number');
+    const qBadgeBottom = document.getElementById('froggy-q-badge-bottom');
     const lilypadsContainer = document.getElementById('lilypads-container');
+    const frog = document.getElementById('frog-character');
     
+    if (frog) {
+      frog.className = 'frog-character';
+      frog.style.transform = 'translate(0, 0)';
+    }
+
     if (qBox) qBox.innerText = currentQ.question;
-    if (qNum) qNum.innerText = `${this.froggyIndex + 1} / 10`;
+    if (qNum) qNum.innerText = `${this.froggyIndex + 1} / ${this.froggyQuestions.length}`;
+    if (qBadgeBottom) qBadgeBottom.innerText = `${this.froggyIndex + 1}`;
     
     if (lilypadsContainer) {
       const labels = ['A', 'B', 'C'];
       lilypadsContainer.innerHTML = currentQ.options.map((opt, i) => `
-        <div class="lilypad-wrapper" style="animation-delay: ${i * 0.3}s">
+        <div class="lilypad-wrapper" id="lilypad-wrap-${i}">
           <div class="lilypad-badge">${labels[i]}</div>
-          <div class="lilypad" onclick="window.labGames.answerFroggy(${opt.isCorrect})">
+          <div class="lilypad" id="lilypad-btn-${i}" onclick="window.labGames.answerFroggy(${opt.isCorrect}, ${i})">
             ${opt.text}
           </div>
         </div>
       `).join('');
     }
 
-    this.froggyTimeLeft = 15;
+    this.froggyTimeLeft = 20;
     this.updateFroggyTimerUI();
     this.froggyTimer = setInterval(() => {
       this.froggyTimeLeft--;
       this.updateFroggyTimerUI();
       if (this.froggyTimeLeft <= 0) {
         clearInterval(this.froggyTimer);
-        this.answerFroggy(false, true); // time out = wrong answer
+        this.answerFroggy(false, -1, true);
       }
     }, 1000);
   }
 
   updateFroggyTimerUI() {
     const textSpan = document.getElementById('froggy-timer-text');
-    const secSpan = document.getElementById('froggy-timer-seconds');
-    if (textSpan) textSpan.innerText = this.froggyTimeLeft;
-    if (secSpan) secSpan.innerText = this.froggyTimeLeft.toString().padStart(2, '0');
+    if (textSpan) textSpan.innerText = `00:${this.froggyTimeLeft.toString().padStart(2, '0')}`;
   }
 
-  answerFroggy(isCorrect, isTimeout = false) {
+  answerFroggy(isCorrect, padIndex = 0, isTimeout = false) {
     clearInterval(this.froggyTimer);
     const frog = document.getElementById('frog-character');
-    if (!frog) return;
+    const chosenPad = document.getElementById(`lilypad-btn-${padIndex}`);
+
+    // Jump direction coordinates
+    const jumpOffsets = [-150, 0, 150];
+    const targetX = (padIndex >= 0 && padIndex < 3) ? jumpOffsets[padIndex] : 0;
 
     if (isCorrect) {
       if (window.labAudio) window.labAudio.playCorrect();
       this.froggyScore += 100;
-      frog.classList.remove('frog-jump');
-      void frog.offsetWidth; // trigger reflow
-      frog.classList.add('frog-jump');
+      
+      if (chosenPad) chosenPad.classList.add('correct-flash');
+
+      if (frog) {
+        frog.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+        frog.style.transform = `translate(${targetX}px, -140px) scale(1.1)`;
+      }
       
       setTimeout(() => {
         this.froggyIndex++;
         this.updateFroggyUI();
         this.renderFroggyQuestion();
-      }, 600);
+      }, 700);
       
     } else {
       if (window.labAudio) window.labAudio.playWrong();
       this.froggyLives--;
       this.updateFroggyUI();
+
+      if (chosenPad) chosenPad.classList.add('wrong-flash');
       
-      frog.classList.remove('frog-sink');
-      void frog.offsetWidth;
-      frog.classList.add('frog-sink');
+      if (frog) {
+        frog.style.transition = 'transform 0.4s ease-out';
+        frog.style.transform = `translate(${targetX}px, -90px) scale(0.9)`;
+        setTimeout(() => {
+          frog.classList.add('frog-sink');
+        }, 400);
+      }
       
       setTimeout(() => {
-        frog.classList.remove('frog-sink');
         if (this.froggyLives > 0) {
           this.renderFroggyQuestion();
         } else {
           this.endFroggyGame();
         }
-      }, 1000);
+      }, 1200);
     }
   }
 
@@ -513,22 +577,40 @@ class LabGames {
 
     if (overlay) {
       overlay.style.display = 'flex';
-      finalScore.style.display = 'block';
-      finalScore.innerText = `Skor Akhir: ${this.froggyScore}`;
+      if (finalScore) {
+        finalScore.style.display = 'block';
+        finalScore.innerText = `Skor Akhir: ${this.froggyScore} Poin (${this.froggyIndex} Soal Terjawab)`;
+      }
       
       if (this.froggyLives > 0) {
         if (window.labAudio) window.labAudio.playFanfare();
         if (window.confetti) window.confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-        icon.innerText = '🏆';
-        title.innerText = 'Luar Biasa!';
-        desc.innerText = 'Katak berhasil melintasi kolam laboratorium!';
+        if (icon) icon.innerHTML = '<i class="fa-solid fa-trophy" style="font-size: 3.5rem; color: #eab308;"></i>';
+        if (title) title.innerText = 'Luar Biasa! Katak Berhasil Menyeberang!';
+        if (desc) desc.innerText = 'Kamu berhasil menguasai materi laboratorium IPA dan sains dengan sangat baik!';
       } else {
-        icon.innerText = '💀';
-        title.innerText = 'Game Over';
-        desc.innerText = 'Katak tenggelam karena kehabisan nyawa.';
+        if (icon) icon.innerHTML = '<i class="fa-solid fa-water" style="font-size: 3.5rem; color: #38bdf8;"></i>';
+        if (title) title.innerText = 'Game Over! Katak Kehabisan Nyawa';
+        if (desc) desc.innerText = 'Jangan berkecil hati, ayo pelajari kembali materi alat lab & K3 lalu coba lagi!';
+      }
+    }
+  }
+
+  toggleFroggyFullscreen() {
+    const gameWrapper = document.getElementById('froggy-game-wrapper');
+    if (!gameWrapper) return;
+
+    if (!document.fullscreenElement) {
+      if (gameWrapper.requestFullscreen) {
+        gameWrapper.requestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
       }
     }
   }
 }
 
 window.labGames = new LabGames();
+
