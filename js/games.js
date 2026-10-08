@@ -492,36 +492,55 @@ class LabGames {
     const qBadgeBottom = document.getElementById('froggy-q-badge-bottom');
     const lilypadsContainer = document.getElementById('lilypads-container');
     const frog = document.getElementById('frog-character');
+    const bottomPad = document.querySelector('.lilypad-bottom');
+    const frogContainer = document.querySelector('.frog-character-container');
+
+    // Reset container and bottom pad
+    if (bottomPad) {
+      bottomPad.style.transition = 'none';
+      bottomPad.style.transform = 'translate(0, 0)';
+      bottomPad.style.opacity = '1';
+    }
+    if (frogContainer) {
+      frogContainer.style.transition = 'none';
+      frogContainer.style.transform = 'translateX(-50%)';
+    }
     
-    // Reset Frog position smoothly on the base lily pad
+    // Reset Frog position smoothly on the base lily pad with idle breathing
     if (frog) {
-      frog.className = 'frog-character';
+      frog.className = 'frog-character idling';
       frog.style.transition = 'none';
-      frog.style.transform = 'translate(0, 0)';
+      frog.style.transform = 'translate(0, 0) scale(1)';
+      frog.style.opacity = '1';
     }
 
-    // Render Question & Image (if available)
+    // Render Question & Image (if available) with smooth crossfade
     if (qBox) {
-      if (currentQ.image) {
-        qBox.innerHTML = `
-          <div class="froggy-q-img-wrap">
-            <img src="${currentQ.image}" alt="Soal" />
-          </div>
-          <div class="froggy-q-text-body">${currentQ.question}</div>
-        `;
-      } else {
-        qBox.innerHTML = `<div class="froggy-q-text-body">${currentQ.question}</div>`;
-      }
+      qBox.style.opacity = '0';
+      setTimeout(() => {
+        if (currentQ.image) {
+          qBox.innerHTML = `
+            <div class="froggy-q-img-wrap">
+              <img src="${currentQ.image}" alt="Soal" />
+            </div>
+            <div class="froggy-q-text-body">${currentQ.question}</div>
+          `;
+        } else {
+          qBox.innerHTML = `<div class="froggy-q-text-body">${currentQ.question}</div>`;
+        }
+        qBox.style.transition = 'opacity 0.3s ease';
+        qBox.style.opacity = '1';
+      }, 150);
     }
 
     if (qNum) qNum.innerText = `${this.froggyIndex + 1} / ${this.froggyQuestions.length}`;
     if (qBadgeBottom) qBadgeBottom.innerText = `${this.froggyIndex + 1}`;
     
-    // Render the 3 Lilypads (A, B, C)
+    // Render the 3 Lilypads (A, B, C) with staggered entrance
     if (lilypadsContainer) {
       const labels = ['A', 'B', 'C'];
       lilypadsContainer.innerHTML = currentQ.options.map((opt, i) => `
-        <div class="lilypad-wrapper" id="lilypad-wrap-${i}">
+        <div class="lilypad-wrapper entering" id="lilypad-wrap-${i}" style="animation-delay: ${i * 0.1}s">
           <div class="lilypad-badge">${labels[i]}</div>
           <div class="lilypad" id="lilypad-btn-${i}" onclick="window.labGames.answerFroggy(${opt.isCorrect}, ${i})">
             ${opt.text}
@@ -553,6 +572,9 @@ class LabGames {
     const chosenPadWrap = document.getElementById(`lilypad-wrap-${padIndex}`);
     const chosenPadBtn = document.getElementById(`lilypad-btn-${padIndex}`);
     const frogContainer = document.querySelector('.frog-character-container');
+    const bottomPad = document.querySelector('.lilypad-bottom');
+
+    if (frog) frog.classList.remove('idling');
 
     // Calculate dynamic precise landing coordinates
     let targetX = 0;
@@ -573,52 +595,115 @@ class LabGames {
     if (isCorrect) {
       if (window.labAudio) {
         window.labAudio.playJump();
-        setTimeout(() => window.labAudio.playCorrect(), 200);
       }
       this.froggyScore += 100;
       
-      if (chosenPadBtn) chosenPadBtn.classList.add('correct-flash');
-
-      // Katak melompat maju dan mendarat di atas daun pilihan
+      // Phase 1: Pre-jump crouch (0ms - 80ms)
       if (frog) {
-        frog.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-        frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.1)`;
+        frog.style.transition = 'transform 0.08s ease-in';
+        frog.style.transform = 'scale(1.15, 0.75)';
       }
+
+      // Phase 2: Parabolic High Leap (80ms - 520ms)
+      setTimeout(() => {
+        if (frog) {
+          frog.style.transition = 'transform 0.44s cubic-bezier(0.2, 0.8, 0.4, 1.2)';
+          frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.92, 1.25)`;
+        }
+      }, 80);
+
+      // Phase 3: Touchdown landing squash on target lilypad (520ms - 620ms)
+      setTimeout(() => {
+        if (window.labAudio) window.labAudio.playCorrect();
+        if (chosenPadBtn) chosenPadBtn.classList.add('correct-flash');
+        if (frog) {
+          frog.style.transition = 'transform 0.15s ease-out';
+          frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.18, 0.86)`;
+        }
+      }, 520);
+
+      // Phase 4: Forward Pond Progression & Camera Scroll (700ms - 1300ms)
+      setTimeout(() => {
+        // Fade out other unchosen lilypads
+        document.querySelectorAll('.lilypad-wrapper').forEach((wrap, i) => {
+          if (i !== padIndex) wrap.classList.add('fade-out');
+        });
+
+        // The chosen pad glides smoothly downward to become the new base pad!
+        if (chosenPadWrap) {
+          chosenPadWrap.style.transition = 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease';
+          chosenPadWrap.style.transform = `translate(${-targetX}px, ${Math.abs(targetY)}px)`;
+        }
+
+        // The frog travels along with the new base pad into position
+        if (frog) {
+          frog.style.transition = 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)';
+          frog.style.transform = 'translate(0px, 0px) scale(1)';
+        }
+
+        // Previous base lilypad floats away off the bottom
+        if (bottomPad) {
+          bottomPad.style.transition = 'all 0.6s ease-in';
+          bottomPad.style.transform = 'translateY(180px) scale(0.8)';
+          bottomPad.style.opacity = '0';
+        }
+      }, 700);
       
-      // Setelah mendarat, kolam bergerak maju ke soal berikutnya
+      // Phase 5: Reveal next question and new lilypads floating in
       setTimeout(() => {
         this.froggyIndex++;
         this.updateFroggyUI();
         this.renderFroggyQuestion();
-      }, 750);
+      }, 1350);
       
     } else {
       if (window.labAudio) {
         window.labAudio.playJump();
-        setTimeout(() => window.labAudio.playSplash(), 450);
-        setTimeout(() => window.labAudio.playWrong(), 200);
       }
       this.froggyLives--;
       this.updateFroggyUI();
 
       if (chosenPadBtn) chosenPadBtn.classList.add('wrong-flash');
       
-      // Katak melompat tetapi terpeleset dan tenggelam ke air
+      // Pre-jump crouch
       if (frog) {
-        frog.style.transition = 'transform 0.5s ease-out';
-        frog.style.transform = `translate(${targetX * 0.7}px, ${targetY * 0.6}px) scale(0.9)`;
-        setTimeout(() => {
-          frog.classList.add('frog-sink');
-        }, 450);
+        frog.style.transition = 'transform 0.08s ease-in';
+        frog.style.transform = 'scale(1.15, 0.75)';
       }
+
+      // Leap towards pad but fall short into the water
+      setTimeout(() => {
+        if (frog) {
+          frog.style.transition = 'transform 0.42s ease-out';
+          frog.style.transform = `translate(${targetX * 0.7}px, ${targetY * 0.6}px) scale(0.9)`;
+        }
+      }, 80);
+
+      // Splash and sink into water
+      setTimeout(() => {
+        if (window.labAudio) {
+          window.labAudio.playSplash();
+          window.labAudio.playWrong();
+        }
+        if (frog) {
+          frog.classList.add('frog-sink');
+        }
+      }, 480);
       
+      // Respawn back on base pad or end game if dead
       setTimeout(() => {
         if (this.froggyLives > 0) {
-          this.renderFroggyQuestion();
+          if (frog) {
+            frog.className = 'frog-character';
+            frog.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            frog.style.transform = 'translate(0, 0) scale(1)';
+            frog.style.opacity = '1';
+            setTimeout(() => frog.classList.add('idling'), 400);
+          }
         } else {
           this.endFroggyGame();
         }
-      }, 1200);
+      }, 1300);
     }
   }
 
