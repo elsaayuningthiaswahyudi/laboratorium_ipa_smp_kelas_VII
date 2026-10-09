@@ -4,11 +4,14 @@ class LabDashboard {
   constructor() {
     this.EVAL_STORAGE_KEY = 'ipa_lab_evaluations';
     this.LKPD_STORAGE_KEY = 'ipa_lab_lkpd_submissions';
+    this.GAMES_STORAGE_KEY = 'ipa_lab_games_submissions';
 
     this.evaluations = [];
     this.lkpdSubmissions = [];
+    this.gameSubmissions = [];
 
     this.currentClassFilter = 'all';
+    this.currentGameFilter = 'all';
     this.searchKeyword = '';
     this.isSyncing = false;
     this.pollInterval = null;
@@ -55,6 +58,76 @@ class LabDashboard {
     ];
   }
 
+  getDefaultGames() {
+    return [
+      {
+        id: "game_demo_1",
+        timestamp: "20/09/2026 14:05",
+        studentName: "Ahmad Fauzi",
+        studentClass: "VII-A",
+        gameId: "froggy",
+        gameTitle: "Game 4: Froggy Jumps IPA",
+        score: 12000,
+        maxScore: 15000,
+        details: "12/15 Soal (Lolos Menyeberang)",
+        stars: 3,
+        badge: "Penjelajah Teratai"
+      },
+      {
+        id: "game_demo_2",
+        timestamp: "20/09/2026 14:18",
+        studentName: "Dewi Lestari",
+        studentClass: "VII-A",
+        gameId: "match",
+        gameTitle: "Game 1: Cocokkan Alat & Fungsi",
+        score: 100,
+        maxScore: 100,
+        details: "6/6 Alat Terpasang Tepat",
+        stars: 3,
+        badge: "Ahli Alat Lab"
+      },
+      {
+        id: "game_demo_3",
+        timestamp: "20/09/2026 14:25",
+        studentName: "Siti Rahmawati",
+        studentClass: "VII-A",
+        gameId: "symbols",
+        gameTitle: "Game 2: Kuis Kilat Simbol K3",
+        score: 850,
+        maxScore: 1000,
+        details: "8/8 Simbol Tuntas Cepat",
+        stars: 3,
+        badge: "Pakar K3 Lab"
+      },
+      {
+        id: "game_demo_4",
+        timestamp: "20/09/2026 14:32",
+        studentName: "Budi Pratama",
+        studentClass: "VII-B",
+        gameId: "memory",
+        gameTitle: "Game 3: Memory Lab Cards",
+        score: 80,
+        maxScore: 100,
+        details: "Selesai dalam 12 Langkah",
+        stars: 2,
+        badge: "Memori Tajam"
+      },
+      {
+        id: "game_demo_5",
+        timestamp: "20/09/2026 14:45",
+        studentName: "Rian Hidayat",
+        studentClass: "VII-C",
+        gameId: "froggy",
+        gameTitle: "Game 4: Froggy Jumps IPA",
+        score: 9000,
+        maxScore: 15000,
+        details: "9 Soal Berhasil (Sisa Nyawa: 2)",
+        stars: 2,
+        badge: "Penjelajah Teratai"
+      }
+    ];
+  }
+
   init() {
     this.loadData();
     this.setupBroadcastChannel();
@@ -69,11 +142,15 @@ class LabDashboard {
       if ('BroadcastChannel' in window) {
         this.channel = new BroadcastChannel('ipa_lab_sync_channel');
         this.channel.onmessage = (event) => {
-          if (event.data && (event.data.type === 'SYNC' || event.data.type === 'NEW_EVAL' || event.data.type === 'NEW_LKPD')) {
+          if (event.data && (event.data.type === 'SYNC' || event.data.type === 'NEW_EVAL' || event.data.type === 'NEW_LKPD' || event.data.type === 'NEW_GAME_SCORE')) {
             this.loadData();
             this.renderDashboard();
             if (event.data.studentName && window.labAuth && window.labAuth.isTeacher()) {
-              window.labAuth.showToast(`📥 Data Masuk: ${event.data.studentName} (${event.data.studentClass || 'Siswa'})`);
+              if (event.data.type === 'NEW_GAME_SCORE') {
+                window.labAuth.showToast(`🎮 Skor Game Masuk: ${event.data.studentName} (${event.data.gameTitle || 'Mini Game'} - ${event.data.score} Pts)`);
+              } else {
+                window.labAuth.showToast(`📥 Data Masuk: ${event.data.studentName} (${event.data.studentClass || 'Siswa'})`);
+              }
             }
           }
         };
@@ -85,7 +162,7 @@ class LabDashboard {
 
   setupStorageListener() {
     window.addEventListener('storage', (e) => {
-      if (e.key === this.EVAL_STORAGE_KEY || e.key === this.LKPD_STORAGE_KEY) {
+      if (e.key === this.EVAL_STORAGE_KEY || e.key === this.LKPD_STORAGE_KEY || e.key === this.GAMES_STORAGE_KEY) {
         this.loadData();
         this.renderDashboard();
       }
@@ -162,14 +239,20 @@ class LabDashboard {
         this.lkpdSubmissions = this.getDefaultLKPD();
         this.saveData();
       }
+
+      const savedGames = localStorage.getItem(this.GAMES_STORAGE_KEY);
+      if (savedGames !== null && savedGames !== undefined && savedGames !== "") {
+        const parsedGames = JSON.parse(savedGames);
+        this.gameSubmissions = Array.isArray(parsedGames) && parsedGames.length > 0 ? parsedGames : this.getDefaultGames();
+      } else {
+        this.gameSubmissions = this.getDefaultGames();
+        this.saveData();
+      }
     } catch (e) {
       console.error("Error loading dashboard data:", e);
-      if (!this.evaluations || this.evaluations.length === 0) {
-        this.evaluations = this.getDefaultEvaluations();
-      }
-      if (!this.lkpdSubmissions || this.lkpdSubmissions.length === 0) {
-        this.lkpdSubmissions = this.getDefaultLKPD();
-      }
+      if (!this.evaluations || this.evaluations.length === 0) this.evaluations = this.getDefaultEvaluations();
+      if (!this.lkpdSubmissions || this.lkpdSubmissions.length === 0) this.lkpdSubmissions = this.getDefaultLKPD();
+      if (!this.gameSubmissions || this.gameSubmissions.length === 0) this.gameSubmissions = this.getDefaultGames();
     }
   }
 
@@ -178,6 +261,7 @@ class LabDashboard {
       this.evaluations = this.deduplicateList(this.evaluations);
       localStorage.setItem(this.EVAL_STORAGE_KEY, JSON.stringify(this.evaluations));
       localStorage.setItem(this.LKPD_STORAGE_KEY, JSON.stringify(this.lkpdSubmissions));
+      localStorage.setItem(this.GAMES_STORAGE_KEY, JSON.stringify(this.gameSubmissions));
     } catch (e) {
       console.error("Error saving local dashboard data:", e);
     }
@@ -186,21 +270,18 @@ class LabDashboard {
   mergeEvaluations(serverEvals) {
     if (!Array.isArray(serverEvals) || serverEvals.length === 0) return;
     const map = new Map();
-    // 1. Existing local evaluations
     this.evaluations.forEach(item => {
       if (item && item.studentName) {
         const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}`;
         map.set(key, item);
       }
     });
-    // 2. Incoming cloud/server evaluations
     serverEvals.forEach(item => {
       if (item && item.studentName) {
         const key = `${item.studentName.toLowerCase().trim()}_${(item.studentClass || '').trim()}`;
         map.set(key, item);
       }
     });
-    // 3. Sort by latest timestamp (newest first on top)
     this.evaluations = Array.from(map.values()).sort((a, b) => {
       const timeA = this.parseTimestamp(a.timestamp) || (typeof a.id === 'number' ? a.id : 0);
       const timeB = this.parseTimestamp(b.timestamp) || (typeof b.id === 'number' ? b.id : 0);
@@ -233,13 +314,34 @@ class LabDashboard {
     this.renderLKPDTable();
   }
 
+  mergeGames(serverGames) {
+    if (!Array.isArray(serverGames) || serverGames.length === 0) return;
+    const map = new Map();
+    serverGames.forEach(item => {
+      if (item && item.id) map.set(String(item.id), item);
+    });
+    this.gameSubmissions.forEach(item => {
+      if (item && item.id && !map.has(String(item.id))) {
+        map.set(String(item.id), item);
+      }
+    });
+    this.gameSubmissions = Array.from(map.values()).sort((a, b) => {
+      const timeA = this.parseTimestamp(a.timestamp) || 0;
+      const timeB = this.parseTimestamp(b.timestamp) || 0;
+      return timeB - timeA;
+    });
+    this.saveData();
+    this.renderMetrics();
+    this.renderGameSubmissionsTable();
+  }
+
   async fetchServerData(notify = false) {
     if (this.isSyncing) return;
     this.isSyncing = true;
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
 
     try {
-      // 1. Fetch from Google Sheets API with cache busting & redirect handling
+      // 1. Fetch from Google Sheets API
       try {
         const sheetRes = await fetch(`${GOOGLE_SCRIPT_URL}?t=${Date.now()}`, {
           method: 'GET',
@@ -267,32 +369,33 @@ class LabDashboard {
             this.mergeEvaluations(mapped);
           }
         }
-      } catch (sheetErr) {
-        console.warn("Cloud Sync warning:", sheetErr);
-      }
+      } catch (sheetErr) { }
 
       // 2. Local backend fallback
       try {
         const evalRes = await fetch('/api/evaluations', { cache: 'no-store' });
         if (evalRes.ok) {
           const data = await evalRes.json();
-          if (Array.isArray(data) && data.length > 0) {
-            this.mergeEvaluations(data);
-          }
+          if (Array.isArray(data) && data.length > 0) this.mergeEvaluations(data);
         }
 
         const lkpdRes = await fetch('/api/lkpd', { cache: 'no-store' });
         if (lkpdRes.ok) {
           const data = await lkpdRes.json();
-          if (Array.isArray(data) && data.length > 0) {
-            this.mergeLKPDs(data);
-          }
+          if (Array.isArray(data) && data.length > 0) this.mergeLKPDs(data);
+        }
+
+        const gamesRes = await fetch('/api/games', { cache: 'no-store' });
+        if (gamesRes.ok) {
+          const data = await gamesRes.json();
+          if (Array.isArray(data) && data.length > 0) this.mergeGames(data);
         }
       } catch (localErr) { }
 
       this.renderMetrics();
       this.renderEvaluationTable();
       this.renderLKPDTable();
+      this.renderGameSubmissionsTable();
       if (notify && window.labAuth) {
         window.labAuth.showToast("✅ Data Dashboard berhasil disinkronkan!");
       }
@@ -349,7 +452,7 @@ class LabDashboard {
       } catch (e) { }
     }
 
-    // Send to Google Sheets Cloud Database (Dual submission GET & POST)
+    // Dual submission to Google Sheets
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
     try {
       const params = new URLSearchParams({
@@ -382,7 +485,6 @@ class LabDashboard {
       }).catch(() => { });
     } catch (e) { }
 
-    // POST to local API if available
     try {
       await fetch('/api/evaluations', {
         method: 'POST',
@@ -437,11 +539,87 @@ class LabDashboard {
     } catch (err) { }
   }
 
+  // ================= 🎮 REKAM OUTPUT GAMIFIKASI KE DASHBOARD GURU =================
+  async recordGameScore(gameData) {
+    this.loadData();
+
+    const user = (window.labAuth && window.labAuth.currentUser) ? window.labAuth.currentUser : null;
+    const studentName = gameData.studentName || (user && user.role === 'student' ? user.name : 'Siswa Teladan');
+    const studentClass = gameData.studentClass || (user && user.role === 'student' ? user.class : 'VII-A');
+
+    const scoreNum = Number(gameData.score) || 0;
+    let stars = 3;
+    if (gameData.gameId === 'froggy') {
+      stars = scoreNum >= 10000 ? 3 : (scoreNum >= 5000 ? 2 : 1);
+    } else if (gameData.gameId === 'symbols') {
+      stars = scoreNum >= 600 ? 3 : (scoreNum >= 350 ? 2 : 1);
+    } else if (gameData.gameId === 'memory') {
+      stars = scoreNum >= 85 ? 3 : (scoreNum >= 70 ? 2 : 1);
+    } else {
+      stars = scoreNum >= 80 ? 3 : 2;
+    }
+
+    const record = {
+      id: 'game_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+      timestamp: new Date().toLocaleString('id-ID', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      studentName: studentName,
+      studentClass: studentClass,
+      gameId: gameData.gameId || 'froggy',
+      gameTitle: gameData.gameTitle || 'Mini Game IPA',
+      score: scoreNum,
+      maxScore: gameData.maxScore || 100,
+      details: gameData.details || 'Tuntas',
+      stars: stars,
+      badge: gameData.badge || 'Sains Explorer'
+    };
+
+    this.gameSubmissions.unshift(record);
+    this.saveData();
+    this.renderDashboard();
+
+    // Broadcast across tabs to inform teacher dashboard instantly
+    if (this.channel) {
+      try {
+        this.channel.postMessage({
+          type: 'NEW_GAME_SCORE',
+          studentName: record.studentName,
+          studentClass: record.studentClass,
+          gameTitle: record.gameTitle,
+          score: record.score,
+          data: record
+        });
+      } catch (e) { }
+    }
+
+    // POST to local API
+    try {
+      await fetch('/api/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(record)
+      });
+    } catch (err) { }
+
+    // Show toast
+    if (window.labAuth) {
+      window.labAuth.showToast(`🎮 Skor Game (${record.gameTitle}) berhasil dikirim ke Dashboard Guru!`);
+    }
+
+    return record;
+  }
+
   renderDashboard() {
     this.loadData();
     this.renderMetrics();
     this.renderEvaluationTable();
     this.renderLKPDTable();
+    this.renderGameSubmissionsTable();
   }
 
   renderMetrics() {
@@ -450,6 +628,7 @@ class LabDashboard {
     const passedCountElem = document.getElementById('dash-passed-count');
     const remedialCountElem = document.getElementById('dash-remedial-count');
     const totalLkpdElem = document.getElementById('dash-total-lkpd');
+    const totalGamesElem = document.getElementById('dash-total-games');
 
     const totalEvals = this.evaluations.length;
     let avg = 0;
@@ -468,6 +647,7 @@ class LabDashboard {
     if (passedCountElem) passedCountElem.innerText = passed;
     if (remedialCountElem) remedialCountElem.innerText = remedial;
     if (totalLkpdElem) totalLkpdElem.innerText = this.lkpdSubmissions.length;
+    if (totalGamesElem) totalGamesElem.innerText = this.gameSubmissions.length;
   }
 
   renderEvaluationTable() {
@@ -564,6 +744,116 @@ class LabDashboard {
     `).join('');
   }
 
+  // ================= RENDER TABEL HASIL MINI GAMES & GAMIFIKASI =================
+  renderGameSubmissionsTable() {
+    const tbody = document.getElementById('dash-games-tbody');
+    if (!tbody) return;
+
+    let filtered = this.gameSubmissions;
+
+    // Filter by game type
+    if (this.currentGameFilter && this.currentGameFilter !== 'all') {
+      filtered = filtered.filter(g => g.gameId === this.currentGameFilter);
+    }
+
+    // Filter by class
+    if (this.currentClassFilter !== 'all') {
+      filtered = filtered.filter(g => g.studentClass === this.currentClassFilter);
+    }
+
+    // Filter by search keyword
+    if (this.searchKeyword) {
+      const kw = this.searchKeyword.toLowerCase();
+      filtered = filtered.filter(g =>
+        (g.studentName && g.studentName.toLowerCase().includes(kw)) ||
+        (g.studentClass && g.studentClass.toLowerCase().includes(kw)) ||
+        (g.gameTitle && g.gameTitle.toLowerCase().includes(kw)) ||
+        (g.badge && g.badge.toLowerCase().includes(kw))
+      );
+    }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+            <i class="fa-solid fa-gamepad" style="font-size: 2rem; margin-bottom: 0.6rem; display: block; opacity: 0.5;"></i>
+            Belum ada data capaian mini game yang sesuai dengan filter.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((g, idx) => {
+      // Game badge styling
+      let gameClass = 'froggy';
+      let icon = 'fa-frog';
+      if (g.gameId === 'match') {
+        gameClass = 'match';
+        icon = 'fa-hand';
+      } else if (g.gameId === 'symbols') {
+        gameClass = 'symbols';
+        icon = 'fa-bolt';
+      } else if (g.gameId === 'memory') {
+        gameClass = 'memory';
+        icon = 'fa-clone';
+      }
+
+      // Stars rendering
+      const starCount = Math.max(1, Math.min(3, g.stars || 3));
+      let starsHtml = '';
+      for (let s = 1; s <= 3; s++) {
+        if (s <= starCount) {
+          starsHtml += '<i class="fa-solid fa-star"></i>';
+        } else {
+          starsHtml += '<i class="fa-solid fa-star star-empty"></i>';
+        }
+      }
+
+      return `
+        <tr>
+          <td style="text-align: center; font-weight: 700;">${idx + 1}</td>
+          <td><i class="fa-regular fa-clock text-muted"></i> ${g.timestamp}</td>
+          <td><strong>${g.studentName}</strong></td>
+          <td style="text-align: center;"><span class="badge-class">${g.studentClass}</span></td>
+          <td>
+            <span class="badge-game ${gameClass}">
+              <i class="fa-solid ${icon}"></i> ${g.gameTitle}
+            </span>
+          </td>
+          <td style="text-align: center;">
+            <span class="score-badge high">
+              ${g.score.toLocaleString('id-ID')} <small class="text-muted">Pts</small>
+            </span>
+          </td>
+          <td>
+            <div>${g.details || 'Selesai'}</div>
+            <div class="badge-lencana-tag"><i class="fa-solid fa-award text-yellow"></i> ${g.badge || 'Sains Explorer'}</div>
+          </td>
+          <td style="text-align: center;">
+            <div class="star-rating" title="${starCount} Bintang">${starsHtml}</div>
+          </td>
+          <td style="text-align: center;">
+            <button class="dash-action-btn delete" onclick="window.labDashboard.deleteGameSubmission('${g.id}')" title="Hapus Hasil Game">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  filterGameType(gameType) {
+    if (window.labAudio) window.labAudio.playClick();
+    this.currentGameFilter = gameType;
+
+    document.querySelectorAll('.dash-gametype-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.game === gameType);
+    });
+
+    this.renderGameSubmissionsTable();
+  }
+
   filterClass(className) {
     if (window.labAudio) window.labAudio.playClick();
     this.currentClassFilter = className;
@@ -573,11 +863,13 @@ class LabDashboard {
     });
 
     this.renderEvaluationTable();
+    this.renderGameSubmissionsTable();
   }
 
   search(keyword) {
     this.searchKeyword = keyword.trim();
     this.renderEvaluationTable();
+    this.renderGameSubmissionsTable();
   }
 
   async deleteEvaluation(id) {
@@ -616,10 +908,29 @@ class LabDashboard {
     }
   }
 
+  async deleteGameSubmission(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus hasil permainan siswa ini?")) {
+      this.gameSubmissions = this.gameSubmissions.filter(g => String(g.id) !== String(id));
+      this.saveData();
+      this.renderDashboard();
+
+      try {
+        await fetch('/api/delete-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: id })
+        });
+      } catch (e) { }
+
+      if (window.labAuth) window.labAuth.showToast("Hasil game siswa berhasil dihapus.");
+    }
+  }
+
   async clearAllData() {
-    if (confirm("⚠️ PERINGATAN: Apakah Anda yakin ingin mengosongkan SEMUA data nilai evaluasi dan LKPD siswa?")) {
+    if (confirm("⚠️ PERINGATAN: Apakah Anda yakin ingin mengosongkan SEMUA data nilai evaluasi, LKPD, dan hasil mini games siswa?")) {
       this.evaluations = [];
       this.lkpdSubmissions = [];
+      this.gameSubmissions = [];
       this.saveData();
       this.renderDashboard();
 
@@ -631,16 +942,18 @@ class LabDashboard {
         try { this.channel.postMessage({ type: 'SYNC' }); } catch (e) { }
       }
 
-      if (window.labAuth) window.labAuth.showToast("Seluruh data nilai dan LKPD berhasil dikosongkan.");
+      if (window.labAuth) window.labAuth.showToast("Seluruh data nilai, LKPD, dan game berhasil dikosongkan.");
     }
   }
 
   async injectDemoData(notify = true) {
     const demoEvals = this.getDefaultEvaluations();
     const demoLkpd = this.getDefaultLKPD();
+    const demoGames = this.getDefaultGames();
 
     this.evaluations = demoEvals;
     this.lkpdSubmissions = demoLkpd;
+    this.gameSubmissions = demoGames;
     this.saveData();
     this.renderDashboard();
 
@@ -650,24 +963,37 @@ class LabDashboard {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ evaluations: demoEvals, lkpd: demoLkpd })
       });
+      await fetch('/api/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(demoGames[0])
+      });
     } catch (e) { }
 
     if (notify && window.labAuth) {
-      window.labAuth.showToast("Data demo siswa berhasil dimuat!");
+      window.labAuth.showToast("Data demo siswa & mini games berhasil dimuat!");
     }
   }
 
   exportCSV() {
-    if (this.evaluations.length === 0) {
-      alert("⚠️ Belum ada data nilai untuk diekspor!");
+    if (this.evaluations.length === 0 && this.gameSubmissions.length === 0) {
+      alert("⚠️ Belum ada data nilai atau game untuk diekspor!");
       return;
     }
 
     let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "=== REKAPITULASI NILAI EVALUASI KUIS IPA ===\n";
     csvContent += "No,Waktu Pengerjaan,Nama Siswa,Kelas,Nilai,Jumlah Benar,Total Soal,Status Kelulusan\n";
 
     this.evaluations.forEach((e, idx) => {
       csvContent += `${idx + 1},"${e.timestamp}","${e.studentName}","${e.studentClass}",${e.score},${e.correctCount},${e.totalQuestions},"${e.isPassed ? 'TUNTAS' : 'REMEDIAL'}"\n`;
+    });
+
+    csvContent += "\n=== REKAPITULASI HASIL MINI GAMES & GAMIFIKASI ===\n";
+    csvContent += "No,Waktu Main,Nama Siswa,Kelas,Permainan,Skor/Poin,Detail Capaian,Bintang,Lencana\n";
+
+    this.gameSubmissions.forEach((g, idx) => {
+      csvContent += `${idx + 1},"${g.timestamp}","${g.studentName}","${g.studentClass}","${g.gameTitle}",${g.score},"${g.details}",${g.stars},"${g.badge}"\n`;
     });
 
     const encodedUri = encodeURI(csvContent);

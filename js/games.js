@@ -129,7 +129,17 @@ class LabGames {
       if (this.scores.match === 6) {
         if (window.labAudio) window.labAudio.playFanfare();
         if (window.confetti) window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        alert("🎉 Luar Biasa! Kamu berhasil mencocokkan semua alat laboratorium dengan tepat!");
+        if (window.labDashboard) {
+          window.labDashboard.recordGameScore({
+            gameId: 'match',
+            gameTitle: 'Game 1: Cocokkan Alat & Fungsi',
+            score: 100,
+            maxScore: 100,
+            details: '6/6 Alat Terpasang Tepat',
+            stars: 3,
+            badge: 'Ahli Alat Lab'
+          });
+        }
       }
     } else {
       // Salah
@@ -156,12 +166,27 @@ class LabGames {
     if (this.symbolQuizIndex >= items.length) {
       // Selesai
       if (window.labAudio) window.labAudio.playFanfare();
+      if (window.confetti) window.confetti({ particleCount: 120, spread: 70 });
+      if (window.labDashboard) {
+        window.labDashboard.recordGameScore({
+          gameId: 'symbols',
+          gameTitle: 'Game 2: Kuis Kilat Simbol K3',
+          score: this.symbolScore,
+          maxScore: 1000,
+          details: `${this.symbolScore} Poin K3 (${items.length} Simbol)`,
+          stars: this.symbolScore >= 600 ? 3 : (this.symbolScore >= 350 ? 2 : 1),
+          badge: 'Pakar K3 Lab'
+        });
+      }
       container.innerHTML = `
         <div class="game-result-box">
           <div class="result-icon"><i class="fa-solid fa-trophy"></i></div>
           <h3>Kuis Kilat Selesai!</h3>
           <p>Total Skor Keselamatan K3 Kamu:</p>
           <div class="big-score">${this.symbolScore} Poin</div>
+          <div class="score-saved-notice" style="margin-bottom: 1.2rem; font-size: 0.88rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 8px 14px; border-radius: 6px; border: 1px solid rgba(34,197,94,0.3);">
+            <i class="fa-solid fa-circle-check"></i> Skor kamu otomatis tersimpan di <strong>Dashboard Guru</strong>!
+          </div>
           <button class="btn btn-primary" onclick="window.labGames.initSymbolsGame()">
             <i class="fa-solid fa-rotate"></i> Main Lagi
           </button>
@@ -299,7 +324,18 @@ class LabGames {
           if (this.matchedPairs === 6) {
             if (window.labAudio) window.labAudio.playFanfare();
             if (window.confetti) window.confetti({ particleCount: 120, spread: 80 });
-            alert(`🎉 Selamat! Kamu menyelesaikan Memory Card Lab dalam ${this.memoryMoves} langkah!`);
+            const memScore = Math.max(50, 100 - Math.max(0, this.memoryMoves - 6) * 5);
+            if (window.labDashboard) {
+              window.labDashboard.recordGameScore({
+                gameId: 'memory',
+                gameTitle: 'Game 3: Memory Lab Cards',
+                score: memScore,
+                maxScore: 100,
+                details: `Selesai dalam ${this.memoryMoves} Langkah`,
+                stars: this.memoryMoves <= 8 ? 3 : (this.memoryMoves <= 14 ? 2 : 1),
+                badge: 'Memori Tajam'
+              });
+            }
           }
         }, 500);
       } else {
@@ -741,11 +777,29 @@ class LabGames {
     const finalScore = document.getElementById('froggy-final-score');
     const icon = document.getElementById('froggy-overlay-icon');
 
+    // Rekam skor gamifikasi otomatis ke Dashboard Guru
+    if (window.labDashboard) {
+      window.labDashboard.recordGameScore({
+        gameId: 'froggy',
+        gameTitle: 'Game 4: Froggy Jumps IPA',
+        score: this.froggyScore,
+        maxScore: this.froggyQuestions.length * 1000,
+        details: `${this.froggyIndex}/${this.froggyQuestions.length} Soal (${this.froggyLives > 0 ? 'Lolos Menyeberang' : 'Gugur'})`,
+        stars: this.froggyLives > 0 ? 3 : (this.froggyScore >= 5000 ? 2 : 1),
+        badge: 'Penjelajah Teratai'
+      });
+    }
+
     if (overlay) {
       overlay.style.display = 'flex';
       if (finalScore) {
         finalScore.style.display = 'block';
-        finalScore.innerText = `Skor Akhir: ${this.froggyScore.toLocaleString('id-ID')} Poin (${this.froggyIndex} Soal Berhasil)`;
+        finalScore.innerHTML = `
+          <div>Skor Akhir: <strong>${this.froggyScore.toLocaleString('id-ID')} Poin</strong> (${this.froggyIndex} Soal Berhasil)</div>
+          <div style="font-size: 0.85rem; color: #4ade80; margin-top: 6px; font-weight: normal;">
+            <i class="fa-solid fa-circle-check"></i> Skor telah otomatis dikirim ke <strong>Dashboard Guru</strong>
+          </div>
+        `;
       }
       
       if (this.froggyLives > 0) {

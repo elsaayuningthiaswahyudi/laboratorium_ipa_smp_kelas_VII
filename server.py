@@ -13,6 +13,7 @@ os.makedirs(DATA_DIR, exist_ok=True)
 
 EVAL_FILE = os.path.join(DATA_DIR, 'evaluations.json')
 LKPD_FILE = os.path.join(DATA_DIR, 'lkpd.json')
+GAMES_FILE = os.path.join(DATA_DIR, 'games.json')
 
 def load_json(filepath, default):
     if os.path.exists(filepath):
@@ -61,6 +62,13 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(data).encode('utf-8'))
             return
+        elif parsed.path == '/api/games':
+            data = load_json(GAMES_FILE, [])
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(json.dumps(data).encode('utf-8'))
+            return
         elif parsed.path == '/api/ping':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -82,7 +90,6 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
         if parsed.path == '/api/evaluations':
             evals = load_json(EVAL_FILE, [])
-            # Check if this evaluation already exists by id
             existing_idx = next((i for i, item in enumerate(evals) if item.get('id') == payload.get('id')), -1)
             if existing_idx >= 0:
                 evals[existing_idx] = payload
@@ -111,6 +118,21 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True, "data": lkpds}).encode('utf-8'))
             return
 
+        elif parsed.path == '/api/games':
+            games = load_json(GAMES_FILE, [])
+            existing_idx = next((i for i, item in enumerate(games) if str(item.get('id')) == str(payload.get('id'))), -1)
+            if existing_idx >= 0:
+                games[existing_idx] = payload
+            else:
+                games.insert(0, payload)
+            save_json(GAMES_FILE, games)
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "data": games}).encode('utf-8'))
+            return
+
         elif parsed.path == '/api/delete-eval':
             target_id = payload.get('id')
             evals = load_json(EVAL_FILE, [])
@@ -135,9 +157,22 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True, "data": lkpds}).encode('utf-8'))
             return
 
+        elif parsed.path == '/api/delete-game':
+            target_id = payload.get('id')
+            games = load_json(GAMES_FILE, [])
+            games = [g for g in games if str(g.get('id')) != str(target_id)]
+            save_json(GAMES_FILE, games)
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "data": games}).encode('utf-8'))
+            return
+
         elif parsed.path == '/api/clear-all':
             save_json(EVAL_FILE, [])
             save_json(LKPD_FILE, [])
+            save_json(GAMES_FILE, [])
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.end_headers()

@@ -1800,6 +1800,13 @@
               <div class="metric-label">Total LKPD Masuk</div>
             </div>
           </div>
+          <div class="metric-card glass-box">
+            <div class="metric-icon-box orange"><i class="fa-solid fa-gamepad"></i></div>
+            <div class="metric-info">
+              <div class="metric-num" id="dash-total-games">0</div>
+              <div class="metric-label">Total Gamifikasi Selesai</div>
+            </div>
+          </div>
         </div>
 
         <!-- Dashboard Table Card: Rekap Evaluasi -->
@@ -1845,6 +1852,43 @@
                 </tr>
               </thead>
               <tbody id="dash-eval-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Rekap Mini Games & Gamifikasi Sains Section -->
+        <div class="dash-content-container glass-box" style="margin-top: 2rem;">
+          <div class="dash-section-header">
+            <div>
+              <h3><i class="fa-solid fa-gamepad text-cyan"></i> Rekapitulasi Hasil Mini Games & Gamifikasi Sains Siswa</h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Pantau capaian skor, bintang, dan lencana dari 4 mini games laboratorium secara otomatis.</p>
+            </div>
+            <div class="dash-filter-bar">
+              <div class="dash-gametype-chips">
+                <button class="dash-gametype-btn active" data-game="all" onclick="window.labDashboard.filterGameType('all')">Semua Game</button>
+                <button class="dash-gametype-btn" data-game="match" onclick="window.labDashboard.filterGameType('match')">Game 1: Cocokkan</button>
+                <button class="dash-gametype-btn" data-game="symbols" onclick="window.labDashboard.filterGameType('symbols')">Game 2: Simbol K3</button>
+                <button class="dash-gametype-btn" data-game="memory" onclick="window.labDashboard.filterGameType('memory')">Game 3: Memory</button>
+                <button class="dash-gametype-btn" data-game="froggy" onclick="window.labDashboard.filterGameType('froggy')">Game 4: Froggy</button>
+              </div>
+            </div>
+          </div>
+          <div class="dash-table-wrapper">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th width="50" style="text-align: center;">No</th>
+                  <th>Waktu Main</th>
+                  <th>Nama Siswa</th>
+                  <th style="text-align: center;">Kelas</th>
+                  <th>Nama Permainan</th>
+                  <th style="text-align: center;">Skor / Poin</th>
+                  <th>Detail Capaian</th>
+                  <th style="text-align: center;">Predikat Bintang</th>
+                  <th style="text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="dash-games-tbody"></tbody>
             </table>
           </div>
         </div>

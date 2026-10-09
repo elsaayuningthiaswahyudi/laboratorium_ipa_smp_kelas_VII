@@ -1,0 +1,67 @@
+[
+  {
+    "id": "game_demo_1",
+    "timestamp": "20/09/2026 14:05",
+    "studentName": "Ahmad Fauzi",
+    "studentClass": "VII-A",
+    "gameId": "froggy",
+    "gameTitle": "Game 4: Froggy Jumps IPA",
+    "score": 12000,
+    "maxScore": 15000,
+    "details": "12/15 Soal (Lolos Menyeberang)",
+    "stars": 3,
+    "badge": "Penjelajah Teratai"
+  },
+  {
+    "id": "game_demo_2",
+    "timestamp": "20/09/2026 14:18",
+    "studentName": "Dewi Lestari",
+    "studentClass": "VII-A",
+    "gameId": "match",
+    "gameTitle": "Game 1: Cocokkan Alat & Fungsi",
+    "score": 100,
+    "maxScore": 100,
+    "details": "6/6 Alat Terpasang Tepat",
+    "stars": 3,
+    "badge": "Ahli Alat Lab"
+  },
+  {
+    "id": "game_demo_3",
+    "timestamp": "20/09/2026 14:25",
+    "studentName": "Siti Rahmawati",
+    "studentClass": "VII-A",
+    "gameId": "symbols",
+    "gameTitle": "Game 2: Kuis Kilat Simbol K3",
+    "score": 850,
+    "maxScore": 1000,
+    "details": "8/8 Simbol Tuntas Cepat",
+    "stars": 3,
+    "badge": "Pakar K3 Lab"
+  },
+  {
+    "id": "game_demo_4",
+    "timestamp": "20/09/2026 14:32",
+    "studentName": "Budi Pratama",
+    "studentClass": "VII-B",
+    "gameId": "memory",
+    "gameTitle": "Game 3: Memory Lab Cards",
+    "score": 80,
+    "maxScore": 100,
+    "details": "Selesai dalam 12 Langkah",
+    "stars": 2,
+    "badge": "Memori Tajam"
+  },
+  {
+    "id": "game_demo_5",
+    "timestamp": "20/09/2026 14:45",
+    "studentName": "Rian Hidayat",
+    "studentClass": "VII-C",
+    "gameId": "froggy",
+    "gameTitle": "Game 4: Froggy Jumps IPA",
+    "score": 9000,
+    "maxScore": 15000,
+    "details": "9 Soal Berhasil (Sisa Nyawa: 2)",
+    "stars": 2,
+    "badge": "Penjelajah Teratai"
+  }
+]
