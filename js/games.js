@@ -314,92 +314,110 @@ class LabGames {
     }
   }
 
-  // ================= 4. GAME: FROGGY JUMP =================
+  // ================= 4. GAME: FROGGY JUMP (CONTINUOUS RIVER PROGRESSION) =================
   initFroggyGame() {
     const overlay = document.getElementById('froggy-overlay');
     if (overlay) overlay.style.display = 'none';
     
-    // Bank 12 Soal Kurikulum IPA Laboratorium SMP Kelas VII (100% Sesuai Kuis Educaplay)
+    // Bank 15 Soal Kurikulum IPA Laboratorium SMP Kelas VII (Sesuai Kuis Froggy Jumps Educaplay)
     this.froggyQuestions = [
       {
         question: "pH meter berfungsi untuk?",
         image: "img/tools/ph-meter.svg",
         options: [
-          { text: "Mengukur pH larutan", isCorrect: true },
-          { text: "Mengukur massa", isCorrect: false },
-          { text: "Memanaskan larutan", isCorrect: false }
+          { text: "Mengukur pH / derajat keasaman larutan", isCorrect: true },
+          { text: "Mengukur massa benda padat", isCorrect: false },
+          { text: "Memanaskan cairan kimia", isCorrect: false }
         ]
       },
       {
         question: "Gelas ukur pada gambar berfungsi untuk ....",
         image: "img/tools/gelas-ukur.svg",
         options: [
-          { text: "Mengukur volume zat cair", isCorrect: true },
-          { text: "Menampung larutan panas", isCorrect: false },
-          { text: "Menghaluskan serbuk kimia", isCorrect: false }
+          { text: "Mengukur volume zat cair secara presisi", isCorrect: true },
+          { text: "Menampung cairan sangat panas", isCorrect: false },
+          { text: "Menghaluskan serbuk kimia padat", isCorrect: false }
         ]
       },
       {
         question: "Tabung reaksi pada gambar digunakan untuk ....",
         image: "img/tools/tabung-reaksi.svg",
         options: [
-          { text: "Mereaksikan campuran bahan", isCorrect: true },
+          { text: "Mereaksikan zat dalam jumlah sedikit", isCorrect: true },
           { text: "Mengukur volume zat cair", isCorrect: false },
-          { text: "Mengamati objek sel", isCorrect: false }
+          { text: "Mengamati objek mikroskopis", isCorrect: false }
         ]
       },
       {
         question: "Alat laboratorium pada gambar di samping berfungsi untuk ....",
         image: "img/tools/mikroskop.svg",
         options: [
-          { text: "Mengamati objek mikroskopis", isCorrect: true },
-          { text: "Menimbang massa benda", isCorrect: false },
-          { text: "Mengukur diameter tabung", isCorrect: false }
+          { text: "Mengamati objek renik / mikroskopis", isCorrect: true },
+          { text: "Menimbang massa benda kecil", isCorrect: false },
+          { text: "Mengukur ketebalan tabung kaca", isCorrect: false }
         ]
       },
       {
         question: "Neraca Ohaus pada gambar berfungsi untuk ....",
         image: "img/tools/neraca-ohaus.svg",
         options: [
-          { text: "Mengukur massa benda", isCorrect: true },
-          { text: "Mengukur volume cairan", isCorrect: false },
-          { text: "Mengukur diameter tabung", isCorrect: false }
+          { text: "Mengukur massa benda atau zat", isCorrect: true },
+          { text: "Mengukur volume zat cair", isCorrect: false },
+          { text: "Mengukur diameter tabung reaksi", isCorrect: false }
         ]
       },
       {
         question: "Jangka sorong pada gambar digunakan untuk ....",
         image: "img/tools/jangka-sorong.svg",
         options: [
-          { text: "Mengukur diameter & kedalaman", isCorrect: true },
-          { text: "Mengukur massa benda", isCorrect: false },
-          { text: "Mengukur suhu larutan", isCorrect: false }
+          { text: "Mengukur diameter luar, dalam, & kedalaman", isCorrect: true },
+          { text: "Mengukur massa sampel padat", isCorrect: false },
+          { text: "Mengukur suhu larutan asam", isCorrect: false }
         ]
       },
       {
         question: "Kaki tiga dan kawat kasa berfungsi untuk ....",
         image: "img/tools/bunsen-spiritus.svg",
         options: [
-          { text: "Menopang wadah saat pemanasan", isCorrect: true },
-          { text: "Memadamkan api spiritus", isCorrect: false },
-          { text: "Menyaring endapan kimia", isCorrect: false }
+          { text: "Menopang wadah saat proses pemanasan", isCorrect: true },
+          { text: "Memadamkan api pembakar spiritus", isCorrect: false },
+          { text: "Menyaring endapan larutan kimia", isCorrect: false }
         ]
       },
       {
         question: "Labu Erlenmeyer pada gambar berguna untuk ....",
         image: "img/tools/labu-erlenmeyer.svg",
         options: [
-          { text: "Mencampur larutan & titrasi", isCorrect: true },
-          { text: "Mengukur massa serbuk", isCorrect: false },
-          { text: "Memotong kaca preparat", isCorrect: false }
+          { text: "Mencampur, menampung, & titrasi larutan", isCorrect: true },
+          { text: "Mengukur massa zat serbuk", isCorrect: false },
+          { text: "Memotong kaca preparat objek", isCorrect: false }
+        ]
+      },
+      {
+        question: "Pipet tetes berfungsi untuk ....",
+        image: "img/tools/pipet-tetes.svg",
+        options: [
+          { text: "Memindahkan cairan dalam volume kecil / tetesan", isCorrect: true },
+          { text: "Mengukur volume zat cair dalam jumlah besar", isCorrect: false },
+          { text: "Mengaduk larutan panas", isCorrect: false }
+        ]
+      },
+      {
+        question: "Gelas kimia (Beaker Glass) pada laboratorium berfungsi untuk ....",
+        image: "img/tools/gelas-kimia.svg",
+        options: [
+          { text: "Menampung, mencampur, & memanaskan larutan", isCorrect: true },
+          { text: "Mengukur volume dengan ketelitian sangat tinggi", isCorrect: false },
+          { text: "Mengamati sel bakteri di bawah cahaya", isCorrect: false }
         ]
       },
       {
         question: "Perhatikan gambar di samping! Arti simbol bahan kimia tersebut adalah ....",
         image: "img/k3/flammable.svg",
         options: [
-          { text: "Bahan Mudah Terbakar", isCorrect: true },
+          { text: "Bahan Mudah Terbakar (Flammable)", isCorrect: true },
           { text: "Bahaya Radiasi Atom", isCorrect: false },
-          { text: "Bahan Beracun", isCorrect: false }
+          { text: "Bahan Beracun (Toxic)", isCorrect: false }
         ]
       },
       {
@@ -415,9 +433,9 @@ class LabGames {
         question: "Simbol keselamatan kerja pada gambar menunjukkan bahan yang bersifat ....",
         image: "img/k3/corrosive.svg",
         options: [
-          { text: "Bahan Korosif", isCorrect: true },
-          { text: "Pengoksidasi", isCorrect: false },
-          { text: "Iritasi Ringan", isCorrect: false }
+          { text: "Bahan Korosif (Dapat merusak jaringan & logam)", isCorrect: true },
+          { text: "Pengoksidasi Kuat", isCorrect: false },
+          { text: "Iritasi Kulit Ringan", isCorrect: false }
         ]
       },
       {
@@ -425,20 +443,30 @@ class LabGames {
         image: "img/k3/explosive.svg",
         options: [
           { text: "Mudah Meledak (Explosive)", isCorrect: true },
-          { text: "Radioaktif", isCorrect: false },
-          { text: "Mudah Terbakar", isCorrect: false }
+          { text: "Bahan Radioaktif", isCorrect: false },
+          { text: "Mudah Menguap", isCorrect: false }
+        ]
+      },
+      {
+        question: "Cabang ilmu sains yang mempelajari kehidupan makhluk hidup adalah ....",
+        image: "img/tools/mikroskop.svg",
+        options: [
+          { text: "Biologi", isCorrect: true },
+          { text: "Kimia", isCorrect: false },
+          { text: "Fisika", isCorrect: false }
         ]
       }
     ].sort(() => Math.random() - 0.5);
 
-    // Randomize options
+    // Randomize options for each question
     this.froggyQuestions.forEach(q => {
       q.options = [...q.options].sort(() => Math.random() - 0.5);
     });
 
     this.froggyIndex = 0;
-    this.froggyLives = 4;
+    this.froggyLives = 5; // Standard Educaplay 5 lives
     this.froggyScore = 0;
+    this.isJumping = false;
     
     this.updateFroggyUI();
     this.renderFroggyQuestion();
@@ -455,6 +483,7 @@ class LabGames {
 
   renderFroggyQuestion() {
     clearInterval(this.froggyTimer);
+    this.isJumping = false;
     
     if (this.froggyLives <= 0 || this.froggyIndex >= this.froggyQuestions.length) {
       this.endFroggyGame();
@@ -470,7 +499,7 @@ class LabGames {
     const bottomPad = document.querySelector('.lilypad-bottom');
     const frogContainer = document.querySelector('.frog-character-container');
 
-    // Reset container and bottom pad
+    // Reset bottom base pad smoothly
     if (bottomPad) {
       bottomPad.style.transition = 'none';
       bottomPad.style.transform = 'translate(0, 0)';
@@ -481,7 +510,7 @@ class LabGames {
       frogContainer.style.transform = 'translateX(-50%)';
     }
     
-    // Reset Frog position smoothly on the base lily pad with idle breathing
+    // Reset Frog position seamlessly on the base lily pad with breathing idle animation
     if (frog) {
       frog.className = 'frog-character idling';
       frog.style.transition = 'none';
@@ -489,7 +518,7 @@ class LabGames {
       frog.style.opacity = '1';
     }
 
-    // Render Question & Image (if available) with smooth crossfade & zoom icon
+    // Render Question & Image with smooth crossfade
     if (qBox) {
       qBox.style.opacity = '0';
       setTimeout(() => {
@@ -506,22 +535,22 @@ class LabGames {
         }
         qBox.style.transition = 'opacity 0.3s ease';
         qBox.style.opacity = '1';
-      }, 150);
+      }, 120);
     }
 
     if (qNum) qNum.innerText = `${this.froggyIndex + 1} / ${this.froggyQuestions.length}`;
     if (qBadgeBottom) qBadgeBottom.innerText = `${this.froggyIndex + 1}`;
     
-    // Render the 3 Lilypads (A, B, C) with mandala star veins & staggered entrance
+    // Render the 3 Lilypads (A, B, C) matching Educaplay layout
     if (lilypadsContainer) {
       const labels = ['A', 'B', 'C'];
       lilypadsContainer.innerHTML = currentQ.options.map((opt, i) => `
-        <div class="lilypad-wrapper entering" id="lilypad-wrap-${i}" style="animation-delay: ${i * 0.1}s">
+        <div class="lilypad-wrapper entering" id="lilypad-wrap-${i}" style="animation-delay: ${i * 0.08}s">
           <div class="lilypad-badge">${labels[i]}</div>
           <div class="lilypad" id="lilypad-btn-${i}" onclick="window.labGames.answerFroggy(${opt.isCorrect}, ${i})">
             <svg class="lilypad-veins" viewBox="0 0 160 160">
-              <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
-              <circle cx="80" cy="80" r="48" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.2"/>
+              <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+              <circle cx="80" cy="80" r="48" fill="none" stroke="rgba(255,255,255,0.11)" stroke-width="1.2"/>
               <path d="M80 10 L80 150 M10 80 L150 80 M30 30 L130 130 M30 130 L130 30" stroke="rgba(255,255,255,0.08)" stroke-width="1.2"/>
             </svg>
             <span class="lilypad-text">${opt.text}</span>
@@ -548,7 +577,10 @@ class LabGames {
   }
 
   answerFroggy(isCorrect, padIndex = 0, isTimeout = false) {
+    if (this.isJumping) return;
+    this.isJumping = true;
     clearInterval(this.froggyTimer);
+
     const frog = document.getElementById('frog-character');
     const chosenPadWrap = document.getElementById(`lilypad-wrap-${padIndex}`);
     const chosenPadBtn = document.getElementById(`lilypad-btn-${padIndex}`);
@@ -557,7 +589,7 @@ class LabGames {
 
     if (frog) frog.classList.remove('idling');
 
-    // Calculate dynamic precise landing coordinates
+    // Calculate dynamic coordinates of the target lilypad
     let targetX = 0;
     let targetY = -150;
 
@@ -565,7 +597,7 @@ class LabGames {
       const padRect = chosenPadWrap.getBoundingClientRect();
       const frogRect = frogContainer.getBoundingClientRect();
       targetX = (padRect.left + padRect.width / 2) - (frogRect.left + frogRect.width / 2);
-      targetY = (padRect.top + padRect.height / 2) - (frogRect.top + frogRect.height / 2) - 10;
+      targetY = (padRect.top + padRect.height / 2) - (frogRect.top + frogRect.height / 2) - 8;
     } else {
       const fallbackOffsets = [-160, 0, 160];
       const fallbackY = [-120, -190, -120];
@@ -574,37 +606,39 @@ class LabGames {
     }
 
     if (isCorrect) {
-      if (window.labAudio) {
-        window.labAudio.playJump();
-      }
-      this.froggyScore += 100;
+      // Play Jump Sound
+      if (window.labAudio) window.labAudio.playJump();
+      this.froggyScore += 1000;
+      this.updateFroggyUI();
       
-      // Phase 1: Pre-jump crouch (0ms - 80ms)
+      // Step 1: Crouch anticipation (0 - 80ms)
       if (frog) {
         frog.style.transition = 'transform 0.08s ease-in';
-        frog.style.transform = 'scale(1.15, 0.75)';
+        frog.style.transform = 'scale(1.18, 0.74)';
       }
 
-      // Phase 2: Parabolic High Leap (80ms - 520ms)
+      // Step 2: High arc leap through the air (80ms - 500ms)
       setTimeout(() => {
         if (frog) {
-          frog.style.transition = 'transform 0.44s cubic-bezier(0.2, 0.8, 0.4, 1.2)';
-          frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.92, 1.25)`;
+          frog.style.transition = 'transform 0.42s cubic-bezier(0.2, 0.85, 0.35, 1.2)';
+          frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.92, 1.28)`;
         }
       }, 80);
 
-      // Phase 3: Touchdown landing squash on target lilypad (520ms - 620ms)
+      // Step 3: Landing squash on target lilypad (500ms - 620ms)
       setTimeout(() => {
         if (window.labAudio) window.labAudio.playCorrect();
         if (chosenPadBtn) chosenPadBtn.classList.add('correct-flash');
         if (frog) {
-          frog.style.transition = 'transform 0.15s ease-out';
-          frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.18, 0.86)`;
+          frog.style.transition = 'transform 0.14s ease-out';
+          frog.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.18, 0.84)`;
         }
-      }, 520);
+      }, 500);
 
-      // Phase 4: Forward Pond Progression & Camera Scroll (700ms - 1300ms)
+      // Step 4: Continuous River Progression System (680ms - 1300ms)
+      // The frog and chosen pad advance forward down the river to become the new baseline pad!
       setTimeout(() => {
+        // Accelerate water flow
         const waterLayer = document.querySelector('.water-bg-layer');
         if (waterLayer) {
           waterLayer.classList.remove('water-advancing');
@@ -613,32 +647,32 @@ class LabGames {
           setTimeout(() => waterLayer.classList.remove('water-advancing'), 850);
         }
 
-        // Fade out other unchosen lilypads
+        // Fade out unchosen lilypads
         document.querySelectorAll('.lilypad-wrapper').forEach((wrap, i) => {
           if (i !== padIndex) wrap.classList.add('fade-out');
         });
 
-        // The chosen pad glides smoothly downward to become the new base pad!
+        // The chosen pad glides smoothly downward to the base anchor position
         if (chosenPadWrap) {
           chosenPadWrap.style.transition = 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease';
           chosenPadWrap.style.transform = `translate(${-targetX}px, ${Math.abs(targetY)}px)`;
         }
 
-        // The frog travels along with the new base pad into position
+        // Frog glides continuously with the pad back to bottom center
         if (frog) {
           frog.style.transition = 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)';
           frog.style.transform = 'translate(0px, 0px) scale(1)';
         }
 
-        // Previous base lilypad floats away off the bottom
+        // Old bottom base lilypad drifts away off the bottom screen
         if (bottomPad) {
           bottomPad.style.transition = 'all 0.6s ease-in';
           bottomPad.style.transform = 'translateY(180px) scale(0.8)';
           bottomPad.style.opacity = '0';
         }
-      }, 700);
+      }, 680);
       
-      // Phase 5: Reveal next question and new lilypads floating in
+      // Step 5: Advance to Next Question and reveal fresh lilypads floating in
       setTimeout(() => {
         this.froggyIndex++;
         this.updateFroggyUI();
@@ -646,29 +680,28 @@ class LabGames {
       }, 1350);
       
     } else {
-      if (window.labAudio) {
-        window.labAudio.playJump();
-      }
+      // Wrong Answer Flow
+      if (window.labAudio) window.labAudio.playJump();
       this.froggyLives--;
       this.updateFroggyUI();
 
       if (chosenPadBtn) chosenPadBtn.classList.add('wrong-flash');
       
-      // Pre-jump crouch
+      // Crouch
       if (frog) {
         frog.style.transition = 'transform 0.08s ease-in';
-        frog.style.transform = 'scale(1.15, 0.75)';
+        frog.style.transform = 'scale(1.18, 0.74)';
       }
 
-      // Leap towards pad but fall short into the water
+      // Leap towards pad but fall short into water
       setTimeout(() => {
         if (frog) {
           frog.style.transition = 'transform 0.42s ease-out';
-          frog.style.transform = `translate(${targetX * 0.7}px, ${targetY * 0.6}px) scale(0.9)`;
+          frog.style.transform = `translate(${targetX * 0.65}px, ${targetY * 0.6}px) scale(0.9)`;
         }
       }, 80);
 
-      // Splash and sink into water
+      // Splash & sink into water
       setTimeout(() => {
         if (window.labAudio) {
           window.labAudio.playSplash();
@@ -679,25 +712,29 @@ class LabGames {
         }
       }, 480);
       
-      // Respawn back on base pad or end game if dead
+      // Re-emerge or End Game
       setTimeout(() => {
         if (this.froggyLives > 0) {
           if (frog) {
             frog.className = 'frog-character';
-            frog.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            frog.style.transition = 'opacity 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
             frog.style.transform = 'translate(0, 0) scale(1)';
             frog.style.opacity = '1';
-            setTimeout(() => frog.classList.add('idling'), 400);
+            setTimeout(() => {
+              frog.classList.add('idling');
+              this.isJumping = false;
+            }, 350);
           }
         } else {
           this.endFroggyGame();
         }
-      }, 1300);
+      }, 1250);
     }
   }
 
   endFroggyGame() {
     clearInterval(this.froggyTimer);
+    this.isJumping = false;
     const overlay = document.getElementById('froggy-overlay');
     const title = document.getElementById('froggy-overlay-title');
     const desc = document.getElementById('froggy-overlay-desc');
@@ -708,19 +745,19 @@ class LabGames {
       overlay.style.display = 'flex';
       if (finalScore) {
         finalScore.style.display = 'block';
-        finalScore.innerText = `Skor Akhir: ${this.froggyScore} Poin (${this.froggyIndex} Soal Terjawab)`;
+        finalScore.innerText = `Skor Akhir: ${this.froggyScore.toLocaleString('id-ID')} Poin (${this.froggyIndex} Soal Berhasil)`;
       }
       
       if (this.froggyLives > 0) {
         if (window.labAudio) window.labAudio.playFanfare();
         if (window.confetti) window.confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
         if (icon) icon.innerHTML = '<i class="fa-solid fa-trophy" style="font-size: 3.5rem; color: #eab308;"></i>';
-        if (title) title.innerText = 'Luar Biasa! Katak Berhasil Menyeberang!';
-        if (desc) desc.innerText = 'Kamu berhasil menguasai materi laboratorium IPA dan sains dengan sangat baik!';
+        if (title) title.innerText = 'Luar Biasa! Katak Berhasil Menyeberangi Kolam!';
+        if (desc) desc.innerText = 'Selamat! Kamu telah menguasai seluruh materi Pengenalan Alat Laboratorium IPA dan Simbol K3 dengan sempurna!';
       } else {
         if (icon) icon.innerHTML = '<i class="fa-solid fa-water" style="font-size: 3.5rem; color: #38bdf8;"></i>';
         if (title) title.innerText = 'Game Over! Katak Kehabisan Nyawa';
-        if (desc) desc.innerText = 'Jangan berkecil hati, ayo pelajari kembali materi alat lab & K3 lalu coba lagi!';
+        if (desc) desc.innerText = 'Jangan berkecil hati! Pelajari kembali fungsi alat laboratorium dan simbol K3, lalu coba lagi!';
       }
     }
   }
