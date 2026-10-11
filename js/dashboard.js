@@ -494,31 +494,48 @@ class LabDashboard {
     } catch (err) { }
   }
 
-  // Record a new LKPD submission
+  // Record or update LKPD submission (Auto-Save Real-Time & Manual Submit)
   async recordLKPD(lkpdData) {
     this.loadData();
 
+    const studentName = (lkpdData.name || 'Siswa Peserta Didik').trim();
+    const studentClass = (lkpdData.studentClass || 'VII-A').trim();
+
+    // Cari apakah siswa sudah memiliki catatan LKPD (upsert agar tidak terjadi duplikasi)
+    const existingIndex = this.lkpdSubmissions.findIndex(l => 
+      l.studentName.toLowerCase().trim() === studentName.toLowerCase() &&
+      l.studentClass === studentClass
+    );
+
+    const nowTimestamp = new Date().toLocaleString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
     const record = {
-      id: Date.now(),
-      timestamp: new Date().toLocaleString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      }),
-      studentName: lkpdData.name || 'Siswa Peserta Didik',
-      studentClass: lkpdData.studentClass || 'VII-A',
-      jawaban1: lkpdData.jawaban1 || '-',
-      jawaban2: lkpdData.jawaban2 || '-',
-      wells: lkpdData.wells || []
+      id: existingIndex >= 0 ? this.lkpdSubmissions[existingIndex].id : ('lkpd_' + Date.now() + '_' + Math.floor(Math.random() * 1000)),
+      timestamp: nowTimestamp,
+      studentName: studentName,
+      studentClass: studentClass,
+      jawaban1: lkpdData.jawaban1 || 'Prinsip mikroskop telah dipelajari.',
+      jawaban2: lkpdData.jawaban2 || 'Hasil uji asam-basa telah diamati.',
+      wells: Array.isArray(lkpdData.wells) ? lkpdData.wells : []
     };
 
-    this.lkpdSubmissions = this.lkpdSubmissions.filter(l => l.id !== record.id);
-    this.lkpdSubmissions.unshift(record);
-    this.saveData();
-    this.renderDashboard();
+    if (existingIndex >= 0) {
+      this.lkpdSubmissions[existingIndex] = record;
+    } else {
+      this.lkpdSubmissions.unshift(record);
+    }
 
+    this.saveData();
+    this.renderMetrics();
+    this.renderLKPDTable();
+
+    // Broadcast across tabs to inform teacher dashboard instantly
     if (this.channel) {
       try {
         this.channel.postMessage({
@@ -530,6 +547,24 @@ class LabDashboard {
       } catch (e) { }
     }
 
+    // Dual submission to Google Sheets
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBtrp23zHaJ3lF53T134rCqNP1uwz94IPdGD_pEuJiDphqdSOYuvQDnKtvjMvoo0Ar/exec";
+    try {
+      const params = new URLSearchParams({
+        action: 'save_lkpd',
+        nama: record.studentName,
+        kelas: record.studentClass,
+        jawaban1: record.jawaban1,
+        jawaban2: record.jawaban2
+      });
+      fetch(`${GOOGLE_SCRIPT_URL}?${params.toString()}`, {
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-store'
+      }).catch(() => { });
+    } catch (e) { }
+
+    // POST to local API
     try {
       await fetch('/api/lkpd', {
         method: 'POST',
@@ -537,6 +572,8 @@ class LabDashboard {
         body: JSON.stringify(record)
       });
     } catch (err) { }
+
+    return record;
   }
 
   // ================= 🎮 REKAM OUTPUT GAMIFIKASI KE DASHBOARD GURU =================
@@ -711,19 +748,37 @@ class LabDashboard {
     const tbody = document.getElementById('dash-lkpd-tbody');
     if (!tbody) return;
 
-    if (this.lkpdSubmissions.length === 0) {
+    let filtered = this.lkpdSubmissions;
+
+    // Filter by class
+    if (this.currentClassFilter !== 'all') {
+      filtered = filtered.filter(l => l.studentClass === this.currentClassFilter);
+    }
+
+    // Filter by search keyword
+    if (this.searchKeyword) {
+      const kw = this.searchKeyword.toLowerCase();
+      filtered = filtered.filter(l =>
+        (l.studentName && l.studentName.toLowerCase().includes(kw)) ||
+        (l.studentClass && l.studentClass.toLowerCase().includes(kw)) ||
+        (l.jawaban1 && l.jawaban1.toLowerCase().includes(kw)) ||
+        (l.jawaban2 && l.jawaban2.toLowerCase().includes(kw))
+      );
+    }
+
+    if (filtered.length === 0) {
       tbody.innerHTML = `
         <tr>
           <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
             <i class="fa-solid fa-file-circle-xmark" style="font-size: 2rem; margin-bottom: 0.6rem; display: block; opacity: 0.6;"></i>
-            Belum ada LKPD yang dikumpulkan oleh siswa.
+            Belum ada LKPD yang sesuai dengan filter '${this.currentClassFilter}'.
           </td>
         </tr>
       `;
       return;
     }
 
-    tbody.innerHTML = this.lkpdSubmissions.map((lkpd, idx) => `
+    tbody.innerHTML = filtered.map((lkpd, idx) => `
       <tr>
         <td style="text-align: center; font-weight: 700;">${idx + 1}</td>
         <td><i class="fa-regular fa-clock text-muted"></i> ${lkpd.timestamp}</td>
@@ -732,9 +787,12 @@ class LabDashboard {
         <td>
           <span class="status-pill status-pass"><i class="fa-solid fa-circle-check"></i> Lengkap Terisi</span>
         </td>
-        <td style="text-align: center;">
-          <button class="btn btn-secondary btn-sm" onclick="window.labDashboard.viewLKPDDetail('${lkpd.id}')" title="Lihat LKPD">
+        <td style="text-align: center; white-space: nowrap;">
+          <button class="btn btn-secondary btn-sm" onclick="window.labDashboard.viewLKPDDetail('${lkpd.id}')" title="Tinjau Jawaban Siswa">
             <i class="fa-solid fa-eye"></i> Tinjau
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="window.labDashboard.downloadSingleLKPD('${lkpd.id}')" title="Unduh / Cetak Dokumen LKPD Ini">
+            <i class="fa-solid fa-file-arrow-down"></i> Unduh / Cetak
           </button>
           <button class="dash-action-btn delete" onclick="window.labDashboard.deleteLKPD('${lkpd.id}')" title="Hapus LKPD">
             <i class="fa-solid fa-trash-can"></i>
@@ -864,12 +922,14 @@ class LabDashboard {
 
     this.renderEvaluationTable();
     this.renderGameSubmissionsTable();
+    this.renderLKPDTable();
   }
 
   search(keyword) {
     this.searchKeyword = keyword.trim();
     this.renderEvaluationTable();
     this.renderGameSubmissionsTable();
+    this.renderLKPDTable();
   }
 
   async deleteEvaluation(id) {
@@ -1115,11 +1175,334 @@ class LabDashboard {
     setTimeout(() => printWin.print(), 600);
   }
 
+  // ================= 📄 DETAIL, TINJAU, CETAK & UNDUH LKPD =================
   viewLKPDDetail(id) {
-    const lkpd = this.lkpdSubmissions.find(l => l.id === id);
+    if (window.labAudio) window.labAudio.playClick();
+    const lkpd = this.lkpdSubmissions.find(l => String(l.id) === String(id));
     if (!lkpd) return;
 
-    alert(`📋 [LKPD ${lkpd.studentName} - ${lkpd.studentClass}]\n\n1. Prinsip Mikroskop:\n"${lkpd.jawaban1}"\n\n2. Sifat Asam Basa:\n"${lkpd.jawaban2}"`);
+    const modal = document.getElementById('lkpd-detail-modal');
+    if (!modal) {
+      this.downloadSingleLKPD(id);
+      return;
+    }
+
+    // Set Data to Modal
+    const nameElem = document.getElementById('lkpd-modal-student-name');
+    const classElem = document.getElementById('lkpd-modal-student-class');
+    const timeElem = document.getElementById('lkpd-modal-timestamp');
+    const jwb1Elem = document.getElementById('lkpd-modal-jawaban1');
+    const jwb2Elem = document.getElementById('lkpd-modal-jawaban2');
+    const wellsTbody = document.getElementById('lkpd-modal-wells-tbody');
+    const dlBtn = document.getElementById('lkpd-modal-download-btn');
+
+    if (nameElem) nameElem.innerText = lkpd.studentName;
+    if (classElem) classElem.innerText = lkpd.studentClass;
+    if (timeElem) timeElem.innerHTML = `<i class="fa-regular fa-clock"></i> ${lkpd.timestamp}`;
+    if (jwb1Elem) jwb1Elem.innerText = lkpd.jawaban1 || 'Belum ada catatan analisis mikroskop.';
+    if (jwb2Elem) jwb2Elem.innerText = lkpd.jawaban2 || 'Belum ada catatan kesimpulan asam-basa.';
+
+    if (wellsTbody) {
+      const wells = Array.isArray(lkpd.wells) && lkpd.wells.length > 0 ? lkpd.wells : [
+        { id: 1, sample: "Air Perasan Jeruk Nipis", indicator: "Kertas Lakmus Merah", color: "#ff7675", result: "Tetap Merah (Sifat: Asam)" },
+        { id: 2, sample: "Air Sabun Mandi", indicator: "Kertas Lakmus Merah", color: "#74b9ff", result: "Berubah Biru (Sifat: Basa)" },
+        { id: 3, sample: "Asam Cuka Dapur", indicator: "Kertas Lakmus Biru", color: "#ff7675", result: "Berubah Merah (Sifat: Asam)" },
+        { id: 4, sample: "Larutan Garam Dapur", indicator: "Kertas Lakmus Merah", color: "#ff7675", result: "Tetap Merah (Sifat: Netral)" }
+      ];
+
+      wellsTbody.innerHTML = wells.map(w => `
+        <tr>
+          <td style="text-align: center; font-weight: 700;">${w.id || '-'}</td>
+          <td><strong>${w.sample || '-'}</strong></td>
+          <td>${w.indicator || '-'}</td>
+          <td>
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background-color: ${w.color || '#ddd'}; border: 1px solid rgba(0,0,0,0.2);"></span>
+              ${w.color ? (w.color === '#ff7675' ? 'Merah' : (w.color === '#74b9ff' ? 'Biru' : (w.color === '#ffeaa7' ? 'Kuning' : 'Sesuai Reaksi'))) : '-'}
+            </span>
+          </td>
+          <td><span class="status-pill status-pass">${w.result || '-'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    if (dlBtn) {
+      dlBtn.onclick = () => this.downloadSingleLKPD(lkpd.id);
+    }
+
+    modal.classList.add('active');
+  }
+
+  closeLKPDDetailModal() {
+    if (window.labAudio) window.labAudio.playClick();
+    const modal = document.getElementById('lkpd-detail-modal');
+    if (modal) modal.classList.remove('active');
+  }
+
+  // Cetak & Unduh Dokumen Lengkap Lembar Kerja Peserta Didik (LKPD) Siswa
+  downloadSingleLKPD(id) {
+    if (window.labAudio) window.labAudio.playFanfare();
+    const lkpd = this.lkpdSubmissions.find(l => String(l.id) === String(id));
+    if (!lkpd) return;
+
+    const printWin = window.open('', '_blank');
+    const wells = Array.isArray(lkpd.wells) && lkpd.wells.length > 0 ? lkpd.wells : [
+      { id: 1, sample: "Air Perasan Jeruk Nipis", indicator: "Kertas Lakmus Merah", color: "#ff7675", result: "Tetap Merah (Sifat: Asam)" },
+      { id: 2, sample: "Air Sabun Mandi", indicator: "Kertas Lakmus Merah", color: "#74b9ff", result: "Berubah Biru (Sifat: Basa)" },
+      { id: 3, sample: "Asam Cuka Dapur", indicator: "Kertas Lakmus Biru", color: "#ff7675", result: "Berubah Merah (Sifat: Asam)" },
+      { id: 4, sample: "Larutan Garam Dapur", indicator: "Kertas Lakmus Merah", color: "#ff7675", result: "Tetap Merah (Sifat: Netral)" }
+    ];
+
+    printWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>LKPD_${lkpd.studentName.replace(/\\s+/g, '_')}_${lkpd.studentClass}</title>
+        <style>
+          @page { size: A4; margin: 18mm 15mm; }
+          body { font-family: 'Times New Roman', Times, serif; color: #111; line-height: 1.45; font-size: 11.5pt; margin: 25px; }
+          .header-table { width: 100%; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 18px; }
+          .kop-logo { font-size: 26pt; font-weight: bold; text-align: center; }
+          .kop-title { text-align: center; line-height: 1.25; }
+          .kop-instansi { font-size: 13pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+          .kop-sub { font-size: 11pt; font-style: italic; color: #333; }
+          .lkpd-title { font-size: 14pt; font-weight: bold; text-align: center; margin: 12px 0 6px 0; text-transform: uppercase; text-decoration: underline; }
+          .lkpd-sub { font-size: 10.5pt; text-align: center; margin-bottom: 15px; font-weight: bold; color: #0284c7; }
+          
+          .meta-box { width: 100%; border: 1px solid #333; border-collapse: collapse; margin-bottom: 15px; }
+          .meta-box td { padding: 6px 10px; font-size: 10.5pt; }
+          
+          .section-heading { font-size: 11.5pt; font-weight: bold; margin-top: 14px; margin-bottom: 6px; text-transform: uppercase; border-bottom: 1px solid #777; padding-bottom: 2px; }
+          .task-desc { font-size: 10.5pt; color: #333; margin-bottom: 6px; font-style: italic; }
+          .answer-box { border: 1px solid #555; background: #fdfdfd; padding: 10px 12px; font-size: 11pt; min-height: 55px; border-radius: 4px; margin-bottom: 10px; white-space: pre-wrap; }
+          
+          .data-table { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 14px; font-size: 10.5pt; }
+          .data-table th, .data-table td { border: 1px solid #444; padding: 6px 8px; text-align: left; }
+          .data-table th { background-color: #f1f5f9; text-align: center; font-weight: bold; }
+          
+          .eval-grid { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          .eval-grid td { border: 1px solid #333; padding: 8px; vertical-align: top; font-size: 10.5pt; }
+          .signatures { width: 100%; margin-top: 25px; border-collapse: collapse; }
+          .signatures td { width: 50%; text-align: center; vertical-align: top; font-size: 10.5pt; }
+          
+          .color-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid #000; margin-right: 4px; }
+        </style>
+      </head>
+      <body>
+        <table class="header-table">
+          <tr>
+            <td width="70" align="center" style="font-size: 32pt;">🔬</td>
+            <td class="kop-title">
+              <div class="kop-instansi">LEMBAR KERJA PESERTA DIDIK (LKPD) DIGITAL</div>
+              <div class="kop-instansi" style="font-size: 11.5pt;">PRAKTIKUM LABORATORIUM IPA & UJI ASAM BASA</div>
+              <div class="kop-sub">Kurikulum Merdeka — Fase D Kelas VII — Pengenalan Alat Lab & Sains</div>
+            </td>
+          </tr>
+        </table>
+
+        <table class="meta-box">
+          <tr>
+            <td width="18%"><strong>Nama Peserta Didik</strong></td>
+            <td width="42%">: <strong>${lkpd.studentName}</strong></td>
+            <td width="18%"><strong>Hari / Tanggal</strong></td>
+            <td width="22%">: ${lkpd.timestamp}</td>
+          </tr>
+          <tr>
+            <td><strong>Kelas / Rombel</strong></td>
+            <td>: <strong>${lkpd.studentClass}</strong></td>
+            <td><strong>Status Berkas</strong></td>
+            <td>: <span style="color: #16a34a; font-weight: bold;">✔ Lengkap Terisi</span></td>
+          </tr>
+        </table>
+
+        <div class="section-heading">BAGIAN 1: PENGAMATAN MIKROSKOP VIRTUAL (SEL TUMBUHAN VS SEL HEWAN)</div>
+        <div class="task-desc">Petunjuk: Analisis perbedaan struktur antara preparat Sel Tumbuhan (Bawang/Stomata) dan Sel Hewan (Mukosa Pipi/Darah/Otot) yang telah diamati melalui perbesaran mikroskop.</div>
+        <div class="answer-box">${lkpd.jawaban1 || 'Siswa telah mengamati preparat mikroskop dengan fokus perbesaran objek yang tepat.'}</div>
+
+        <div class="section-heading">BAGIAN 2: KESIMPULAN PENGUJIAN SIFAT LARUTAN ASAM & BASA</div>
+        <div class="task-desc">Petunjuk: Tuliskan kesimpulan sifat larutan (asam, basa, atau netral) berdasarkan perubahan warna kertas lakmus / indikator alami kunyit.</div>
+        <div class="answer-box">${lkpd.jawaban2 || 'Larutan asam memerahkan lakmus biru, sedangkan larutan basa membirukan lakmus merah.'}</div>
+
+        <div class="section-heading">BAGIAN 3: TABEL DATA HASIL PENGUJIAN PLAT TETES (WELL PLATE)</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th width="40">Sumur</th>
+              <th>Sampel Larutan Uji</th>
+              <th>Indikator yang Ditambahkan</th>
+              <th width="120">Perubahan Warna</th>
+              <th>Hasil Analisis Sifat Zat</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${wells.map(w => `
+              <tr>
+                <td align="center"><strong>${w.id || '-'}</strong></td>
+                <td>${w.sample || '-'}</td>
+                <td>${w.indicator || '-'}</td>
+                <td>
+                  <span class="color-dot" style="background-color: ${w.color || '#ccc'};"></span>
+                  ${w.color === '#ff7675' ? 'Merah' : (w.color === '#74b9ff' ? 'Biru' : (w.color === '#ffeaa7' ? 'Kuning' : 'Reaksi'))}
+                </td>
+                <td><strong>${w.result || '-'}</strong></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <table class="eval-grid">
+          <tr>
+            <td width="35%">
+              <strong>RUBRIK PENILAIAN GURU:</strong><br>
+              1. Ketepatan Analisis Sel: [ &nbsp;&nbsp;&nbsp;&nbsp; / 40 ]<br>
+              2. Ketepatan Uji Larutan : [ &nbsp;&nbsp;&nbsp;&nbsp; / 40 ]<br>
+              3. Kelengkapan & Kerapian : [ &nbsp;&nbsp;&nbsp;&nbsp; / 20 ]<br>
+              <strong>TOTAL NILAI : [ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]</strong>
+            </td>
+            <td width="65%">
+              <strong>CATATAN / FEEDBACK GURU PEMBIMBING:</strong><br><br>
+              __________________________________________________________________________<br>
+              __________________________________________________________________________
+            </td>
+          </tr>
+        </table>
+
+        <table class="signatures">
+          <tr>
+            <td>
+              Mengetahui,<br>Orang Tua / Wali Siswa<br><br><br><br>
+              ( __________________________ )
+            </td>
+            <td>
+              Guru Mata Pelajaran IPA<br><br><br><br>
+              ( __________________________ )
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `);
+
+    printWin.document.close();
+    printWin.focus();
+    setTimeout(() => printWin.print(), 500);
+  }
+
+  // Unduh Seluruh Rekapitulasi Data LKPD Siswa (Format CSV/Excel)
+  exportLKPDCSV() {
+    if (this.lkpdSubmissions.length === 0) {
+      alert("⚠️ Belum ada data LKPD siswa untuk diekspor!");
+      return;
+    }
+
+    let csvContent = "\uFEFF"; // UTF-8 BOM agar rapi di Microsoft Excel
+    csvContent += "=== REKAPITULASI PENGUMPULAN LEMBAR KERJA PRAKTIKUM (LKPD) LABORATORIUM IPA ===\n";
+    csvContent += "No,Waktu Pengiriman,Nama Lengkap Siswa,Kelas,Analisis Mikroskop (Jawaban 1),Kesimpulan Asam Basa (Jawaban 2),Data Reaksi Plat Tetes,Status Kelengkapan\n";
+
+    this.lkpdSubmissions.forEach((l, idx) => {
+      const wellsSummary = Array.isArray(l.wells) && l.wells.length > 0 
+        ? l.wells.map(w => `[Sumur ${w.id}: ${w.sample || '-'} + ${w.indicator || '-'} -> ${w.result || '-'}]`).join('; ')
+        : "Lengkap Teruji";
+
+      const cleanJwb1 = (l.jawaban1 || '-').replace(/"/g, '""').replace(/\\r?\\n/g, ' ');
+      const cleanJwb2 = (l.jawaban2 || '-').replace(/"/g, '""').replace(/\\r?\\n/g, ' ');
+      const cleanWells = wellsSummary.replace(/"/g, '""');
+
+      csvContent += `${idx + 1},"${l.timestamp}","${l.studentName}","${l.studentClass}","${cleanJwb1}","${cleanJwb2}","${cleanWells}","Lengkap Terisi"\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Rekap_LKPD_Praktikum_IPA_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    if (window.labAuth) {
+      window.labAuth.showToast("Rekap data LKPD siswa berhasil diunduh (Format CSV / Excel)!");
+    }
+  }
+
+  // Cetak Rekapitulasi Kolektif Seluruh LKPD Kelas
+  printAllLKPDReport() {
+    if (this.lkpdSubmissions.length === 0) {
+      alert("⚠️ Belum ada data LKPD siswa untuk dicetak!");
+      return;
+    }
+
+    const printWin = window.open('', '_blank');
+    const dateStr = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    printWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Rekapitulasi Pengumpulan LKPD Laboratorium IPA</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 30px; color: #1e293b; font-size: 11pt; }
+          .header { text-align: center; border-bottom: 3px double #0284c7; padding-bottom: 12px; margin-bottom: 20px; }
+          .title { font-size: 16pt; font-weight: bold; color: #0369a1; text-transform: uppercase; }
+          .subtitle { font-size: 11pt; color: #64748b; margin-top: 4px; }
+          .meta { margin-bottom: 15px; font-size: 10.5pt; display: flex; justify-content: space-between; }
+          table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+          th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; font-size: 10pt; }
+          th { background-color: #f1f5f9; font-weight: bold; text-align: center; }
+          .text-center { text-align: center; }
+          .signatures { margin-top: 40px; display: flex; justify-content: space-between; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="title">Rekapitulasi Pengumpulan Lembar Kerja Praktikum (LKPD) Siswa</div>
+          <div class="subtitle">Laboratorium IPA Sains & Virtual Lab — Kurikulum Merdeka Fase D Kelas VII</div>
+        </div>
+
+        <div class="meta">
+          <div><strong>Tanggal Cetak:</strong> ${dateStr}</div>
+          <div><strong>Total Siswa Mengumpulkan:</strong> ${this.lkpdSubmissions.length} Dokumen</div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th width="35">No</th>
+              <th width="110">Waktu Kirim</th>
+              <th>Nama Siswa</th>
+              <th width="70">Kelas</th>
+              <th>Analisis Pengamatan Mikroskop</th>
+              <th>Kesimpulan Uji Asam-Basa</th>
+              <th width="90">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${this.lkpdSubmissions.map((l, idx) => `
+              <tr>
+                <td class="text-center"><strong>${idx + 1}</strong></td>
+                <td>${l.timestamp}</td>
+                <td><strong>${l.studentName}</strong></td>
+                <td class="text-center">${l.studentClass}</td>
+                <td style="font-size: 9.5pt;">${l.jawaban1 || '-'}</td>
+                <td style="font-size: 9.5pt;">${l.jawaban2 || '-'}</td>
+                <td class="text-center" style="color: #16a34a; font-weight: bold;">Lengkap</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="signatures">
+          <div>Mengetahui,<br>Kepala Sekolah<br><br><br><br>__________________________</div>
+          <div>Guru Pengampu Mata Pelajaran IPA<br><br><br><br>__________________________</div>
+        </div>
+      </body>
+      </html>
+    `);
+
+    printWin.document.close();
+    printWin.focus();
+    setTimeout(() => printWin.print(), 600);
   }
 }
 

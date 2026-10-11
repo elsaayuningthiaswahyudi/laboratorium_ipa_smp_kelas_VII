@@ -105,7 +105,9 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
         elif parsed.path == '/api/lkpd':
             lkpds = load_json(LKPD_FILE, [])
-            existing_idx = next((i for i, item in enumerate(lkpds) if item.get('id') == payload.get('id')), -1)
+            p_name = payload.get('studentName', '').strip().lower()
+            p_class = payload.get('studentClass', '').strip()
+            existing_idx = next((i for i, item in enumerate(lkpds) if str(item.get('id')) == str(payload.get('id')) or (item.get('studentName', '').strip().lower() == p_name and item.get('studentClass', '').strip() == p_class)), -1)
             if existing_idx >= 0:
                 lkpds[existing_idx] = payload
             else:

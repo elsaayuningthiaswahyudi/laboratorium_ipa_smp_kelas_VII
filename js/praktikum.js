@@ -27,11 +27,16 @@ class VirtualLab {
         { id: 4, sample: null, indicator: null, color: '#f5f6fa', result: '-' }
       ]
     };
+
+    // Auto-Save Controller
+    this.autoSaveTimer = null;
+    this.isAutoSaving = false;
   }
 
   init() {
     this.renderMicroscopeLab();
     this.renderChemLab();
+    this.setupLKPDAutoSync();
   }
 
   // ================= 1. SIMULASI MIKROSKOP VIRTUAL =================
@@ -310,6 +315,7 @@ class VirtualLab {
     };
 
     this.updatePlateDisplay();
+    this.triggerAutoSaveLKPD();
   }
 
   resetPlate() {
@@ -321,6 +327,7 @@ class VirtualLab {
       { id: 4, sample: null, indicator: null, color: '#f5f6fa', result: '-' }
     ];
     this.updatePlateDisplay();
+    this.triggerAutoSaveLKPD();
   }
 
   updatePlateDisplay() {
@@ -342,12 +349,124 @@ class VirtualLab {
     `).join('');
   }
 
-  // ================= 3. DIGITAL LKPD / REPORT EXPORT =================
-  submitLKPD() {
+  // ================= 3. DIGITAL LKPD AUTO-SAVE & SUBMIT ENGINE =================
+  setupLKPDAutoSync() {
     const namaInput = document.getElementById('lkpd-nama-siswa');
     const kelasInput = document.getElementById('lkpd-kelas-siswa');
     const jwb1 = document.getElementById('lkpd-jawaban-1');
     const jwb2 = document.getElementById('lkpd-jawaban-2');
+
+    // Auto-fill from student login session if available
+    const currentUser = window.labAuth ? window.labAuth.getCurrentUser() : null;
+    if (currentUser && currentUser.role === 'student') {
+      if (namaInput && !namaInput.value) namaInput.value = currentUser.name;
+      if (kelasInput && currentUser.class) kelasInput.value = currentUser.class;
+    }
+
+    // Restore draft from localStorage if inputs are empty
+    try {
+      const draft = localStorage.getItem('ipa_lab_student_lkpd_draft');
+      if (draft) {
+        const parsed = JSON.parse(draft);
+        if (namaInput && !namaInput.value && parsed.name) namaInput.value = parsed.name;
+        if (kelasInput && parsed.studentClass) kelasInput.value = parsed.studentClass;
+        if (jwb1 && !jwb1.value && parsed.jawaban1) jwb1.value = parsed.jawaban1;
+        if (jwb2 && !jwb2.value && parsed.jawaban2) jwb2.value = parsed.jawaban2;
+      }
+    } catch (e) { }
+
+    // Bind real-time input listeners for auto-save
+    [namaInput, kelasInput, jwb1, jwb2].forEach(inputEl => {
+      if (inputEl) {
+        inputEl.addEventListener('input', () => this.triggerAutoSaveLKPD());
+        inputEl.addEventListener('change', () => this.triggerAutoSaveLKPD());
+      }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      this.autoSaveNow(false);
+    });
+  }
+
+  triggerAutoSaveLKPD() {
+    clearTimeout(this.autoSaveTimer);
+    this.updateAutoSaveStatusUI('saving');
+    this.autoSaveTimer = setTimeout(() => {
+      this.autoSaveNow(false);
+    }, 600);
+  }
+
+  autoSaveNow(showToast = false) {
+    const namaInput = document.getElementById('lkpd-nama-siswa');
+    const kelasInput = document.getElementById('lkpd-kelas-siswa');
+    const jwb1 = document.getElementById('lkpd-jawaban-1');
+    const jwb2 = document.getElementById('lkpd-jawaban-2');
+
+    const currentUser = window.labAuth ? window.labAuth.getCurrentUser() : null;
+    let namaSiswa = namaInput?.value.trim() || "";
+    let kelasSiswa = kelasInput?.value.trim() || "VII-A";
+
+    if (currentUser && currentUser.role === 'student') {
+      namaSiswa = namaSiswa || currentUser.name;
+      kelasSiswa = kelasSiswa || currentUser.class;
+    }
+
+    // Default placeholder if empty
+    if (!namaSiswa) namaSiswa = 'Siswa Peserta Didik';
+
+    const jawaban1 = jwb1?.value.trim() || 'Prinsip mikroskop telah dipelajari.';
+    const jawaban2 = jwb2?.value.trim() || 'Hasil uji asam-basa telah diamati.';
+    const wells = this.chemState.wells || [];
+
+    // Save draft locally
+    try {
+      localStorage.setItem('ipa_lab_student_lkpd_draft', JSON.stringify({
+        name: namaSiswa,
+        studentClass: kelasSiswa,
+        jawaban1: jawaban1,
+        jawaban2: jawaban2
+      }));
+    } catch (e) { }
+
+    // Auto-record to Dashboard Guru
+    if (window.labDashboard) {
+      window.labDashboard.recordLKPD({
+        name: namaSiswa,
+        studentClass: kelasSiswa,
+        jawaban1: jawaban1,
+        jawaban2: jawaban2,
+        wells: wells
+      });
+    }
+
+    this.updateAutoSaveStatusUI('saved');
+
+    if (showToast && window.labAuth) {
+      window.labAuth.showToast(`✅ LKPD atas nama ${namaSiswa} (${kelasSiswa}) otomatis tersimpan di Dashboard Guru!`);
+    }
+  }
+
+  updateAutoSaveStatusUI(status) {
+    const badge = document.getElementById('lkpd-autosave-status');
+    if (!badge) return;
+
+    if (status === 'saving') {
+      badge.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-yellow"></i> <span>Menyimpan ke Dashboard Guru...</span>`;
+      badge.style.color = '#f59e0b';
+      badge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+      badge.style.background = 'rgba(245, 158, 11, 0.12)';
+    } else {
+      const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      badge.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-green"></i> <span>Tersimpan otomatis ke Dashboard Guru (${timeStr})</span>`;
+      badge.style.color = '#4ade80';
+      badge.style.borderColor = 'rgba(34, 197, 94, 0.25)';
+      badge.style.background = 'rgba(34, 197, 94, 0.12)';
+    }
+  }
+
+  submitLKPD() {
+    const namaInput = document.getElementById('lkpd-nama-siswa');
+    const kelasInput = document.getElementById('lkpd-kelas-siswa');
 
     const currentUser = window.labAuth ? window.labAuth.getCurrentUser() : null;
     let namaSiswa = namaInput?.value.trim() || "";
@@ -367,27 +486,13 @@ class VirtualLab {
       return;
     }
 
-    const jawaban1 = jwb1?.value.trim() || 'Prinsip mikroskop telah dipelajari.';
-    const jawaban2 = jwb2?.value.trim() || 'Hasil uji asam-basa telah diamati.';
-
     if (window.labAudio) window.labAudio.playFanfare();
+    if (window.confetti) window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
 
-    // Record submission to Teacher Dashboard
-    if (window.labDashboard) {
-      window.labDashboard.recordLKPD({
-        name: namaSiswa,
-        studentClass: kelasSiswa,
-        jawaban1: jawaban1,
-        jawaban2: jawaban2,
-        wells: this.chemState.wells || []
-      });
-    }
+    // Submit & Save Now
+    this.autoSaveNow(true);
 
-    if (window.labAuth && window.labAuth.showToast) {
-      window.labAuth.showToast(`✅ LKPD atas nama ${namaSiswa} (${kelasSiswa}) berhasil dikumpulkan ke Dashboard Guru!`);
-    } else {
-      alert(`✅ LKPD atas nama ${namaSiswa} (${kelasSiswa}) berhasil tersimpan dan masuk ke Dashboard Guru!`);
-    }
+    alert(`🎉 Terima kasih! LKPD atas nama ${namaSiswa} (${kelasSiswa}) telah berhasil dikumpulkan dan tersimpan di Dashboard Guru.`);
   }
 
   printLKPD() {
