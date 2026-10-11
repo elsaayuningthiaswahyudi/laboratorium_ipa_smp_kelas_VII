@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgPipet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b192e"/>
+      <stop offset="100%" stop-color="#030b17"/>
+    </linearGradient>
+
+    <!-- Rubber Bulb Gradient -->
+    <linearGradient id="rubberBulb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="45%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+
+    <!-- Glass Pipet Body Gradient -->
+    <linearGradient id="glassBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="25%" stop-color="#bae6fd" stop-opacity="0.25"/>
+      <stop offset="75%" stop-color="#38bdf8" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.65"/>
+    </linearGradient>
+
+    <!-- Liquid Gradient Inside Pipette -->
+    <linearGradient id="liquidBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="60%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+
+    <!-- Drop Glow Filter -->
+    <filter id="glowDrop" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Frame Background -->
+  <rect width="400" height="300" rx="16" fill="url(#bgPipet)"/>
+
+  <!-- Subtle Ground Shadow -->
+  <ellipse cx="200" cy="272" rx="130" ry="14" fill="#000000" opacity="0.45"/>
+
+  <!-- Beaker at Bottom Right Receiving Drops -->
+  <g transform="translate(190, 185)">
+    <!-- Liquid in Beaker -->
+    <path d="M 12,50 Q 40,55 68,50 L 66,75 Q 40,82 14,75 Z" fill="#0284c7" opacity="0.45"/>
+    <ellipse cx="40" cy="50" rx="28" ry="6" fill="#38bdf8" opacity="0.6"/>
+    <!-- Glass Rim & Outline -->
+    <path d="M 5,20 L 10,75 Q 40,84 70,75 L 75,20" fill="none" stroke="#7dd3fc" stroke-width="2" opacity="0.8"/>
+    <ellipse cx="40" cy="20" rx="35" ry="6" fill="none" stroke="#e0f2fe" stroke-width="2" opacity="0.85"/>
+    <!-- Measurement markings -->
+    <line x1="22" y1="36" x2="32" y2="36" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+    <line x1="20" y1="48" x2="35" y2="48" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+    <line x1="22" y1="60" x2="32" y2="60" stroke="#ffffff" stroke-width="1.2" opacity="0.7"/>
+  </g>
+
+  <!-- Falling Drops -->
+  <g filter="url(#glowDrop)">
+    <!-- Drop 1 (Just Falling) -->
+    <path d="M 175,215 C 171,222 168,227 168,231 A 7 7 0 0 0 182 231 C 182,227 179,222 175,215 Z" fill="#38bdf8"/>
+    <!-- Drop 1 Specular Highlight -->
+    <circle cx="173" cy="229" r="2" fill="#ffffff" opacity="0.9"/>
+
+    <!-- Drop 2 (Near Beaker Surface) -->
+    <circle cx="195" cy="242" r="4.5" fill="#38bdf8" opacity="0.85"/>
+  </g>
+
+  <!-- Main Pipette Body (Angled 32 deg for elegant presentation) -->
+  <g transform="translate(145, 125) rotate(-32)">
+    <!-- Rubber Bulb (Karet Penghisap) -->
+    <!-- Bulb Collar / Ring -->
+    <rect x="-11" y="-85" width="22" height="12" rx="3" fill="#b91c1c" stroke="#fca5a5" stroke-width="1"/>
+    <!-- Teat / Bulb Oval -->
+    <path d="M -16,-85 C -25,-105 -22,-140 0,-140 C 22,-140 25,-105 16,-85 Z" fill="url(#rubberBulb)" stroke="#f87171" stroke-width="1.5"/>
+    <!-- Rubber Highlight Shine -->
+    <path d="M -10,-130 C -15,-120 -15,-100 -9,-90" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- Glass Collar / Flange -->
+    <rect x="-10" y="-74" width="20" height="6" rx="2" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.2"/>
+
+    <!-- Main Glass Tube (Silinder Utama Kaca) -->
+    <rect x="-8" y="-68" width="16" height="125" rx="2" fill="url(#glassBody)" stroke="#38bdf8" stroke-width="1.5"/>
+
+    <!-- Liquid inside glass body -->
+    <rect x="-6.5" y="-15" width="13" height="72" fill="url(#liquidBlue)" opacity="0.85"/>
+    <ellipse cx="0" cy="-15" rx="6.5" ry="2" fill="#7dd3fc"/>
+
+    <!-- Tapered Capillary Tip (Ujung Runcing Pipet) -->
+    <path d="M -8,57 L -3.5,108 Q -3.5,112 0,112 Q 3.5,112 3.5,108 L 8,57 Z" fill="url(#glassBody)" stroke="#38bdf8" stroke-width="1.5"/>
+    
+    <!-- Liquid in Tip -->
+    <path d="M -6.5,57 L -3,108 Q -3,111 0,111 Q 3,111 3,108 L 6.5,57 Z" fill="url(#liquidBlue)" opacity="0.9"/>
+    
+    <!-- Forming Droplet at the Tip -->
+    <path d="M 0,112 C -2.5,114 -3.5,117 -3.5,120 A 4 4 0 0 0 3.5 120 C 3.5,117 2.5,114 0,112 Z" fill="#38bdf8"/>
+    <circle cx="-1" cy="119" r="1.2" fill="#ffffff"/>
+
+    <!-- Measurement Markings (Garis Skala) -->
+    <line x1="-7" y1="-50" x2="-2" y2="-50" stroke="#0284c7" stroke-width="1.2"/>
+    <line x1="-7" y1="-38" x2="-4" y2="-38" stroke="#0284c7" stroke-width="1"/>
+    <line x1="-7" y1="-26" x2="-2" y2="-26" stroke="#0284c7" stroke-width="1.2"/>
+    <line x1="-7" y1="-14" x2="-4" y2="-14" stroke="#0284c7" stroke-width="1"/>
+    <line x1="-7" y1="-2" x2="-2" y2="-2" stroke="#0284c7" stroke-width="1.2"/>
+    <line x1="-7" y1="10" x2="-4" y2="10" stroke="#0284c7" stroke-width="1"/>
+    <line x1="-7" y1="22" x2="-2" y2="22" stroke="#0284c7" stroke-width="1.2"/>
+    <line x1="-7" y1="34" x2="-4" y2="34" stroke="#0284c7" stroke-width="1"/>
+    <line x1="-7" y1="46" x2="-2" y2="46" stroke="#0284c7" stroke-width="1.2"/>
+
+    <!-- Longitudinal Glass Reflection Line -->
+    <line x1="4" y1="-64" x2="4" y2="54" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.75"/>
+  </g>
+
+  <!-- Title Badge (Upper Left) -->
+  <rect x="15" y="15" width="135" height="26" rx="6" fill="#0284c7" opacity="0.25"/>
+  <text x="25" y="32" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#38bdf8">PIPET TETES</text>
+</svg>

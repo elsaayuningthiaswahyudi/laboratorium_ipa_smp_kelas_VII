@@ -412,10 +412,10 @@ class LabGames {
         ]
       },
       {
-        question: "Kaki tiga dan kawat kasa berfungsi untuk ....",
-        image: "img/tools/bunsen-spiritus.svg",
+        question: "Kaki tiga pada gambar di samping berfungsi untuk ....",
+        image: "img/tools/kaki-tiga.svg",
         options: [
-          { text: "Menopang wadah saat proses pemanasan", isCorrect: true },
+          { text: "Menopang wadah saat proses pemanasan zat", isCorrect: true },
           { text: "Memadamkan api pembakar spiritus", isCorrect: false },
           { text: "Menyaring endapan larutan kimia", isCorrect: false }
         ]
@@ -430,7 +430,7 @@ class LabGames {
         ]
       },
       {
-        question: "Pipet tetes berfungsi untuk ....",
+        question: "Pipet tetes pada gambar di samping berfungsi untuk ....",
         image: "img/tools/pipet-tetes.svg",
         options: [
           { text: "Memindahkan cairan dalam volume kecil / tetesan", isCorrect: true },
@@ -484,12 +484,12 @@ class LabGames {
         ]
       },
       {
-        question: "Cabang ilmu sains yang mempelajari kehidupan makhluk hidup adalah ....",
-        image: "img/tools/mikroskop.svg",
+        question: "Pembakar spiritus pada gambar di samping berfungsi untuk ....",
+        image: "img/tools/bunsen-spiritus.svg",
         options: [
-          { text: "Biologi", isCorrect: true },
-          { text: "Kimia", isCorrect: false },
-          { text: "Fisika", isCorrect: false }
+          { text: "Sumber nyala api untuk pemanasan zat kimia", isCorrect: true },
+          { text: "Mengukur suhu derajat celcius", isCorrect: false },
+          { text: "Menghancurkan sampel padat", isCorrect: false }
         ]
       }
     ].sort(() => Math.random() - 0.5);
@@ -560,9 +560,9 @@ class LabGames {
       setTimeout(() => {
         if (currentQ.image) {
           qBox.innerHTML = `
-            <div class="froggy-q-img-wrap">
-              <img src="${currentQ.image}" alt="Soal" />
-              <span class="zoom-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <div class="froggy-q-img-wrap" onclick="window.labGames.zoomFroggyImage('${currentQ.image}')" title="Klik untuk memperbesar gambar">
+              <img src="${currentQ.image}" alt="Soal Alat Lab" onerror="this.onerror=null; this.src='img/tools/tabung-reaksi.svg';" />
+              <span class="zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
             </div>
             <div class="froggy-q-text-body">${currentQ.question}</div>
           `;
@@ -828,6 +828,49 @@ class LabGames {
       if (document.exitFullscreen) {
         document.exitFullscreen();
       }
+    }
+  }
+
+  // Tampilkan gambar soal dalam ukuran besar & jernih saat diklik
+  zoomFroggyImage(imgSrc) {
+    if (window.labAudio) window.labAudio.playClick();
+    let zoomModal = document.getElementById('froggy-img-zoom-modal');
+    if (!zoomModal) {
+      zoomModal = document.createElement('div');
+      zoomModal.id = 'froggy-img-zoom-modal';
+      zoomModal.className = 'modal-overlay active';
+      zoomModal.style.zIndex = '99999';
+      zoomModal.innerHTML = `
+        <div class="modal-container" style="max-width: 480px; padding: 1.5rem; text-align: center; background: #0b192e; border: 2px solid #38bdf8; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
+          <button class="modal-close-btn" onclick="window.labGames.closeFroggyImageZoom()"><i class="fa-solid fa-xmark"></i></button>
+          <div style="font-size: 1rem; font-weight: bold; color: #38bdf8; margin-bottom: 1rem;">
+            <i class="fa-solid fa-magnifying-glass"></i> Tampilan Gambar Soal
+          </div>
+          <div style="width: 100%; max-height: 340px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px;">
+            <img id="froggy-zoom-img-target" src="${imgSrc}" alt="Detail Alat Lab" style="max-width: 100%; max-height: 320px; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));" />
+          </div>
+          <div style="margin-top: 1.2rem;">
+            <button class="btn btn-secondary btn-sm" onclick="window.labGames.closeFroggyImageZoom()">Tutup Tampilan</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(zoomModal);
+      zoomModal.onclick = (e) => {
+        if (e.target === zoomModal) this.closeFroggyImageZoom();
+      };
+    } else {
+      const imgTarget = document.getElementById('froggy-zoom-img-target');
+      if (imgTarget) imgTarget.src = imgSrc;
+      zoomModal.style.display = 'flex';
+      zoomModal.classList.add('active');
+    }
+  }
+
+  closeFroggyImageZoom() {
+    const zoomModal = document.getElementById('froggy-img-zoom-modal');
+    if (zoomModal) {
+      zoomModal.style.display = 'none';
+      zoomModal.classList.remove('active');
     }
   }
 }
